@@ -4,7 +4,7 @@ $LOAD_PATH.unshift("./rb")
 
 require 'yaml'
 require 'require_all'
-require_all Dir['rb/lib/**/*.rb']
+require_all Dir[File.dirname(__FILE__) + '/rb/lib/**/*.rb']
 
 def validate(hash, *keys)
   h_keys = hash.keys
