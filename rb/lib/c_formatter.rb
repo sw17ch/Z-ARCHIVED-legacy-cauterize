@@ -1,5 +1,3 @@
-require 'mixins'
-
 class CFormatter
   def initialize(c_name, indent="  ")
     @c_name = c_name

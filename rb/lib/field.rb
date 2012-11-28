@@ -1,4 +1,5 @@
 class Field
+  attr_reader :name, :type, :init, :desc
   def self.from_hash(hash)
     validate(hash, "name", "type", "init", "description")
     Field.new(hash["name"], hash["type"], hash["init"], hash["description"])

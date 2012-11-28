@@ -1,5 +1,3 @@
-require 'mixins'
-
 class Member
   attr_reader :name, :sizeFunc
 
