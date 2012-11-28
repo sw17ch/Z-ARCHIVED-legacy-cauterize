@@ -1,24 +1,3 @@
-class Member
-  attr_reader :name, :sizeFunc
-
-  def self.from_obj(obj)
-    if obj.class == Hash
-      Member.new(obj["name"], obj["size"])
-    else
-      Member.new(obj)
-    end
-  end
-
-  def initialize(name, sizeFunc=nil)
-    @name = name
-    @sizeFunc = sizeFunc
-  end
-
-  def enum_name(prefix="")
-    prefix + @name.up_snake
-  end
-end
-
 class Group
   def self.from_hash(hash)
     validate(hash, "group")
@@ -30,7 +9,7 @@ class Group
 
   def initialize(name, members)
     @name = name
-    @members = members.map {|m| Member.from_obj(m)}
+    @members = members.map {|m| GroupMember.from_obj(m)}
   end
 
   def enum_type
