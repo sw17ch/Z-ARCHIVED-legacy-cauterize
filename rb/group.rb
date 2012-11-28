@@ -15,6 +15,27 @@ class String
   end
 end
 
+class Member
+  attr_reader :name, :sizeFunc
+
+  def self.from_obj(obj)
+    if obj.class == Hash
+      Member.new(obj["name"], obj["size"])
+    else
+      Member.new(obj)
+    end
+  end
+
+  def initialize(name, sizeFunc=nil)
+    @name = name
+    @sizeFunc = sizeFunc
+  end
+
+  def enum_name(prefix="")
+    prefix + @name.up_snake
+  end
+end
+
 class Group
   def self.from_hash(hash)
     validate(hash, "group")
@@ -26,31 +47,24 @@ class Group
 
   def initialize(name, members)
     @name = name
-    @members = members
+    @members = members.map {|m| Member.from_obj(m)}
   end
 
   def enum_type
-    "enum #{cap_name}"
+    "enum #{up_name}"
   end
 
-  def cap_name
+  def up_name
     "GROUP_" + @name.up_snake
   end
 
-  def member_enums
-      enum_to_member_map.keys
-  end
-
-  def enum_to_member_map
-    @etmm ||= {}.tap do |h|
-      @members.map do |m|
-        h[m] = "#{cap_name}_#{m.up_snake}"
-      end
-    end
+  def name_as_prefix
+    up_name + "_"
   end
 
   def format_enumeration(formatter)
-    formatter.enum(cap_name) do |f|
+    formatter.enum(up_name) do |f|
+      member_enums = @members.map {|m| m.enum_name(name_as_prefix)}
       member_enums.each {|m| f << "#{m},"}
     end
     formatter.blank_line
@@ -60,7 +74,7 @@ class Group
     formatter.struct(@name) do |f|
       f << "#{enum_type} tag;"
       f.braces("union") do |g|
-        @members.each {|m| g << "struct #{m} #{m.down_snake};"}
+        @members.each {|m| g << "struct #{m.name} #{m.name.down_snake};"}
       end
       formatter.append_last(" data;")
     end
@@ -82,9 +96,9 @@ class Group
 
       # Copy the union.
       f.braces("switch (s->tag)") do
-        enum_to_member_map.each_pair do |m, e|
-          f.undented { f << "case #{e}:"}
-          field = "s->data.#{m.down_snake}"
+        @members.each do |m|
+          f.undented { f << "case #{m.enum_name(name_as_prefix)}:"}
+          field = "s->data.#{m.name.down_snake}"
           f << "s = CauterizeAppend(c, &(#{field}), sizeof(#{field}));"
           f.braces("if (CA_OK != s)") do
             f << "return s;"
