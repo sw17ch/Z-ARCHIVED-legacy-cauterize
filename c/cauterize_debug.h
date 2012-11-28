@@ -16,7 +16,7 @@
   do { \
     if(!(cond)) { \
       CA_ASSERT_PRINT(msg); \
-      return MS_ERR_ASSERT; \
+      return CA_ERR_ASSERT; \
     } \
   } while(0)
 
