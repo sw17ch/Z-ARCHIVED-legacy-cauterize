@@ -9,10 +9,19 @@ describe GroupMember do
 
   describe :initialize do
     it "Creates a GroupMember" do
+      GroupMember.new("foo").name.should == "foo"
+      GroupMember.new("foo").sizeFunc.should be_nil
+      GroupMember.new("foo", "nerp").sizeFunc.should == "nerp"
     end
   end
 
   describe :enum_name do
-    xit "is the name of the member's enumeration entry"
+    it "is the name of the member's enumeration entry" do
+      GroupMember.new("FooBar").enum_name.should =="FOO_BAR"
+    end
+
+    it "allows a prefix to be specified" do
+      GroupMember.new("FooBar").enum_name("MEEP_").should =="MEEP_FOO_BAR"
+    end
   end
 end
