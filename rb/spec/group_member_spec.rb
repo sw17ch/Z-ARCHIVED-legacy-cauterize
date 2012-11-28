@@ -1,10 +1,15 @@
 describe GroupMember do
   describe :from_obj do
-    xit "Creates a GroupMember from String or a Hash"
+    it "Creates a GroupMember from String or a Hash" do
+      GroupMember.from_obj({"name" => "foo"}).name.should == "foo"
+      GroupMember.from_obj({"name" => "foo"}).sizeFunc.should be_nil
+      GroupMember.from_obj({"name" => "foo", "size" => "sizeFunc"}).sizeFunc.should == "sizeFunc"
+    end
   end
 
   describe :initialize do
-    xit "Creates a GroupMember"
+    it "Creates a GroupMember" do
+    end
   end
 
   describe :enum_name do
