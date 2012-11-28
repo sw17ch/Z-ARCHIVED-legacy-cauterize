@@ -15,18 +15,18 @@ class Message
     @fields = fields
   end
 
-  def format(formatter)
+  def format_struct(formatter)
     formatter.struct(@name) do |f|
       fields.each {|field| field.format(f)}
     end
     formatter.blank_line
   end
 
-  def marshaler(formatter)
+  def format_packer(formatter)
     raise :unimplemented
   end
 
-  def unmarshaler(formatter)
+  def format_unpacker(formatter)
     raise :unimplemented
   end
 end

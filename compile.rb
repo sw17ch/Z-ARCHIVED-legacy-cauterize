@@ -49,9 +49,10 @@ def compile_files(*files)
 
   c = CFormatter.new
 
-  messages.each { |req| req.format(c) }
+  messages.each { |req| req.format_struct(c) }
   groups.each { |grp| grp.format_enumeration(c) }
   groups.each { |grp| grp.format_struct(c) }
+  groups.each { |grp| grp.format_packer(c) }
 
   puts c.to_s
 end

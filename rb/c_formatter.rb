@@ -23,6 +23,10 @@ class CFormatter
     append_last(";")
   end
 
+  def func(name, ret, params, &blk)
+    braces("#{ret} #{name}(#{params.join(", ")})", &blk)
+  end
+
   def braces(prefix="")
     @lines << indent_line("#{prefix} {")
     indent
@@ -33,6 +37,12 @@ class CFormatter
 
   def append_last(str)
     @lines.last and @lines.last.concat str
+  end
+
+  def undented
+    deindent
+    yield self
+    indent
   end
 
   def to_s
