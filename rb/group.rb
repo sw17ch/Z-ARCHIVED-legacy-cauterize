@@ -50,6 +50,7 @@ class Group
       f.braces("union") do |g|
         @members.each {|m| g << "struct #{m} #{m.down_snake};"}
       end
+      formatter.append_last(" data;")
     end
     formatter.blank_line
   end

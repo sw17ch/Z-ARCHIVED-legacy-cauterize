@@ -31,6 +31,10 @@ class CFormatter
     @lines << indent_line("}")
   end
 
+  def append_last(str)
+    @lines.last and @lines.last.concat str
+  end
+
   def to_s
     @lines.join("\n")
   end
@@ -43,10 +47,6 @@ class CFormatter
 
   def deindent
     @level -= 1
-  end
-
-  def append_last(str)
-    @lines.last and @lines.last.concat str
   end
 
   def indent_line(line)
