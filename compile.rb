@@ -47,7 +47,7 @@ def compile_files(*files)
     end
   end
 
-  c = CFormatter.new
+  c = CFormatter.new("cauterize_example")
 
   messages.each { |req| req.format_struct(c) }
   groups.each { |grp| grp.format_enumeration(c) }
@@ -55,7 +55,7 @@ def compile_files(*files)
   groups.each { |grp| grp.format_packer(c) }
   groups.each { |grp| grp.format_unpacker(c) }
 
-  puts c.to_s
+  puts c.c_text
 end
 
 compile_files(*ARGV)
