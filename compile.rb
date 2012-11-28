@@ -53,6 +53,7 @@ def compile_files(*files)
   groups.each { |grp| grp.format_enumeration(c) }
   groups.each { |grp| grp.format_struct(c) }
   groups.each { |grp| grp.format_packer(c) }
+  groups.each { |grp| grp.format_unpacker(c) }
 
   puts c.to_s
 end
