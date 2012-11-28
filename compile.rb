@@ -3,12 +3,8 @@
 $LOAD_PATH.unshift("./rb")
 
 require 'yaml'
-
-require 'c_formatter'
-require 'message'
-require 'group'
-require 'field'
-require 'type'
+require 'require_all'
+require_all Dir['rb/lib/**/*.rb']
 
 def validate(hash, *keys)
   h_keys = hash.keys
