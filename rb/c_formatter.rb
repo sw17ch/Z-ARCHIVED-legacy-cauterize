@@ -1,8 +1,12 @@
+require 'mixins'
+
 class CFormatter
-  def initialize(indent="  ")
+  def initialize(c_name, indent="  ")
+    @c_name = c_name
     @indent = indent
     @level = 0
     @lines = []
+    @func_prototypes = []
   end
 
   def blank_line
@@ -45,8 +49,16 @@ class CFormatter
     indent
   end
 
-  def to_s
+  def c_text
     @lines.join("\n")
+  end
+
+  def h_text
+    gaurd = @c_name.up_snake + "_H"
+    self << "#ifndef #{gaurd}"
+    self << "#define #{gaurd}"
+
+    self << "#endif /* #{gaurd} */"
   end
 
   private
