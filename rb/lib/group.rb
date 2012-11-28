@@ -68,8 +68,8 @@ class Group
 
           # Update and copy the length
           f << "/* Copy the length. */"
-          sizeFunc = m.sizeFunc || "sizeof"
-          f << "src->length = #{sizeFunc}(#{field})"
+          sizeExpr = m.sizeFunc ? "#{m.sizeFunc}(&#{field})" : "sizeof(#{field})"
+          f << "src->length = #{sizeExpr}"
           f << "s = CauterizeAppend(dst, &(src->length), sizeof(src->length));"
           f.braces("if (CA_OK != s)") do
             f << "return s;"
@@ -105,28 +105,21 @@ class Group
       end
       f.blank_line
 
-      # Copy the length
+      # Read the length
       f << "s = CauterizeRead(src, &(dst->length), sizeof(dst->length));"
       f.braces("if (CA_OK != s)") do
         f << "return s;"
       end
       f.blank_line
 
-      # Read the union based on the tag.
-      f.braces("switch (dst->tag)") do
-        @members.each do |m|
-          field = "dst->data.#{m.name.down_snake}"
-          f.undented { f << "case #{m.enum_name(name_as_prefix)}:"}
-
-          f << "s = CauterizeRead(src, &(#{field}), &(dst->length));"
-          f.braces("if (CA_OK != s)") do
-            f << "return s;"
-          end
-          f << "break;"
-          f.blank_line
-        end
+      # Read the union
+      field = "dst->data"
+      f << "s = CauterizeRead(src, &(#{field}), &(dst->length));"
+      f.braces("if (CA_OK != s)") do
+        f << "return s;"
       end
       f.blank_line
+
       f << "return CA_OK;"
     end
     formatter.blank_line
