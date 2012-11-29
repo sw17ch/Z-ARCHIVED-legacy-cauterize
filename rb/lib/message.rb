@@ -1,10 +1,10 @@
 class Message
-  attr_reader :fields
+  attr_reader :name, :fields
 
   def self.from_hash(hash)
     validate(hash, "message")
     message = hash["message"]
-    validate(message, "fields")
+    validate(message, "fields", "name")
 
     fields = message["fields"].map {|f| Field.from_hash(f)}
     Message.new(message["name"], fields)
