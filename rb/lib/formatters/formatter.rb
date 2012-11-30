@@ -1,6 +1,4 @@
 class Formatter
-  attr_accessor :indent_str
-
   def initialize
     @indent_level = 0
     @indent_str = "  "
@@ -9,14 +7,6 @@ class Formatter
 
   def indent(line)
     (@indent_str * @indent_level) + line
-  end
-
-  def braces
-    self << "{"
-    if block_given?
-      yield self
-    end
-    self << "{"
   end
 
   def <<(line)
@@ -28,12 +18,33 @@ class Formatter
       @lines << ""
     end
 
-    @lines.last += text
+    @lines[-1] += text
   end
 
-  def to_s(indent_level)
-    @indent_level += indent_level
-    lines.map {|l| indent(l) }
-    @indent_level -= indent_level
+  def braces
+    self << "{"
+    increase_indent
+    if block_given?
+      yield self
+    end
+    decrease_indent
+    self << "}"
+  end
+
+  def to_s(extra_indent = 0)
+    @indent_level += extra_indent
+    s = @lines.map {|l| indent(l) }.join("\n")
+    @indent_level -= extra_indent
+    return s
+  end
+
+  private
+
+  def increase_indent
+    @indent_level += 1
+  end
+
+  def decrease_indent
+    @indent_level -= 1
   end
 end
