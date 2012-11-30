@@ -23,11 +23,7 @@ class Formatter
 
   def braces
     self << "{"
-    increase_indent
-    if block_given?
-      yield self
-    end
-    decrease_indent
+    indented { yield self } if block_given?
     self << "}"
   end
 
@@ -40,11 +36,9 @@ class Formatter
 
   private
 
-  def increase_indent
+  def indented
     @indent_level += 1
-  end
-
-  def decrease_indent
+    yield self
     @indent_level -= 1
   end
 end
