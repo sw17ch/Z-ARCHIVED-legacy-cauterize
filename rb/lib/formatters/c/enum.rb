@@ -1,0 +1,2 @@
+class CEnum
+end
