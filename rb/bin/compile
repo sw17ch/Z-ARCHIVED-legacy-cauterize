@@ -4,14 +4,7 @@ $LOAD_PATH.unshift("./rb")
 
 require 'yaml'
 require 'require_all'
-require_all Dir[File.dirname(__FILE__) + '/rb/lib/**/*.rb']
-
-def validate(hash, *keys)
-  h_keys = hash.keys
-  unless keys == keys & h_keys
-    raise "Missing keys: #{(keys - h_keys).join(", ")}."
-  end
-end
+require_all Dir[File.dirname(__FILE__) + '/../lib/**/*.rb']
 
 def compile_files(*files)
   definitions = files.map do |f|
@@ -45,13 +38,15 @@ def compile_files(*files)
 
   c = CFormatter.new("cauterize_example")
 
-  messages.each { |req| req.format_struct(c) }
-  groups.each { |grp| grp.format_enumeration(c) }
-  groups.each { |grp| grp.format_struct(c) }
-  groups.each { |grp| grp.format_packer(c) }
-  groups.each { |grp| grp.format_unpacker(c) }
+  formatted = messages.map { |req| req.format }
+  # groups.each { |grp| grp.format_enumeration(c) }
+  # groups.each { |grp| grp.format_struct(c) }
+  # groups.each { |grp| grp.format_packer(c) }
+  # groups.each { |grp| grp.format_unpacker(c) }
 
-  puts c.c_text
+  formatted.each {|f| puts f.h_file}
+  # formatted.each {|f| puts f.c_file}
+  # formatted.each {|f| puts f.cs_file}
 end
 
 compile_files(*ARGV)

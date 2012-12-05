@@ -14,6 +14,10 @@ class Field
 
   def format(formatter)
     formatter << "/* #{@desc} */"
-    formatter << "#{@type.type_str} #{@name}#{@type.array_str};"
+    formatter << "#{decl};"
+  end
+
+  def decl
+    "#{@type.type_str} #{@name}#{@type.array_str}"
   end
 end

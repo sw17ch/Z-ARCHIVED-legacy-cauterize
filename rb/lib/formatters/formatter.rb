@@ -27,6 +27,10 @@ class Formatter
     self << "}"
   end
 
+  def blank_line
+    @lines << ""
+  end
+
   def to_s(extra_indent = 0)
     @indent_level += extra_indent
     s = @lines.map {|l| indent(l) }.join("\n")

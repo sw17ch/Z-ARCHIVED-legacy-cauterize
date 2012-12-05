@@ -22,12 +22,10 @@ class Message
     formatter.blank_line
   end
 
-  def format_packer(formatter)
-    raise :unimplemented
-  end
-
-  def format_unpacker(formatter)
-    raise :unimplemented
+  def format
+    formatted = Formatted.new(@name)
+    formatted.struct(@name, @fields)
+    return formatted
   end
 end
 

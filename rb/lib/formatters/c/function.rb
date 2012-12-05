@@ -1,9 +1,10 @@
 class CFunction
   # `params` is an array of strings suitable as parameter declarations.
-  def initialize(name, ret, params)
+  def initialize(name, ret, params, &blk)
     @name = name
     @ret = ret
     @params = params
+    @defn_blk = blk
   end
 
   def prototype(formatter)
@@ -13,10 +14,10 @@ class CFunction
   def definition(formatter)
     formatter << proto_string
     formatter.braces do
-      if block_given?
-        yield formatter
-      end
+      blk.call(formatter) if blk
+      formatter << "#{@ret};"
     end
+    formatter.blank_line
   end
 
   private
