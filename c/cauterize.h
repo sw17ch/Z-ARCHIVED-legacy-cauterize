@@ -10,6 +10,8 @@ typedef uint32_t CAUTERIZE_STATUS_T;
 #define CA_ERR_ASSERT            (1)
 #define CA_ERR_NOT_ENOUGH_SPACE  (2)
 #define CA_ERR_NOT_ENOUGH_DATA   (3)
+#define CA_ERR_INVALID_LENGTH    (4)
+#define CA_ERR_INVALUD_TYPE_TAG  (5)
 #define CA_ERR_GENERAL           (UINT32_MAX)
 
 struct Cauterize {
@@ -23,5 +25,6 @@ CAUTERIZE_STATUS_T CauterizeInit(struct Cauterize * m, uint8_t * buffer, size_t 
 CAUTERIZE_STATUS_T CauterizeAppend(struct Cauterize * m, uint8_t * src, size_t length);
 CAUTERIZE_STATUS_T CauterizeRead(struct Cauterize * m, uint8_t * dst, size_t length);
 
+#define CA_MAX(a,b) ((a) > (b) ? (a) : (b))
 
 #endif /* CAUTERIZE_H */

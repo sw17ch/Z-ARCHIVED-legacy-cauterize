@@ -1,37 +1,77 @@
-describe Group do
-  describe :from_hash do
-    xit "creates a Group from a hash"
+describe Cauterize do
+  before { reset_for_test }
+
+  describe :group do
+    it { creates_a_named_object(:group, Group) }
+    it { retrieves_obj_with_identical_name(:group) }
+    it { yields_the_object(:group) }
+    it { adds_object_to_hash(:group, :groups) }
   end
 
-  describe :initialize do
-    xit "creates a Group"
+  describe :group! do
+    it { creates_a_named_object(:group!, Group) }
+    it { raises_exception_with_identical_name(:group!) }
+    it { yields_the_object(:group!) }
+    it { adds_object_to_hash(:group!, :groups) }
   end
 
-  describe :enum_type do
-    xit "its the string representation of the group's enumeration type"
+  describe :groups do
+    it "is all the defined groups" do
+      group(:a)
+      group(:b)
+      groups.values.map(&:name).should == [:a, :b]
+    end
   end
 
-  describe :up_name do
-    xit "is the upper case representation of the group's name"
+  describe GroupField do
+    describe :initialize do
+      it "creats a GroupField" do
+        t = atom(:type)
+        f = GroupField.new(:name, :type)
+        f.name.should == :name
+        f.type.should be t
+      end
+    end
   end
 
-  describe :name_as_prefix do
-    xit "is the group's name in a format appropriate for prefixing to other names"
-  end
+  describe Group do
+    describe :initialize do
+      it "makes a new Group" do
+        Group.new(:foo).name == :foo
+      end
+    end
 
-  describe :formate_enumeration do
-    xit "uses a formatter to create the group's enumeration"
-  end
+    describe :field do
+      it "adds a field to the Group" do
+        a = atom(:aaa)
+        b = atom(:bbb)
+        grp = group(:foo) do |g|
+          g.field(:a, :aaa)
+          g.field(:b, :bbb)
+        end
 
-  describe :format_struct do
-    xit "uses a formatter to create the group's tagged struct"
-  end
+        grp.fields.values.map(&:name).should == [:a, :b]
+      end
 
-  describe :format_packer do
-    xit "uses a formatter to create the group's packing function"
-  end
+      it "errors on duplicate field names" do
+        a = atom(:aaa)
+        lambda {
+          grp = group(:foo) do |g|
+            g.field(:a, :aaa)
+            g.field(:a, :aaa)
+          end
+        }.should raise_error /Field name a already used/
+      end
 
-  describe :format_unpacker do
-    xit "uses a formatter to create the group's unpacking function"
+      it "errors on non-existant types" do
+        lambda {
+          grp = group(:foo) do |g|
+            g.field(:a, :aaa)
+          end
+        }.should raise_error /name aaa does not correspond to a type/
+      end
+
+      xit "errors on recursive definitions"
+    end
   end
 end

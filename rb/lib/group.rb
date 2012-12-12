@@ -1,128 +1,45 @@
-class Group
-  def self.from_hash(hash)
-    validate(hash, "group")
-    group = hash["group"]
-    validate(group, "name", "members")
-
-    Group.new(group["name"], group["members"])
+module Cauterize
+  def group(name)
+    a = groups[name] || groups[name] = Group.new(name)
+    yield a if block_given?
+    return a
   end
 
-  def initialize(name, members)
-    @name = name
-    @members = members.map {|m| GroupMember.from_obj(m)}
-  end
-
-  def enum_type
-    "enum #{up_name}"
-  end
-
-  def up_name
-    "GROUP_" + @name.up_snake
-  end
-
-  def name_as_prefix
-    up_name + "_"
-  end
-
-  def format_enumeration(formatter)
-    formatter.enum(up_name) do |f|
-      member_enums = @members.map {|m| m.enum_name(name_as_prefix)}
-      member_enums.each {|m| f << "#{m},"}
+  def group!(name, &blk)
+    if groups[name]
+      raise Exception.new("Group with name #{name} already exists.")
+    else
+      group(name, &blk)
     end
-    formatter.blank_line
   end
 
-  def format_struct(formatter)
-    uses_length = @members.any? {|m| m.sizeFunc}
-    formatter.struct(@name) do |f|
-      f << "#{enum_type} tag;"
-      f << "size_t length;"
-      f.braces("union") do |g|
-        @members.each {|m| g << "struct #{m.name} #{m.name.down_snake};"}
-      end
-      formatter.append_last(" data;")
-    end
-    formatter.blank_line
+  def groups
+    @groups ||= {}
   end
 
-  def format_packer(formatter)
-    params = [ "struct Cauterize * dst", "struct #{@name} * src" ]
-    formatter.func("Pack#{@name}", "CAUTERIZE_STATUS_T", params) do |f|
-      f << "CAUTERIZE_STATUS_T s;"
-      f.blank_line
+  class GroupField
+    attr_reader :name, :type
 
-      # Copy the tag.
-      f << "/* Copy the tag. */"
-      f << "s = CauterizeAppend(dst, &(src->tag), sizeof(src->tag));"
-      f.braces("if (CA_OK != s)") do
-        f << "return s;"
-      end
-      f.blank_line
-
-      # Copy the union.
-      f.braces("switch (src->tag)") do
-        @members.each do |m|
-          # Create the field
-          field = "src->data.#{m.name.down_snake}"
-          f.undented { f << "case #{m.enum_name(name_as_prefix)}:"}
-
-          # Update and copy the length
-          f << "/* Copy the length. */"
-          sizeExpr = m.sizeFunc ? "#{m.sizeFunc}(&#{field})" : "sizeof(#{field})"
-          f << "src->length = #{sizeExpr}"
-          f << "s = CauterizeAppend(dst, &(src->length), sizeof(src->length));"
-          f.braces("if (CA_OK != s)") do
-            f << "return s;"
-          end
-          f.blank_line
-
-          # Copy the data
-          f << "s = CauterizeAppend(dst, &(#{field}), src->length);"
-          f.braces("if (CA_OK != s)") do
-            f << "return s;"
-          end
-          f << "break;"
-          f.blank_line
-        end
-      end
-      f.blank_line
-      f << "return CA_OK;"
+    def initialize(name, type)
+      @name = name
+      @type = BaseType.find_type!(type)
     end
-    formatter.blank_line
   end
 
-  def format_unpacker(formatter)
-    params = [ "struct #{@name} * dst", "struct Cauterize * src" ]
-    formatter.func("Unpack#{@name}", "CAUTERIZE_STATUS_T", params) do |f|
-      f << "CAUTERIZE_STATUS_T s;"
-      f << "size_t length = 0;"
-      f.blank_line
+  class Group < BaseType
+    attr_reader :fields
 
-      # Read the tag.
-      f << "s = CauterizeRead(src, &(dst->tag), sizeof(dst->tag));"
-      f.braces("if (CA_OK != s)") do
-        f << "return s;"
-      end
-      f.blank_line
-
-      # Read the length
-      f << "s = CauterizeRead(src, &(dst->length), sizeof(dst->length));"
-      f.braces("if (CA_OK != s)") do
-        f << "return s;"
-      end
-      f.blank_line
-
-      # Read the union
-      field = "dst->data"
-      f << "s = CauterizeRead(src, &(#{field}), &(dst->length));"
-      f.braces("if (CA_OK != s)") do
-        f << "return s;"
-      end
-      f.blank_line
-
-      f << "return CA_OK;"
+    def initialize(name)
+      super
+      @fields = {}
     end
-    formatter.blank_line
+
+    def field(name, type)
+      if @fields[name]
+        raise Exception.new("Field name #{name} already used.")
+      else
+        @fields[name] = GroupField.new(name, type)
+      end
+    end
   end
 end
-
