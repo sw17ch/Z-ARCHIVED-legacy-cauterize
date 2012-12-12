@@ -75,7 +75,7 @@ module Cauterize
         f << "CAUTERIZE_STATUS_T err;"
 
         # pack the tag
-        f << "if (CA_OK != (err = #{@tag_enumeration.pack_sym}(dst, &src->tag))) { return err; }"
+        f << "if (CA_OK != (err = #{tag_enumeration.pack_sym}(dst, &src->tag))) { return err; }"
 
         # pack the fields
         f << "switch (src->tag)"

@@ -54,6 +54,7 @@ describe Cauterize do
             "  GROUP_A_GROUP_TYPE_C = 1,",
             "};",
             "CAUTERIZE_STATUS_T Pack_enum_group_a_group_type(struct Cauterize * dst, enum group_a_group_type * src);",
+            "CAUTERIZE_STATUS_T Unpack_enum_group_a_group_type(struct Cauterize * src, enum group_a_group_type * dst);",
             "",
             "struct a_group",
             "{",
@@ -69,9 +70,18 @@ describe Cauterize do
     end
 
     describe :format_c_defn do
-      it "does nothing" do
-        @g.format_c_defn(@f)
-        @f.to_s.should == ""
+      before { @g.format_c_defn(@f) }
+
+      it "contains return statements" do
+        @f.to_s.should match "return"
+      end
+
+      it "defines a packing function" do
+        @f.to_s.should match "Pack_"
+      end
+
+      it "defines an unpacking function" do
+        @f.to_s.should match "Unpack_"
       end
     end
 

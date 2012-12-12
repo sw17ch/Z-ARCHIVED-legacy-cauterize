@@ -22,14 +22,25 @@ describe Cauterize do
     describe :format_h_defn do
       it "produces the packer" do
         atom(:foo).format_h_defn(@f)
-        @f.to_s.should == "CAUTERIZE_STATUS_T Pack_foo(struct Cauterize * dst, foo * src);"
+        @f.to_s.should match Regexp.escape("CAUTERIZE_STATUS_T Pack_foo(struct Cauterize * dst, foo * src);")
+      end
+      it "produces the unpacker" do
+        atom(:foo).format_h_defn(@f)
+        @f.to_s.should match Regexp.escape("CAUTERIZE_STATUS_T Unpack_foo(struct Cauterize * src, foo * dst);")
       end
     end
 
     describe :format_c_defn do
-      it "is the definition of the packing function" do
-        atom(:foo).format_c_defn(@f)
-        @f.to_s.should == ""
+      before { atom(:foo).format_c_defn(@f) }
+
+      it "formats the definition of the packing function" do
+        @f.to_s.should match Regexp.escape("Pack_foo")
+        @f.to_s.should match Regexp.escape("return")
+      end
+
+      it "formats the definition of the unpacking function" do
+        @f.to_s.should match Regexp.escape("Unpack_foo")
+        @f.to_s.should match Regexp.escape("return")
       end
     end
 
@@ -46,7 +57,7 @@ describe Cauterize do
     end
     describe :unpack_sym do
       it "is the symbol used for the unpacking function" do
-        atom(:foo).pack_sym.should == "Unpack_foo"
+        atom(:foo).unpack_sym.should == "Unpack_foo"
       end
     end
   end

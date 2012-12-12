@@ -53,9 +53,18 @@ describe Cauterize do
     end
 
     describe :format_c_defn do
-      it "does nothing" do
-        @e.format_c_defn(@f)
-        @f.to_s.should == ""
+      before { @e.format_c_defn(@f) }
+
+      it "contains return statements" do
+        @f.to_s.should match "return"
+      end
+
+      it "formats the unpacking function" do
+        @f.to_s.should match "Unpack_"
+      end
+
+      it "formats the packing function" do
+        @f.to_s.should match "Pack_"
       end
     end
 

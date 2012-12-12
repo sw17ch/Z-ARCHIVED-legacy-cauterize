@@ -43,9 +43,14 @@ describe Cauterize do
     end
 
     describe :format_h_proto do
+      before { @a.format_h_proto(@f) }
+
       it "formats a packing function" do
-        @a.format_h_proto(@f)
-        @f.to_s.should == "CAUTERIZE_STATUS_T Pack_foo(struct Cauterize * dst, struct composite * src);"
+        @f.to_s.should match Regexp.escape("CAUTERIZE_STATUS_T Pack_foo(struct Cauterize * dst, struct composite * src);")
+      end
+
+      it "formats an unpacking function" do
+        @f.to_s.should match Regexp.escape("CAUTERIZE_STATUS_T Unpack_foo(struct Cauterize * src, struct composite * dst);")
       end
     end
 
@@ -57,9 +62,18 @@ describe Cauterize do
     end
 
     describe :format_c_defn do
-      it "does nothing" do
-        @a.format_c_defn(@f)
-        @f.to_s.should == ""
+      before { @a.format_c_defn(@f) }
+
+      it "contains return statements" do
+        @f.to_s.should match "return"
+      end
+
+      it "defines a packing function" do
+        @f.to_s.should match "Pack_"
+      end
+
+      it "defines an unpacking function" do
+        @f.to_s.should match "Unpack_"
       end
     end
 

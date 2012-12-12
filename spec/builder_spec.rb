@@ -107,10 +107,6 @@ describe Cauterize do
       end
 
       describe "compilation" do
-        it "includes unpacking syms" do
-          pending
-        end
-
         it "can be built" do
           caut_dir = "#{File.dirname(__FILE__)}/../c"
 
