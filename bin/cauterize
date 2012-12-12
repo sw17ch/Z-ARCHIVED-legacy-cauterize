@@ -12,10 +12,11 @@ def e(msg); CmdLineException.new(msg); end
 class CauterizeCmdline < Thor
   desc "generate [language] [target_dir] [[description file]]",
        "Generate sources for [language] in [target_dir]."
+  method_option :omit_support, :type => :boolean, :default => false
   def generate(language, target_dir, desc_file = nil)
     raise e("Language '#{language}' is not supported.") unless language == 'c'
 
-    if Dir.exist?(target_dir) and Dir.entries(target_dir).size > 0
+    if Dir.exist?(target_dir) and Dir[target_dir + "/*"].size > 0
       raise e("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
     end
 
