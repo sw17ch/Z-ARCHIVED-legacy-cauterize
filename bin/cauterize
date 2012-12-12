@@ -17,10 +17,13 @@ class CauterizeCmdline < Thor
   method_option :omit_support, :type => :boolean,
                                :desc => "Omit the support files needed by Cauterize",
                                :default => false
+  method_option :force, :type => :boolean,
+                        :desc => "Bravely overwrite files in non-empty directories",
+                        :default => false
   def generate(language, target_dir, desc_file = nil)
     raise e("Language '#{language}' is not supported.") unless language == 'c'
 
-    if Dir.exist?(target_dir) and Dir[target_dir + "/*"].size > 0
+    if not options[:force] and Dir.exist?(target_dir) and Dir[target_dir + "/*"].size > 0
       raise e("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
     end
 
