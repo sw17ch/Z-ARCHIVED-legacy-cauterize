@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
-lib_path = File.dirname(__FILE__) + "/../lib"
-$LOAD_PATH.unshift lib_path
+LIB_PATH = File.dirname(__FILE__) + "/../lib"
+C_PATH = File.dirname(__FILE__) + "/../c/src"
+
+$LOAD_PATH.unshift LIB_PATH
 
 require 'thor'
 require 'cauterize/cauterize'
@@ -12,7 +14,9 @@ def e(msg); CmdLineException.new(msg); end
 class CauterizeCmdline < Thor
   desc "generate [language] [target_dir] [[description file]]",
        "Generate sources for [language] in [target_dir]."
-  method_option :omit_support, :type => :boolean, :default => false
+  method_option :omit_support, :type => :boolean,
+                               :desc => "Omit the support files needed by Cauterize",
+                               :default => false
   def generate(language, target_dir, desc_file = nil)
     raise e("Language '#{language}' is not supported.") unless language == 'c'
 
@@ -26,7 +30,15 @@ class CauterizeCmdline < Thor
       raise e("The description file #{desc_file} does not exist.")
     end
 
+    # Generate the C files.
     Cauterize.generate_c(target_dir, desc_file)
+
+    # Copy the cauterize support files.
+    unless options[:omit_support]
+      Dir[C_PATH + "/*"].each do |path|
+        FileUtils.cp(path, target_dir)
+      end
+    end
   end
 end
 
@@ -36,4 +48,4 @@ rescue CmdLineException => ex
   puts ex.message
 end
 
-# vim: set syntax=ruby ts=2 sw=2 et
+# vim: set syntax=ruby ts=2 sw=2 et ai

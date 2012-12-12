@@ -6,7 +6,7 @@ require_all Dir[lib_path + "/**/*.rb"]
 module Cauterize
   def self.generate_c(target_dir, desc_file)
     Object.new.extend(Cauterize).instance_eval(File.read(desc_file))
-    output_prefix = @name || "cauterize"
+    output_prefix = @name || "generated_interface"
 
     FileUtils.mkdir_p(target_dir)
     h_file = File.join(target_dir, "#{output_prefix}.h")
