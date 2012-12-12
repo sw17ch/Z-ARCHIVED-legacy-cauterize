@@ -124,7 +124,6 @@ describe Cauterize do
               test_main.c
               -o testing.bin 2>&1
             }.join(" ")
-            # puts cmd
 
             `#{cmd}`
           end
