@@ -1,12 +1,11 @@
-require 'require_all'
 require 'mocha/api'
+
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+require 'cauterize/cauterize'
 
 RSpec.configure do |config|
   config.mock_framework = :mocha
 end
-
-files = Dir[File.dirname(__FILE__) + '/../lib/**/*.rb']
-require_all files
 
 ###
 include Cauterize

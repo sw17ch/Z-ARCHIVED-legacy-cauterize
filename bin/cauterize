@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+lib_path = File.dirname(__FILE__) + "/../lib"
+$LOAD_PATH.unshift lib_path
+
+require 'thor'
+require 'cauterize/cauterize'
+
+class CmdLineException < Exception; end
+def e(msg); CmdLineException.new(msg); end
+
+class CauterizeCmdline < Thor
+  desc "generate [language] [target_dir] [[description file]]",
+       "Generate sources for [language] in [target_dir]."
+  def generate(language, target_dir, desc_file = nil)
+    raise e("Language '#{language}' is not supported.") unless language == 'c'
+
+    if Dir.exist?(target_dir) and Dir.entries(target_dir).size > 0
+      raise e("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
+    end
+
+    desc_file ||= "Cauterize"
+
+    if not File.exist? desc_file
+      raise e("The description file #{desc_file} does not exist.")
+    end
+
+    Cauterize.generate_c(target_dir, desc_file)
+  end
+end
+
+begin
+  CauterizeCmdline.start
+rescue CmdLineException => ex
+  puts ex.message
+end
+
+# vim: set syntax=ruby ts=2 sw=2 et

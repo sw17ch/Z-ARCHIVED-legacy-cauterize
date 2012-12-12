@@ -2,6 +2,8 @@
 #
 # Enumerations correspond exactly to C enumerations.
 
+require 'set'
+
 module Cauterize
   def enumeration(name)
     e = enumerations[name] || enumerations[name] = Enumeration.new(name)
