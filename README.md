@@ -10,3 +10,5 @@ Future Tasks
 * define names for each of the various sizes in different structures
 * break different types into different include files
 * make some of the length checking optional
+* allow customization of enumeration packing size
+* automatically pick a suitable length type based on the array size
