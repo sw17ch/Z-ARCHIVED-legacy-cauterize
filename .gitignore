@@ -19,3 +19,6 @@
 # Bundler
 Gemfile.lock
 pkg
+
+# Examples
+example/cauterize_output

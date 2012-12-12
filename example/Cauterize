@@ -1,0 +1,42 @@
+atom(:int8_t)
+atom(:int16_t)
+atom(:int32_t)
+atom(:int64_t)
+atom(:uint8_t)
+atom(:uint16_t)
+atom(:uint32_t)
+atom(:uint64_t)
+
+enumeration(:color) do |e|
+  e.value :red
+  e.value :blue
+  e.value :green
+end
+
+fixed_array(:color_list) do |a|
+  a.array_type :color
+  a.array_size 4
+end
+
+variable_array(:numbers) do |a|
+  a.size_type  :uint8_t
+  a.array_type :int32_t
+  a.array_size 128
+end
+
+composite(:nonsensical) do |c|
+  c.field :color, :color
+  c.field :color_list, :color_list
+  c.field :numbers, :numbers
+end
+
+composite(:crazy) do |c|
+  c.field :first_numbers, :numbers
+  c.field :second_numbers, :numbers
+  c.field :third_numbers, :numbers
+end
+
+group(:insanity) do |g|
+  g.field :nonsensical, :nonsensical
+  g.field :crazy, :crazy
+end
