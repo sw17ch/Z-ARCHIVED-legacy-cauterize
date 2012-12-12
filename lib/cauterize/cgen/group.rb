@@ -41,11 +41,24 @@ module Cauterize
     def tag_enumeration
       type_name = "group_#{@name}_type".to_sym
 
-      @tag_enumeration ||= enumeration(type_name) do |e|
-        @fields.values.each do |v|
-          e.value field_enum_sym(v.name)
+      # GAH! NO! DON'T LOOK!
+      # (this is bad. this will be fixed when we use builders instead of
+      # mixins.)
+      te = nil
+      group_fields = @fields
+      fes = lambda {|n| field_enum_sym(n)}
+      unless @tag_enumeration
+        Object.new.extend(Cauterize).instance_exec do
+          te = enumeration(type_name) do |e|
+            group_fields.values.each do |v|
+              e.value fes.call(v.name)
+            end
+          end
         end
       end
+
+      @tag_enumeration = te if te
+      return @tag_enumeration
     end
 
     def pack_sym; "Pack_struct_#{@name}" end
