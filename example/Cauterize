@@ -1,13 +1,13 @@
 set_name("example_project")
 
-atom(:int8_t)
-atom(:int16_t)
-atom(:int32_t)
-atom(:int64_t)
-atom(:uint8_t)
-atom(:uint16_t)
-atom(:uint32_t)
-atom(:uint64_t)
+scalar(:int8_t)
+scalar(:int16_t)
+scalar(:int32_t)
+scalar(:int64_t)
+scalar(:uint8_t)
+scalar(:uint16_t)
+scalar(:uint32_t)
+scalar(:uint64_t)
 
 enumeration(:color) do |e|
   e.value :red

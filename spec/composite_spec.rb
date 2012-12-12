@@ -4,8 +4,8 @@ describe Cauterize do
   describe CompositeField do
     describe :initialize do
       it "creates a new name -> type mapping" do
-        a = atom(:a_type)
-        b = atom(:b_type)
+        a = scalar(:a_type)
+        b = scalar(:b_type)
         f = CompositeField.new(:a_name, :a_type)
         f.name.should == :a_name
         f.type.should be a
@@ -23,7 +23,7 @@ describe Cauterize do
 
     describe :fields do
       it "defines a new field in the composite" do
-        a = atom(:foo)
+        a = scalar(:foo)
         comp = composite(:comp) do |c|
           c.field :a_foo, :foo
         end
@@ -34,7 +34,7 @@ describe Cauterize do
       end
 
       it "errors on duplicate field names" do
-        a = atom(:foo)
+        a = scalar(:foo)
         lambda {
           composite(:comp) do |c|
             c.field :a_foo, :foo

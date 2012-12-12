@@ -6,9 +6,9 @@ describe Cauterize do
 
   describe Composite do
     before do
-      @a = atom(:atom)
+      @a = scalar(:scalar)
       @c = composite(:foo) do |c|
-        c.field :a, :atom
+        c.field :a, :scalar
       end
     end
 
@@ -46,7 +46,7 @@ describe Cauterize do
         @f.to_s.should match Regexp.new(Regexp.escape [
                               "struct foo",
                               "{",
-                              "  atom a;",
+                              "  scalar a;",
                               "};",
                             ].join("\n"))
       end

@@ -1,5 +1,5 @@
 module Cauterize
-  class Atom < BaseType
+  class Scalar < BaseType
     def format_decl(f, decl, init=nil)
       f << "#{@name} #{decl};"
     end

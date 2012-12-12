@@ -6,11 +6,11 @@ describe Cauterize do
 
   describe VariableArray do
     before do
-      atom(:uint16_t)
-      atom(:atom)
+      scalar(:uint16_t)
+      scalar(:scalar)
 
       @v = variable_array(:va) do |v|
-        v.array_type :atom
+        v.array_type :scalar
         v.array_size 16
         v.size_type :uint16_t
       end
@@ -44,7 +44,7 @@ describe Cauterize do
           "struct va",
           "{",
           "  uint16_t length;",
-          "  atom data[16];",
+          "  scalar data[16];",
           "};"
         ].join("\n")
       end

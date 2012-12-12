@@ -32,10 +32,10 @@ module Cauterize
 
     def size_type(t)
       _t = BaseType.find_type!(t)
-      if _t.is_atom?
+      if _t.is_scalar?
         @size_type = _t
       else
-        raise Exception.new("The type #{t} is not an atom")
+        raise Exception.new("The type #{t} is not an scalar")
       end
     end
   end

@@ -25,7 +25,7 @@ describe Cauterize do
     end
 
     describe :tag do
-      it { is_tagged_as(Atom, 0) }
+      it { is_tagged_as(Scalar, 0) }
       it { is_tagged_as(Enumeration, 1) }
       it { is_tagged_as(Composite, 2) }
       it { is_tagged_as(FixedArray, 3) }
@@ -45,8 +45,8 @@ describe Cauterize do
       end
 
       it "should not allow derived class ids to interact" do
-        a1 = Atom.new(:foo)
-        a2 = Atom.new(:bar)
+        a1 = Scalar.new(:foo)
+        a2 = Scalar.new(:bar)
         e1 = Enumeration.new(:zoop)
         e2 = Enumeration.new(:nih)
 
@@ -89,7 +89,7 @@ describe Cauterize do
       it "is every instance of a BaseType-derived class" do
         BaseType.all_instances.should == []
 
-        a = Atom.new(:foo)
+        a = Scalar.new(:foo)
         e = Enumeration.new(:emoo)
         c = Composite.new(:cooo)
         f = FixedArray.new(:moo)
@@ -108,8 +108,8 @@ describe Cauterize do
 
     describe :find_type do
       it "returns the instance with the provided name" do
-        f = atom(:foo)
-        b = atom(:bar)
+        f = scalar(:foo)
+        b = scalar(:bar)
 
         BaseType.find_type(:bar).should be b
         BaseType.find_type(:foo).should be f
@@ -122,8 +122,8 @@ describe Cauterize do
 
     describe :find_type! do
       it "returns the instance with the provided name" do
-        f = atom(:foo)
-        b = atom(:bar)
+        f = scalar(:foo)
+        b = scalar(:bar)
 
         BaseType.find_type!(:bar).should be b
         BaseType.find_type!(:foo).should be f
@@ -135,8 +135,8 @@ describe Cauterize do
     end
 
     describe "is_[type]?" do
-      it "supports atom" do
-        atom(:foo).is_atom?.should be_true
+      it "supports scalar" do
+        scalar(:foo).is_scalar?.should be_true
       end
 
       it "supports enumeration" do

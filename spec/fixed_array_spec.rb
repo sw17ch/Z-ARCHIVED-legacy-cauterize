@@ -27,7 +27,7 @@ describe Cauterize do
 
     describe :array_type do
       it "Defines the type of the FixedArray." do
-        atom(:uint32_t)
+        scalar(:uint32_t)
         @a.array_type :uint32_t
         @a.instance_variable_get(:@array_type).name.should == :uint32_t
       end

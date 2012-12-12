@@ -25,9 +25,9 @@ describe Cauterize do
 
     describe :build do
       before do
-        atom(:uint8_t)
-        atom(:uint16_t)
-        atom(:uint32_t)
+        scalar(:uint8_t)
+        scalar(:uint16_t)
+        scalar(:uint32_t)
 
         fixed_array(:mac_address) do |fa|
           fa.array_type :uint8_t

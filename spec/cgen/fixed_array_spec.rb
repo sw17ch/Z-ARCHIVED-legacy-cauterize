@@ -6,9 +6,9 @@ describe Cauterize do
 
   describe FixedArray do
     before do
-      atom(:atom)
+      scalar(:scalar)
       @c = composite(:composite) do |c|
-        c.field :a, :atom
+        c.field :a, :scalar
       end
 
       @a = fixed_array(:foo) do |f|
@@ -25,16 +25,16 @@ describe Cauterize do
 
       it "raises an error if size isn't defined" do
         lambda {
-          atom(:atom)
+          scalar(:scalar)
           fixed_array(:nerp) do |fa|
-            fa.array_type :atom
+            fa.array_type :scalar
           end.format_decl(@f, :beep)
         }.should raise_error /size must be defined/
       end
 
       it "raises an error if type isn't defined" do
         lambda {
-          atom(:atom)
+          scalar(:scalar)
           fixed_array(:nerp) do |fa|
             fa.array_size 96
           end.format_decl(@f, :beep)

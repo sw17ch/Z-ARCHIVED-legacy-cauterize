@@ -23,7 +23,7 @@ module Cauterize
     def tag
       cname = self.class.name
       case cname
-      when "Cauterize::Atom";          0
+      when "Cauterize::Scalar";        0
       when "Cauterize::Enumeration";   1
       when "Cauterize::Composite";     2
       when "Cauterize::FixedArray";    3

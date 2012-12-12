@@ -26,7 +26,7 @@ describe Cauterize do
   describe GroupField do
     describe :initialize do
       it "creats a GroupField" do
-        t = atom(:type)
+        t = scalar(:type)
         f = GroupField.new(:name, :type)
         f.name.should == :name
         f.type.should be t
@@ -43,8 +43,8 @@ describe Cauterize do
 
     describe :field do
       it "adds a field to the Group" do
-        a = atom(:aaa)
-        b = atom(:bbb)
+        a = scalar(:aaa)
+        b = scalar(:bbb)
         grp = group(:foo) do |g|
           g.field(:a, :aaa)
           g.field(:b, :bbb)
@@ -54,7 +54,7 @@ describe Cauterize do
       end
 
       it "errors on duplicate field names" do
-        a = atom(:aaa)
+        a = scalar(:aaa)
         lambda {
           grp = group(:foo) do |g|
             g.field(:a, :aaa)

@@ -6,12 +6,12 @@ describe Cauterize do
 
   describe Group do
     before do
-      @a = atom(:atom)
+      @a = scalar(:scalar)
       @c = composite(:composite) do |c|
-        c.field :a, :atom
+        c.field :a, :scalar
       end
       @g = group(:a_group) do |g|
-        g.field :a, :atom
+        g.field :a, :scalar
         g.field :c, :composite
       end
     end
@@ -61,7 +61,7 @@ describe Cauterize do
             "  enum group_a_group_type tag;",
             "  union",
             "  {",
-            "    atom a;",
+            "    scalar a;",
             "    struct composite c;",
             "  } data;",
             "};"
