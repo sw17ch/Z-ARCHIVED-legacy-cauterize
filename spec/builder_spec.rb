@@ -112,7 +112,7 @@ describe Cauterize do
         end
 
         it "can be built" do
-          caut_dir = "#{File.dirname(__FILE__)}/../../c"
+          caut_dir = "#{File.dirname(__FILE__)}/../c"
 
           res = Dir.chdir @tempdir do
             File.open("test_main.c", "wb") do |fh|
