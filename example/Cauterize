@@ -1,3 +1,5 @@
+set_name("example_project")
+
 atom(:int8_t)
 atom(:int16_t)
 atom(:int32_t)
