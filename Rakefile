@@ -12,7 +12,7 @@ task :greatest do
     test_suite_path = File.join(d, "test_suite.c")
     mk_test_suite_file(test_suite_path)
 
-    args = "-Ic/test -Ic/src -I#{d}"
+    args = "-Wall -Wextra -Werror -Ic/test -Ic/src -I#{d}"
     srcs = "c/src/cauterize.c c/test/test.c"
     bin = File.join(d, "test.bin")
     sh "gcc #{args} #{srcs} -o #{bin}"
