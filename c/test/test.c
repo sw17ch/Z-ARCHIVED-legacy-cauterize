@@ -133,13 +133,8 @@ TEST t_CauterizeRead_checks_data_needs() {
 }
 
 GREATEST_SUITE(marshal) {
-  RUN_TEST(t_CauterizeInit_works);
-  RUN_TEST(t_CauterizeAppend_works);
-  RUN_TEST(t_CauterizeAppend_works_again);
-  RUN_TEST(t_CauterizeAppend_checks_space_needs);
-  RUN_TEST(t_CauterizeRead_works);
-  RUN_TEST(t_CauterizeRead_works_again);
-  RUN_TEST(t_CauterizeRead_checks_data_needs);
+/* test_suite.c is generated programatically by the Rakefile */
+#include "test_suite.c"
 }
 
 int main(int argc, char * argv[]) {
