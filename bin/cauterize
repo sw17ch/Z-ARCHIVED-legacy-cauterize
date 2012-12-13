@@ -9,7 +9,6 @@ require 'thor'
 require 'cauterize/cauterize'
 
 class CmdLineException < Exception; end
-def e(msg); CmdLineException.new(msg); end
 
 class CauterizeCmdline < Thor
   desc "generate [language] [target_dir] [[description file]]",
@@ -21,16 +20,16 @@ class CauterizeCmdline < Thor
                         :desc => "Bravely overwrite files in non-empty directories",
                         :default => false
   def generate(language, target_dir, desc_file = nil)
-    raise e("Language '#{language}' is not supported.") unless language == 'c'
+    raise CmdLineException.new("Language '#{language}' is not supported.") unless language == 'c'
 
     if not options[:force] and Dir.exist?(target_dir) and Dir[target_dir + "/*"].size > 0
-      raise e("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
+      raise CmdLineException.new("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
     end
 
     desc_file ||= "Cauterize"
 
     if not File.exist? desc_file
-      raise e("The description file #{desc_file} does not exist.")
+      raise CmdLineException.new("The description file #{desc_file} does not exist.")
     end
 
     # Generate the C files.
