@@ -18,3 +18,5 @@ Future Tasks
 * make some of the length checking optional
 * allow customization of enumeration packing size
 * automatically pick a suitable length type based on the array size
+* add version information
+* add derived version support (hash of protocol)
