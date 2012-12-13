@@ -6,7 +6,13 @@ require_all Dir[lib_path + "/**/*.rb"]
 module Cauterize
   # Genearte the C code corresponding to the generated configuration
   def self.generate_c(target_dir, desc_file)
-    Object.new.extend(Cauterize).instance_eval(File.read(desc_file))
+    Object.new.extend(Cauterize).instance_exec do
+      # this magic allows us to emit useful exception messages when evaling the
+      # file. if your description file has errors, you'll be able to find them
+      # because of this magic.
+      proc = Proc.new {}
+      eval(File.read(desc_file), proc.binding, desc_file)
+    end
     output_prefix = get_name || "generated_interface"
 
     FileUtils.mkdir_p(target_dir)
