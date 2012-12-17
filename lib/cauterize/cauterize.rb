@@ -10,8 +10,8 @@ module Cauterize
       # this magic allows us to emit useful exception messages when evaling the
       # file. if your description file has errors, you'll be able to find them
       # because of this magic.
-      proc = Proc.new {}
-      eval(File.read(desc_file), proc.binding, desc_file)
+      p = Proc.new {}
+      eval(File.read(desc_file), p.binding, desc_file)
     end
     output_prefix = get_name || "generated_interface"
 
