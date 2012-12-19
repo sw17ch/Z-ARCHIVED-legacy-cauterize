@@ -21,9 +21,25 @@ struct Cauterize {
   uint8_t * buffer; // Buffer to hold data
 };
 
-CAUTERIZE_STATUS_T CauterizeInit(struct Cauterize * m, uint8_t * buffer, size_t length);
-CAUTERIZE_STATUS_T CauterizeAppend(struct Cauterize * m, uint8_t * src, size_t length);
-CAUTERIZE_STATUS_T CauterizeRead(struct Cauterize * m, uint8_t * dst, size_t length);
+CAUTERIZE_STATUS_T CauterizeInitAppend(
+    struct Cauterize * m,
+    uint8_t * buffer,
+    size_t length);
+
+CAUTERIZE_STATUS_T CauterizeInitRead(
+    struct Cauterize * m,
+    uint8_t * buffer,
+    size_t used);
+
+CAUTERIZE_STATUS_T CauterizeAppend(
+    struct Cauterize * m,
+    uint8_t * src,
+    size_t length);
+
+CAUTERIZE_STATUS_T CauterizeRead(
+    struct Cauterize * m,
+    uint8_t * dst,
+    size_t length);
 
 #define CA_MAX(a,b) ((a) > (b) ? (a) : (b))
 
