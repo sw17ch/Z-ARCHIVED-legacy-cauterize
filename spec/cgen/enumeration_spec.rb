@@ -2,6 +2,7 @@ describe Cauterize do
   before do
     reset_for_test
 
+    scalar(:uint32_t)
     @f = default_formatter
     @e = enumeration(:foo) do |enum|
       enum.value :a

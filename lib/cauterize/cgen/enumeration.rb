@@ -52,13 +52,30 @@ module Cauterize
     def format_pack_defn(f)
       f << pack_signature
       f.braces do
-        f << "return CauterizeAppend(dst, (uint8_t*)src, sizeof(*src));"
+        rep = "enum_representation"
+
+        @representation.format_decl(f, rep)
+        f << "#{rep} = (#{@representation.render_c})(*src);"
+        f << "return #{@representation.pack_sym}(dst, &#{rep});"
       end
     end
     def format_unpack_defn(f)
       f << unpack_signature
       f.braces do
-        f << "return CauterizeRead(src, (uint8_t*)dst, sizeof(*dst));"
+        rep = "enum_representation"
+
+        @representation.format_decl(f, rep)
+
+        f << "CAUTERIZE_STATUS_T s = #{@representation.unpack_sym}(src, &#{rep});"
+        f << "if (CA_OK != s)"
+        f.braces do
+          f << "return s;"
+        end
+        f << "else"
+        f.braces do
+          f << "*dst = (#{render_c})#{rep};"
+          f << "return CA_OK;"
+        end
       end
     end
 

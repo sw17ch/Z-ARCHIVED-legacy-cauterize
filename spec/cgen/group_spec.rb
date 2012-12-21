@@ -2,6 +2,7 @@ describe Cauterize do
   before do
     @f = default_formatter
     reset_for_test
+    scalar(:uint32_t)
   end
 
   describe Group do

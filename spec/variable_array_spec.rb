@@ -1,5 +1,7 @@
 describe Cauterize do
-  before { reset_for_test }
+  before {
+    reset_for_test
+  }
 
   describe :variable_array  do
     it { creates_a_named_object(:variable_array, VariableArray) }
@@ -59,6 +61,7 @@ describe Cauterize do
       end
 
       it "raises an error if the type isn't an scalar" do
+        scalar(:uint32_t)
         enumeration(:lol)
         lambda { @a.size_type :lol }.should raise_error /is not an scalar/
       end

@@ -1,5 +1,8 @@
 describe Cauterize do
-  before { reset_for_test }
+  before {
+    reset_for_test
+    scalar(:uint32_t)
+  }
 
   describe EnumerationValue do
     describe :initialize do

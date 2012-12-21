@@ -40,6 +40,11 @@ module Cauterize
       @values = {}
       @value_id = 0
       @used_ids = Set.new
+      @representation = BaseType.find_type!(:uint32_t)
+    end
+
+    def representation(type_name)
+      @representation = BaseType.find_type!(type_name)
     end
 
     def value(name, id=nil)

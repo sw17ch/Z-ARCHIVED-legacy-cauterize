@@ -13,6 +13,8 @@ describe Cauterize do
 
     describe :type_str do
       it "is the hexadecimal representation of type" do
+        scalar(:uint32_t)
+
         f = enumeration(:foo) do |e|
           e.value :a, 1
         end
@@ -26,7 +28,10 @@ describe Cauterize do
 
     describe :tag do
       it { is_tagged_as(Scalar, 0) }
-      it { is_tagged_as(Enumeration, 1) }
+      it {
+        scalar(:uint32_t)
+        is_tagged_as(Enumeration, 1)
+      }
       it { is_tagged_as(Composite, 2) }
       it { is_tagged_as(FixedArray, 3) }
       it { is_tagged_as(VariableArray, 4) }
@@ -45,8 +50,8 @@ describe Cauterize do
       end
 
       it "should not allow derived class ids to interact" do
-        a1 = Scalar.new(:foo)
-        a2 = Scalar.new(:bar)
+        a1 = Scalar.new(:uint32_t) # Define uint32_t so Enumerations work (see @representation in Enumeration)
+        a2 = Scalar.new(:uint64_t)
         e1 = Enumeration.new(:zoop)
         e2 = Enumeration.new(:nih)
 
@@ -89,7 +94,7 @@ describe Cauterize do
       it "is every instance of a BaseType-derived class" do
         BaseType.all_instances.should == []
 
-        a = Scalar.new(:foo)
+        a = Scalar.new(:uint32_t) # Define uint32_t so Enumerations work (see @representation in Enumeration)
         e = Enumeration.new(:emoo)
         c = Composite.new(:cooo)
         f = FixedArray.new(:moo)
@@ -140,6 +145,7 @@ describe Cauterize do
       end
 
       it "supports enumeration" do
+        scalar(:uint32_t)
         enumeration(:foo).is_enumeration?.should be_true
       end
 
