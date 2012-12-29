@@ -1,18 +1,28 @@
 require 'mocha/api'
+require 'require_all'
 
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'cauterize/cauterize'
 
+require_all Dir['spec/support/**/*.rb']
+
 RSpec.configure do |config|
   config.mock_framework = :mocha
+  config.before(:each) do
+    reset_for_test
+  end
 end
 
 ###
-include Cauterize
 
 def reset_for_test
   BaseType.class_variable_set(:@@next_id, {})
   BaseType.class_variable_set(:@@instances, {})
+
+  Cauterize.module_exec do
+    @enumerations = {}
+    @groups = {}
+  end
 end
 
 def is_tagged_as(cls, tag)

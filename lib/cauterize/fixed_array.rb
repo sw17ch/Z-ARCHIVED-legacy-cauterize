@@ -1,4 +1,6 @@
 module Cauterize
+  module_function
+
   def fixed_array(name)
     a = fixed_arrays[name] || fixed_arrays[name] = FixedArray.new(name)
     yield a if block_given?
@@ -22,12 +24,20 @@ module Cauterize
       super
     end
 
-    def array_type(t)
-      @array_type = BaseType.find_type!(t)
+    def array_type(t = nil)
+      if t
+        @array_type = BaseType.find_type!(t)
+      else
+        @array_type
+      end
     end
 
-    def array_size(s)
-      @array_size = s
+    def array_size(s = nil)
+      if s
+        @array_size = s
+      else
+        @array_size
+      end
     end
   end
 end

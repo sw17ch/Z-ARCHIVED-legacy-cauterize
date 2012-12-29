@@ -18,7 +18,7 @@ module Cauterize
     def build_h
       f = default_formatter
 
-      excluder = @name.up_snake + "_H"
+      excluder = @name.up_snake + "_H_#{Time.now.to_i}"
       f << "#ifndef #{excluder}"
       f << "#define #{excluder}"
       f.blank_line
@@ -26,15 +26,14 @@ module Cauterize
       f << %Q{#include <stdint.h>}
       f.blank_line
 
-      BaseType.all_instances.each do |i|
-        i.format_h_proto(f)
-      end
+      instances = BaseType.all_instances
+      builders = instances.map {|i| Builders.get(:c, i)}
 
-      f.blank_line
-
-      BaseType.all_instances.each do |i|
-        i.format_h_defn(f)
-      end
+      builders.each { |b| b.enum_defn(f) }
+      builders.each { |b| b.struct_proto(f) }
+      builders.each { |b| b.struct_defn(f) }
+      builders.each { |b| b.packer_proto(f) }
+      builders.each { |b| b.unpacker_proto(f) }
 
       f.blank_line
       f << "#endif /* #{excluder} */"
@@ -50,9 +49,11 @@ module Cauterize
       f << %Q{#include <cauterize_util.h>}
       f << %Q{#include "#{@name}.h"}
 
-      BaseType.all_instances.each do |i|
-        i.format_c_defn(f)
-      end
+      instances = BaseType.all_instances
+      builders = instances.map {|i| Builders.get(:c, i)}
+
+      builders.each { |b| b.packer_defn(f) }
+      builders.each { |b| b.unpacker_defn(f) }
 
       File.open(@c, "wb") do |fh|
         fh.write(f.to_s)

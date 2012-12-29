@@ -8,13 +8,26 @@
 #define S CAUTERIZE_STATUS_T
 #define T struct Cauterize
 
-S CauterizeInit(T * m, uint8_t * buffer, size_t length)
+S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, size_t length)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != buffer);
 
   m->size = length;
   m->used = 0;
+  m->pos = 0;
+  m->buffer = buffer;
+
+  return CA_OK;
+}
+
+S CauterizeInitRead( struct Cauterize * m, uint8_t * buffer, size_t used)
+{
+  CA_ASSERT(NULL != m);
+  CA_ASSERT(NULL != buffer);
+
+  m->size = used;
+  m->used = used;
   m->pos = 0;
   m->buffer = buffer;
 

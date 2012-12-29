@@ -5,6 +5,7 @@
 require 'set'
 
 module Cauterize
+  module_function
   def enumeration(name)
     e = enumerations[name] || enumerations[name] = Enumeration.new(name)
     yield e if block_given?

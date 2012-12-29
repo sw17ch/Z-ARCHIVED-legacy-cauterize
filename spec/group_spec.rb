@@ -39,6 +39,12 @@ describe Cauterize do
       it "makes a new Group" do
         Group.new(:foo).name == :foo
       end
+
+      it "creates the tag enum" do
+        e = Group.new(:foo).tag_enum
+        e.name.should == :group_foo_type
+        e.values == {}
+      end
     end
 
     describe :field do
@@ -71,7 +77,30 @@ describe Cauterize do
         }.should raise_error /name aaa does not correspond to a type/
       end
 
+      it "adds a new value to the enum for each field" do
+        a = scalar(:aaa)
+        b = scalar(:bbb)
+        grp = group(:foo) do |g|
+          g.field(:a, :aaa)
+          g.field(:b, :bbb)
+        end
+
+        grp.tag_enum.values.keys.should =~ [:GROUP_FOO_TYPE_A, :GROUP_FOO_TYPE_B]
+      end
+
       xit "errors on recursive definitions"
+    end
+
+    describe ".tag_enum" do
+      it "is the enumeration used for the type tag" do
+        Group.new(:foo).tag_enum.class.should be Cauterize::Enumeration
+      end
+    end
+
+    describe "enum_sym" do
+      it "returns the enumeration symbol for a field name" do
+        group(:foo).enum_sym(:a_field).should == :GROUP_FOO_TYPE_A_FIELD
+      end
     end
   end
 end

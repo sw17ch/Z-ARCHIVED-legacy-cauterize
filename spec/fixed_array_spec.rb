@@ -39,12 +39,23 @@ describe Cauterize do
           end
         }.should raise_error /lol does not correspond/
       end
+
+      it "is the defined type if no argument is passed" do
+        s = scalar(:uint32_t)
+        @a.array_type :uint32_t
+        @a.array_type.should be s
+      end
     end
 
     describe :array_size do
       it "Defines the size of the FixedArray." do
         @a.array_size 46
         @a.instance_variable_get(:@array_size).should == 46
+      end
+
+      it "is the defined size if no argument is passed" do
+        @a.array_size 46
+        @a.array_size.should == 46
       end
     end
   end

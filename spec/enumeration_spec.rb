@@ -18,6 +18,10 @@ describe Cauterize do
       end
     end
 
+    describe :representation do
+      pending
+    end
+
     describe :value do
       it "adds a new value to the enumeration" do
         enum = enumeration(:foo) do |e|

@@ -3,6 +3,8 @@
 # Composites correspond to C structs.
 
 module Cauterize
+  module_function
+
   def composite(name)
     c = composites[name] || composites[name] = Composite.new(name)
     yield c if block_given?

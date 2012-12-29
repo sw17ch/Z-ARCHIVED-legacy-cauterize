@@ -1,4 +1,6 @@
 module Cauterize
+  module_function
+
   def variable_array(name)
     a = variable_arrays[name] || variable_arrays[name] = VariableArray.new(name)
     yield a if block_given?
@@ -22,20 +24,32 @@ module Cauterize
       super
     end
 
-    def array_type(t)
-      @array_type = BaseType.find_type!(t)
-    end
-
-    def array_size(s)
-      @array_size = s
-    end
-
-    def size_type(t)
-      _t = BaseType.find_type!(t)
-      if _t.is_scalar?
-        @size_type = _t
+    def array_type(t = nil)
+      if t
+        @array_type = BaseType.find_type!(t)
       else
-        raise Exception.new("The type #{t} is not an scalar")
+        @array_type
+      end
+    end
+
+    def array_size(s = nil)
+      if s
+        @array_size = s
+      else
+        @array_size
+      end
+    end
+
+    def size_type(t = nil)
+      if t
+        _t = BaseType.find_type!(t)
+        if _t.is_scalar?
+          @size_type = _t
+        else
+          raise Exception.new("The type #{t} is not an scalar")
+        end
+      else
+        @size_type
       end
     end
   end

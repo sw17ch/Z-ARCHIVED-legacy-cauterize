@@ -6,6 +6,8 @@
 # scalars are not structs, enumerations, unions, or arrays.
 
 module Cauterize
+  module_function
+
   def scalar(name)
     a = scalars[name] || scalars[name] = Scalar.new(name)
     yield a if block_given?

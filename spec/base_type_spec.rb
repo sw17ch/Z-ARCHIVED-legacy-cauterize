@@ -99,9 +99,13 @@ describe Cauterize do
         lst = [a, e, c, f, v, g]
 
         instances = BaseType.all_instances
-        instances.length.should == lst.length
-        instances.zip(lst).each do |a,b|
-          a.should be b
+        instances.length.should == lst.length + 1 # +1 because groups make an enum as well
+
+        # Check that each of our instances shows up in the list returned from
+        # all_instances. Do it this way in case there are other types created
+        # (like the enumeration for Group).
+        lst.all? do |l|
+          instances.any? {|i| i.equal? l}
         end
       end
     end

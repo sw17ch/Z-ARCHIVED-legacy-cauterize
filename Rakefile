@@ -7,6 +7,7 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 task :default => :greatest
 
+desc "Run C tests"
 task :greatest do
   Dir.mktmpdir do |d|
     test_suite_path = File.join(d, "test_suite.c")
