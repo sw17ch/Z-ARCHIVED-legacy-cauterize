@@ -1,10 +1,19 @@
+require 'set'
+
 module Cauterize
   class BaseType
     attr_reader :name, :id
     @@next_id = {}
     @@instances = {}
+    @@used_names = Set.new
 
     def initialize(name)
+      if @@used_names.include?(name)
+        raise Exception.new("A type with the name #{name} already exists.")
+      else
+        @@used_names << name
+      end
+
       @name = name
       @id = next_id
       register_instance(self)

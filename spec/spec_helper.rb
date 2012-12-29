@@ -1,3 +1,4 @@
+require 'set'
 require 'mocha/api'
 require 'require_all'
 
@@ -18,11 +19,13 @@ end
 def reset_for_test
   BaseType.class_variable_set(:@@next_id, {})
   BaseType.class_variable_set(:@@instances, {})
+  BaseType.class_variable_set(:@@used_names, Set.new)
 
   Cauterize.module_exec do
     @enumerations = {}
     @groups = {}
   end
+
 end
 
 def is_tagged_as(cls, tag)

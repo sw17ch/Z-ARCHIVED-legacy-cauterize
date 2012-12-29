@@ -13,7 +13,10 @@ shared_examples "a buildable" do
   end
 
   it "errors on duplicate type names" do
-    pending
+    BaseType.class_variable_set(:@@used_names, Set.new([:a_common_name]))
+    lambda {
+      type_constructor.call(:a_common_name)
+    }.should raise_error /already exists/
   end
 
   describe :packer_sym do
