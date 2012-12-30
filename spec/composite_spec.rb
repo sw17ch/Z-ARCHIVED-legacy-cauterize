@@ -43,8 +43,6 @@ describe Cauterize do
           end
         }.should raise_error /Field name b_foo already used/
       end
-
-      xit "errors on recursive definitions"
     end
   end
 

@@ -87,8 +87,6 @@ describe Cauterize do
 
         grp.tag_enum.values.keys.should =~ [:GROUP_FOO_TYPE_A, :GROUP_FOO_TYPE_B]
       end
-
-      xit "errors on recursive definitions"
     end
 
     describe ".tag_enum" do

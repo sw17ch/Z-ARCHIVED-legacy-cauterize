@@ -1,10 +1,6 @@
 describe Cauterize::Builders::C::Enumeration do
   let(:type_constructor) { lambda {|name| enumeration(name)}}
 
-  it "scales its representation to the number of elements" do
-    pending
-  end
-
   it_behaves_like "a buildable"
   it_behaves_like "a sane buildable"
   include_examples "no struct"

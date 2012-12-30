@@ -88,7 +88,5 @@ describe Cauterize do
         @a.size_type.should be s
       end
     end
-
-    xit "errors on recursive definitions"
   end
 end
