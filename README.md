@@ -1,5 +1,3 @@
-# *THIS PROJECT IS EXPERIMENTAL. IT MAY BREAK AND RUIN EVERYTHING YOU KNOW AND LOVE.*
-
 # cauterize
 
 A Ruby DSL for generating marshalable structured data easily compatable with
