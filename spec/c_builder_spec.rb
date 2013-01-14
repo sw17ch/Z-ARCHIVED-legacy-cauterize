@@ -20,6 +20,8 @@ describe Cauterize::CBuilder do
 
   describe :build do
     before do
+      set_version("1.2.3")
+
       scalar(:uint8_t)
       scalar(:uint16_t)
       scalar(:uint32_t)
@@ -76,6 +78,10 @@ describe Cauterize::CBuilder do
     end
 
     describe "header generation" do
+      it "sets a VERSION define" do
+        @h_lines.should include("#define GEN_VERSION (\"1.2.3\")\n")
+      end
+
       it "prevents multiple inclusion in headers" do
         @h_lines[0].should match /#ifndef TESTING_H_\d+/
         @h_lines[1].should match /#define TESTING_H_\d+/

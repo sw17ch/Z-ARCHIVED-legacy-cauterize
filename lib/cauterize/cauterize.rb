@@ -27,7 +27,15 @@ module Cauterize
     @@description_name
   end
 
+  def self.get_version
+    @@version
+  end
+
   def set_name(desc_name)
     @@description_name = desc_name
+  end
+
+  def set_version(version)
+    @@version = version
   end
 end
