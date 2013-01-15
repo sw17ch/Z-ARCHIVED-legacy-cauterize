@@ -31,4 +31,48 @@ describe Cauterize::Builders::C::Enumeration do
       en.should match /};/
     end
   end
+
+  describe ".packer_defn" do
+    let(:en) do
+      _e = enumeration(:foo) do |e|
+        e.value :aaa
+        e.value :bbb
+        e.value "QuickBrownFox".to_sym
+      end
+
+      f = default_formatter
+      Builders.get(:c, _e).packer_defn(f)
+      f.to_s
+    end
+
+    it "defines a representation variable" do
+      en.should match /uint32_t enum_representation;/
+    end
+
+    it "references a packer for the representation" do
+      en.should match /Pack_uint32_t/
+    end
+  end
+
+  describe ".unpacker_defn" do
+    let(:en) do
+      _e = enumeration(:foo) do |e|
+        e.value :aaa
+        e.value :bbb
+        e.value "QuickBrownFox".to_sym
+      end
+
+      f = default_formatter
+      Builders.get(:c, _e).unpacker_defn(f)
+      f.to_s
+    end
+
+    it "defines a representation variable" do
+      en.should match /uint32_t enum_representation;/
+    end
+
+    it "references a unpacker for the representation" do
+      en.should match /Unpack_uint32_t/
+    end
+  end
 end
