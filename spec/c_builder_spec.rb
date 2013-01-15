@@ -78,8 +78,12 @@ describe Cauterize::CBuilder do
     end
 
     describe "header generation" do
-      it "sets a VERSION define" do
+      it "creates a VERSION define" do
         @h_lines.should include("#define GEN_VERSION (\"1.2.3\")\n")
+      end
+
+      it "creates a DATE define" do
+        @h_lines.any?{|l| l.match /GEN_DATE/}.should be_true
       end
 
       it "prevents multiple inclusion in headers" do

@@ -1,3 +1,5 @@
+require 'time'
+
 module Cauterize
   class CBuilder
     attr_reader :h, :c
@@ -26,6 +28,8 @@ module Cauterize
       f << %Q{#include <stdint.h>}
       f.blank_line
       f << "#define GEN_VERSION (\"#{Cauterize.get_version}\")"
+      f << "#define GEN_DATE (\"#{DateTime.now.to_s}\")"
+      f.blank_line
 
       instances = BaseType.all_instances
       builders = instances.map {|i| Builders.get(:c, i)}

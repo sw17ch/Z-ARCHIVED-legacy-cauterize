@@ -28,7 +28,11 @@ module Cauterize
   end
 
   def self.get_version
-    @@version
+    if defined? @@version
+      @@version
+    else
+      "UNDEFINED"
+    end
   end
 
   def set_name(desc_name)
