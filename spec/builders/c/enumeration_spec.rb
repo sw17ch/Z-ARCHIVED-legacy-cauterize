@@ -1,5 +1,7 @@
 describe Cauterize::Builders::C::Enumeration do
-  let(:type_constructor) { lambda {|name| enumeration(name)}}
+  let(:type_constructor) { lambda {|name|
+    enumeration(name)
+  }}
 
   it_behaves_like "a buildable"
   it_behaves_like "a sane buildable"

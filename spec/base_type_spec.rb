@@ -16,6 +16,7 @@ describe Cauterize do
         f = enumeration(:foo) do |e|
           e.value :a, 1
         end
+
         b = enumeration(:bar) do |e|
           e.value :a, 1
         end
@@ -45,8 +46,8 @@ describe Cauterize do
       end
 
       it "should not allow derived class ids to interact" do
-        a1 = Scalar.new(:foo)
-        a2 = Scalar.new(:bar)
+        a1 = Scalar.new(:uint8_t)
+        a2 = Scalar.new(:uint64_t)
         e1 = Enumeration.new(:zoop)
         e2 = Enumeration.new(:nih)
 
@@ -89,17 +90,20 @@ describe Cauterize do
       it "is every instance of a BaseType-derived class" do
         BaseType.all_instances.should == []
 
-        a = Scalar.new(:foo)
+        s = Scalar.new(:eek)
         e = Enumeration.new(:emoo)
         c = Composite.new(:cooo)
         f = FixedArray.new(:moo)
         v = VariableArray.new(:quack)
         g = Group.new(:goo)
 
-        lst = [a, e, c, f, v, g]
+        lst = [s, e, c, f, v, g]
 
         instances = BaseType.all_instances
-        instances.length.should == lst.length + 1 # +1 because groups make an enum as well
+
+        # There will be some extras due to automatic creation of enums and
+        # scalars in Enumeration and Group.
+        instances.should include(*lst)
 
         # Check that each of our instances shows up in the list returned from
         # all_instances. Do it this way in case there are other types created

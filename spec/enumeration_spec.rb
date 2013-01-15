@@ -1,20 +1,18 @@
 describe Cauterize do
-  before { reset_for_test }
-
-  describe EnumerationValue do
+  describe Cauterize::EnumerationValue do
     describe :initialize do
       it "creates an EnumerationValue" do
-        e = EnumerationValue.new(:foo, 1)
+        e = Cauterize::EnumerationValue.new(:foo, 1)
         e.name.should == :foo
         e.value.should == 1
       end
     end
   end
 
-  describe Enumeration do
+  describe Cauterize::Enumeration do
     describe :initialize do
       it "creates a new enumeration with the right name" do
-        Enumeration.new(:foo).name.should == :foo
+        Cauterize::Enumeration.new(:foo).name.should == :foo
       end
     end
 
@@ -88,17 +86,17 @@ describe Cauterize do
     it { creates_a_named_object(:enumeration, Enumeration) }
     it { retrieves_obj_with_identical_name(:enumeration) }
     it { yields_the_object(:enumeration) }
-    it { adds_object_to_hash(:enumeration, :enumerations) }
+    it { adds_object_to_hash(:enumeration, Cauterize.enumerations) }
   end
 
   describe :enumeration! do
     it { creates_a_named_object(:enumeration!, Enumeration) }
     it { raises_exception_with_identical_name(:enumeration!) }
     it { yields_the_object(:enumeration!) }
-    it { adds_object_to_hash(:enumeration!, :enumerations) }
+    it { adds_object_to_hash(:enumeration!, Cauterize.enumerations) }
   end
 
   describe :enumerations do
-    it { is_hash_of_created_objs(:enumeration, :enumerations) }
+    it { is_hash_of_created_objs(:enumeration, Cauterize.enumerations) }
   end
 end

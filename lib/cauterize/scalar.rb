@@ -9,25 +9,21 @@ module Cauterize
   module_function
 
   def scalar(name)
-    a = scalars[name] || scalars[name] = Scalar.new(name)
+    a = Cauterize.scalars[name] || Cauterize.scalars[name] = Scalar.new(name)
     yield a if block_given?
     return a
   end
 
   def scalar!(name, &blk)
-    if scalars[name]
+    if Cauterize.scalars[name]
       raise Exception.new("Scalar with name #{name} already exists.")
     else
-      scalar(name, &blk)
+      Cauterize.scalar(name, &blk)
     end
   end
 
   def scalars
     @scalars ||= {}
-  end
-
-  def flush_scalars
-    @scalars = {}
   end
 
   class Scalar < BaseType

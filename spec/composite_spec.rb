@@ -1,6 +1,4 @@
 describe Cauterize do
-  before { reset_for_test }
-
   describe CompositeField do
     describe :initialize do
       it "creates a new name -> type mapping" do
@@ -50,13 +48,17 @@ describe Cauterize do
     it { creates_a_named_object(:composite, Composite) }
     it { retrieves_obj_with_identical_name(:composite) }
     it { yields_the_object(:composite) }
-    it { adds_object_to_hash(:composite, :composites) }
+    it { adds_object_to_hash(:composite, Cauterize.composites) }
   end
 
   describe :composite! do
     it { creates_a_named_object(:composite!, Composite) }
     it { raises_exception_with_identical_name(:composite!) }
     it { yields_the_object(:composite!) }
-    it { adds_object_to_hash(:composite!, :composites) }
+    it { adds_object_to_hash(:composite!, Cauterize.composites) }
+  end
+
+  describe :composites do
+    it { is_hash_of_created_objs(:composite, Cauterize.composites) }
   end
 end

@@ -1,8 +1,8 @@
 describe Cauterize::Builders::C::Composite do
   let(:type_constructor) do
     lambda do |name|
-      scalar(:int32)
-      composite(name) do |c|
+      Cauterize.scalar(:int32)
+      Cauterize.composite(name) do |c|
         c.field :an_int, :int32
         c.field :another_int, :int32
       end
@@ -15,8 +15,8 @@ describe Cauterize::Builders::C::Composite do
 
   context "structure definition" do
     let(:comp) do
-      scalar(:int32)
-      _c = composite(:foo) do |c|
+      Cauterize.scalar(:int32)
+      _c = Cauterize.composite(:foo) do |c|
         c.field(:an_int, :int32)
       end
 

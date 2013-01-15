@@ -1,26 +1,20 @@
 describe Cauterize do
-  before { reset_for_test }
-
   describe :group do
     it { creates_a_named_object(:group, Group) }
     it { retrieves_obj_with_identical_name(:group) }
     it { yields_the_object(:group) }
-    it { adds_object_to_hash(:group, :groups) }
+    it { adds_object_to_hash(:group, Cauterize.groups) }
   end
 
   describe :group! do
     it { creates_a_named_object(:group!, Group) }
     it { raises_exception_with_identical_name(:group!) }
     it { yields_the_object(:group!) }
-    it { adds_object_to_hash(:group!, :groups) }
+    it { adds_object_to_hash(:group!, Cauterize.groups) }
   end
 
   describe :groups do
-    it "is all the defined groups" do
-      group(:a)
-      group(:b)
-      groups.values.map(&:name).should == [:a, :b]
-    end
+    it { is_hash_of_created_objs(:group, Cauterize.groups) }
   end
 
   describe GroupField do

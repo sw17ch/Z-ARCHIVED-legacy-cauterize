@@ -13,7 +13,7 @@ shared_examples "a buildable" do
   end
 
   it "errors on duplicate type names" do
-    BaseType.class_variable_set(:@@used_names, Set.new([:a_common_name]))
+    BaseType.class_variable_set(:@@instances, {:a_common_name => nil})
     lambda {
       type_constructor.call(:a_common_name)
     }.should raise_error /already exists/

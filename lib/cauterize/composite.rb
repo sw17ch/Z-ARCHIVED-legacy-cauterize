@@ -6,16 +6,16 @@ module Cauterize
   module_function
 
   def composite(name)
-    c = composites[name] || composites[name] = Composite.new(name)
+    c = Cauterize.composites[name] || Cauterize.composites[name] = Composite.new(name)
     yield c if block_given?
     return c
   end
 
   def composite!(name, &blk)
-    if composites[name]
+    if Cauterize.composites[name]
       raise Exception.new("Composite with name #{name} already exists.")
     else
-      composite(name, &blk)
+      Cauterize.composite(name, &blk)
     end
   end
 

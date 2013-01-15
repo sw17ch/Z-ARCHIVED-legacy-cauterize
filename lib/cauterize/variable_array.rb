@@ -2,21 +2,21 @@ module Cauterize
   module_function
 
   def variable_array(name)
-    a = variable_arrays[name] || variable_arrays[name] = VariableArray.new(name)
+    a = Cauterize.variable_arrays[name] || Cauterize.variable_arrays[name] = VariableArray.new(name)
     yield a if block_given?
     return a
   end
 
   def variable_array!(name, &blk)
-    if variable_arrays[name]
+    if Cauterize.variable_arrays[name]
       raise Exception.new("VariableArray with name #{name} already exists.")
     else
-      variable_array(name, &blk)
+      Cauterize.variable_array(name, &blk)
     end
   end
 
   def variable_arrays
-    @variable_ararys ||= {}
+    @variable_arrays ||= {}
   end
 
   class VariableArray < BaseType

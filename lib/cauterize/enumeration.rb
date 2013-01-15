@@ -7,16 +7,16 @@ require 'set'
 module Cauterize
   module_function
   def enumeration(name)
-    e = enumerations[name] || enumerations[name] = Enumeration.new(name)
+    e = Cauterize.enumerations[name] || Cauterize.enumerations[name] = Enumeration.new(name)
     yield e if block_given?
     return e
   end
 
   def enumeration!(name, &blk)
-    if enumerations[name]
+    if Cauterize.enumerations[name]
       raise Exception.new("Enumeration with name #{name} already exists.")
     else
-      enumeration(name, &blk)
+      Cauterize.enumeration(name, &blk)
     end
   end
 
@@ -34,13 +34,17 @@ module Cauterize
   end
 
   class Enumeration < BaseType
-    attr_reader :values
+    attr_reader :values, :representation
 
     def initialize(name)
       super
+      # Ensure that the representation type is defined
+      Cauterize.scalar(:uint32_t)
+
       @values = {}
       @value_id = 0
       @used_ids = Set.new
+      @representation = BaseType.find_type!(:uint32_t)
     end
 
     def value(name, id=nil)

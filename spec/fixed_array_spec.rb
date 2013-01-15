@@ -1,18 +1,16 @@
 describe Cauterize do
-  before { reset_for_test }
-
   describe :fixed_array  do
     it { creates_a_named_object(:fixed_array, FixedArray) }
     it { retrieves_obj_with_identical_name(:fixed_array) }
     it { yields_the_object(:fixed_array) }
-    it { adds_object_to_hash(:fixed_array, :fixed_arrays) }
+    it { adds_object_to_hash(:fixed_array, Cauterize.fixed_arrays) }
   end
 
   describe :fixed_array! do
     it { creates_a_named_object(:fixed_array!, FixedArray) }
     it { raises_exception_with_identical_name(:variable_array!) }
     it { yields_the_object(:fixed_array!) }
-    it { adds_object_to_hash(:fixed_array!, :fixed_arrays) }
+    it { adds_object_to_hash(:fixed_array!, Cauterize.fixed_arrays) }
   end
 
   describe FixedArray do

@@ -1,26 +1,20 @@
 describe Cauterize do
-  before { reset_for_test }
-
   describe :variable_array  do
     it { creates_a_named_object(:variable_array, VariableArray) }
     it { retrieves_obj_with_identical_name(:variable_array) }
     it { yields_the_object(:variable_array) }
-    it { adds_object_to_hash(:variable_array, :variable_arrays) }
+    it { adds_object_to_hash(:variable_array, Cauterize.variable_arrays) }
   end
 
   describe :variable_array! do
     it { creates_a_named_object(:variable_array!, VariableArray) }
     it { raises_exception_with_identical_name(:variable_array!) }
     it { yields_the_object(:variable_array!) }
-    it { adds_object_to_hash(:variable_array!, :variable_arrays) }
+    it { adds_object_to_hash(:variable_array!, Cauterize.variable_arrays) }
   end
 
   describe :variable_arrays do
-    it "is all the variable arrays" do
-      variable_array(:a)
-      variable_array(:b)
-      variable_arrays.values.map(&:name).should == [:a, :b]
-    end
+    it { is_hash_of_created_objs(:variable_array, Cauterize.variable_arrays) }
   end
 
   describe VariableArray do
@@ -78,6 +72,7 @@ describe Cauterize do
       end
 
       it "raises an error if the type isn't an scalar" do
+        scalar(:uint32_t)
         enumeration(:lol)
         lambda { @a.size_type :lol }.should raise_error /is not an scalar/
       end

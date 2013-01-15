@@ -1,9 +1,4 @@
 describe Cauterize do
-  before do
-    reset_for_test
-    flush_scalars
-  end
-
   describe Scalar do
     describe :initialize do
       it "creates an scalar" do
@@ -20,17 +15,17 @@ describe Cauterize do
     it { creates_a_named_object(:scalar, Scalar) }
     it { retrieves_obj_with_identical_name(:scalar) }
     it { yields_the_object(:scalar) }
-    it { adds_object_to_hash(:scalar, :scalars) }
+    it { adds_object_to_hash(:scalar, Cauterize.scalars) }
   end
 
   describe :scalar! do
     it { creates_a_named_object(:scalar!, Scalar) }
     it { raises_exception_with_identical_name(:scalar!) }
     it { yields_the_object(:scalar!) }
-    it { adds_object_to_hash(:scalar!, :scalars) }
+    it { adds_object_to_hash(:scalar!, Cauterize.scalars) }
   end
 
   describe :scalars do
-    it { is_hash_of_created_objs(:scalar, :scalars) }
+    it { is_hash_of_created_objs(:scalar, Cauterize.scalars) }
   end
 end

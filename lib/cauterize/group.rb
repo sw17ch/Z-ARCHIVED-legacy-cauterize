@@ -2,16 +2,16 @@ module Cauterize
   module_function
 
   def group(name)
-    a = groups[name] || groups[name] = Group.new(name)
+    a = Cauterize.groups[name] || Cauterize.groups[name] = Group.new(name)
     yield a if block_given?
     return a
   end
 
   def group!(name, &blk)
-    if groups[name]
+    if Cauterize.groups[name]
       raise Exception.new("Group with name #{name} already exists.")
     else
-      group(name, &blk)
+      Cauterize.group(name, &blk)
     end
   end
 

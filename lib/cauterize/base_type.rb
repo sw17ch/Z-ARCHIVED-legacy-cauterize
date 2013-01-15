@@ -5,13 +5,10 @@ module Cauterize
     attr_reader :name, :id
     @@next_id = {}
     @@instances = {}
-    @@used_names = Set.new
 
     def initialize(name)
-      if @@used_names.include?(name)
-        raise Exception.new("A type with the name #{name} already exists.")
-      else
-        @@used_names << name
+      if @@instances.keys.include?(name)
+        raise Exception.new("A type with the name #{name} already exists. [#{@@instances[name].inspect}]")
       end
 
       @name = name
