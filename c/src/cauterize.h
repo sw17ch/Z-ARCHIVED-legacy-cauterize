@@ -12,6 +12,7 @@ typedef uint32_t CAUTERIZE_STATUS_T;
 #define CA_ERR_NOT_ENOUGH_DATA   (3)
 #define CA_ERR_INVALID_LENGTH    (4)
 #define CA_ERR_INVALUD_TYPE_TAG  (5)
+#define CA_ERR_INVALID_ENUM_VAL  (6)
 #define CA_ERR_GENERAL           (UINT32_MAX)
 
 struct Cauterize {
