@@ -21,6 +21,11 @@ fixed_array(:color_list) do |a|
   a.array_size 4
 end
 
+fixed_array(:color_list_list) do |a|
+  a.array_type :color_list
+  a.array_size 4
+end
+
 variable_array(:numbers) do |a|
   a.size_type  :uint8_t
   a.array_type :int32_t

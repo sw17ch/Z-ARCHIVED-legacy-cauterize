@@ -3,14 +3,11 @@ module Cauterize
     module C
       class FixedArray < Buildable
         def render
-          # HEY! PAY ATTENTION!
-          # Keep in mind that there's no sane way to "render" an array in C
-          # that doesn't involve an identifier.
-          ty_bldr.render
+          "struct #{@blueprint.name}"
         end
 
         def declare(formatter, sym)
-          formatter << "#{ty_bldr.render} #{sym}[#{@blueprint.array_size}]; /* #{@blueprint.name} */"
+          formatter << "#{render} #{sym};"
         end
 
         def packer_defn(formatter)
@@ -23,7 +20,7 @@ module Cauterize
             # store each used item in the array
             formatter << "for (i = 0; i < #{@blueprint.array_size}; i++)"
             formatter.braces do
-              formatter << "if (CA_OK != (err = #{ty_bldr.packer_sym}(dst, &src[i]))) { return err; }"
+              formatter << "if (CA_OK != (err = #{ty_bldr.packer_sym}(dst, &src->data[i]))) { return err; }"
             end
             formatter.blank_line
 
@@ -41,12 +38,24 @@ module Cauterize
             # store each used item in the array
             formatter << "for (i = 0; i < #{@blueprint.array_size}; i++)"
             formatter.braces do
-              formatter << "if (CA_OK != (err = #{ty_bldr.unpacker_sym}(src, &dst[i]))) { return err; }"
+              formatter << "if (CA_OK != (err = #{ty_bldr.unpacker_sym}(src, &dst->data[i]))) { return err; }"
             end
             formatter.blank_line
 
             formatter << "return CA_OK;"
           end
+        end
+
+        def struct_proto(formatter)
+          formatter << (render + ";")
+        end
+
+        def struct_defn(formatter)
+          formatter << render
+          formatter.braces do
+            formatter << "#{ty_bldr.render} data[#{@blueprint.array_size}];"
+          end
+          formatter.append(";")
         end
 
         private

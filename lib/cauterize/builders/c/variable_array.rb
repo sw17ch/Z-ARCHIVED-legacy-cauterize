@@ -7,7 +7,7 @@ module Cauterize
         end
 
         def declare(formatter, sym)
-          formatter << "struct #{@blueprint.name} #{sym};"
+          formatter << "#{render} #{sym};"
         end
 
         def packer_defn(formatter)
