@@ -81,6 +81,15 @@ describe Cauterize do
 
         grp.tag_enum.values.keys.should =~ [:GROUP_FOO_TYPE_A, :GROUP_FOO_TYPE_B]
       end
+
+      it "allows nil types" do
+        grp = group(:empty) do |g|
+          g.field(:a)
+          g.field(:b)
+        end
+
+        grp.tag_enum.values.keys.should =~ [:GROUP_EMPTY_TYPE_A, :GROUP_EMPTY_TYPE_B]
+      end
     end
 
     describe ".tag_enum" do

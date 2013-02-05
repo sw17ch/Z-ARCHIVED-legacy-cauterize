@@ -27,12 +27,14 @@ module Cauterize
             # pack the fields
             formatter << "switch (src->tag)"
             formatter.braces do
-              @blueprint.fields.values.each do |field|
+              having_data.each do |field|
                 bldr = Builders.get(:c, field.type)
                 formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
                 formatter << "if (CA_OK != (err = #{bldr.packer_sym}(dst, &src->data.#{field.name}))) { return err; }"
                 formatter << "break;"
               end
+
+              format_no_data_stubs(formatter)
 
               formatter.backdent "default:"
               formatter << "return CA_ERR_INVALUD_TYPE_TAG;"
@@ -54,12 +56,14 @@ module Cauterize
             # pack the fields
             formatter << "switch (dst->tag)"
             formatter.braces do
-              @blueprint.fields.values.each do |field|
+              having_data.each do |field|
                 bldr = Builders.get(:c, field.type)
                 formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
                 formatter << "if (CA_OK != (err = #{bldr.unpacker_sym}(src, &dst->data.#{field.name}))) { return err; }"
                 formatter << "break;"
               end
+
+              format_no_data_stubs(formatter)
 
               formatter.backdent "default:"
               formatter << "return CA_ERR_INVALUD_TYPE_TAG;"
@@ -80,12 +84,37 @@ module Cauterize
             formatter << "union"
             formatter.braces do
               @blueprint.fields.values.each do |field|
-                Builders.get(:c, field.type).declare(formatter, field.name)
+                b = Builders.get(:c, field.type)
+                if b
+                  b.declare(formatter, field.name)
+                else
+                  formatter << "/* No data associated with '#{field.name}'. */"
+                end
               end
             end
             formatter.append(" data;")
           end
           formatter.append(";")
+        end
+
+        private
+
+        def having_data
+          @blueprint.fields.values.reject {|v| v.type.nil?}
+        end
+
+        def no_data
+          @blueprint.fields.values.reject {|v| not v.type.nil?}
+        end
+
+        def format_no_data_stubs(formatter)
+          if 0 < no_data.length
+            formatter.backdent "/* No data associated with the remaining tags. */"
+            no_data.each do |field|
+              formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
+            end
+            formatter << "break;"
+          end
         end
       end
     end

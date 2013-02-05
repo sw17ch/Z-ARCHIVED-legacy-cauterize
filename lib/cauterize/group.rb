@@ -24,10 +24,7 @@ module Cauterize
 
     def initialize(name, type)
       @name = name
-      @type = BaseType.find_type!(type)
-    end
-
-    def enum_sym
+      @type = BaseType.find_type!(type) if type
     end
   end
 
@@ -40,7 +37,7 @@ module Cauterize
       @tag_enum = Cauterize.enumeration!("group_#{name}_type".to_sym)
     end
 
-    def field(name, type)
+    def field(name, type=nil)
       if @fields[name]
         raise Exception.new("Field name #{name} already used.")
       else

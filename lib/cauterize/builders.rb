@@ -17,10 +17,8 @@ module Cauterize
     end
 
     def get(language, description_instance)
-      if @builders and @builders[language]
+      if @builders and @builders[language] and @builders[language][description_instance.class]
         @builders[language][description_instance.class].new(description_instance)
-      else
-        raise UnregisteredException.new("The builder for #{description_instance.class} in #{language} is unregistered.")
       end
     end
   end
