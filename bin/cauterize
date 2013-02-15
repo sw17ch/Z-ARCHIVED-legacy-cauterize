@@ -2,6 +2,7 @@
 
 LIB_PATH = File.dirname(__FILE__) + "/../lib"
 C_PATH = File.dirname(__FILE__) + "/../c/src"
+CS_PATH = File.dirname(__FILE__) + "/../cs/src"
 
 $LOAD_PATH.unshift LIB_PATH
 
@@ -20,8 +21,6 @@ class CauterizeCmdline < Thor
                         :desc => "Bravely overwrite files in non-empty directories",
                         :default => false
   def generate(language, target_dir, desc_file = nil)
-    raise CmdLineException.new("Language '#{language}' is not supported.") unless language == 'c'
-
     if not options[:force] and Dir.exist?(target_dir) and Dir[target_dir + "/*"].size > 0
       raise CmdLineException.new("Directory '#{target_dir}' isn't empty. Cowardly quitting.")
     end
@@ -32,12 +31,21 @@ class CauterizeCmdline < Thor
       raise CmdLineException.new("The description file #{desc_file} does not exist.")
     end
 
-    # Generate the C files.
-    Cauterize.generate_c(target_dir, desc_file)
+    case language.to_sym
+    when :c
+      # Generate the C files.
+      Cauterize.generate_c(target_dir, desc_file)
+      path = C_PATH
+    when :cs
+      raise CmdLineException.new("Unimplemented")
+      path = CS_PATH
+    else
+      raise CmdLineException.new("Language '#{language}' is not supported.")
+    end
 
     # Copy the cauterize support files.
     unless options[:omit_support]
-      Dir[C_PATH + "/*"].each do |path|
+      Dir[path + "/*"].each do |path|
         FileUtils.cp(path, target_dir)
       end
     end
