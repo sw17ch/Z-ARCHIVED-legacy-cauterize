@@ -1,11 +1,15 @@
 def default_formatter
-  Formatter.new
+  Formatter.new("  ")
+end
+
+def four_space_formatter
+  Formatter.new("    ")
 end
 
 class Formatter
-  def initialize
+  def initialize(indent_str)
     @indent_level = 0
-    @indent_str = "  "
+    @indent_str = indent_str
     @lines = []
   end
 

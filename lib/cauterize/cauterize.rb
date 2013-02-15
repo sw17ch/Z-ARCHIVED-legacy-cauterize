@@ -5,7 +5,8 @@ require_all Dir[lib_path + "/**/*.rb"]
 
 module Cauterize
 
-  def self.generate(language, target_dir, desc_file)
+  module_function
+  def generate(language, target_dir, desc_file)
     parse_dsl(desc_file)
     FileUtils.mkdir_p(target_dir)
     output_prefix = get_name || "generated_interface"
@@ -13,19 +14,26 @@ module Cauterize
     builder.build
   end
 
-  # Genearte the C code corresponding to the generated configuration
-  def self.make_builder_c(target_dir, output_prefix)
+  # Generate the C code corresponding to the generated configuration
+  def make_builder_c(target_dir, output_prefix)
     h_file = File.join(target_dir, "#{output_prefix}.h")
     c_file = File.join(target_dir, "#{output_prefix}.c")
 
     Cauterize::CBuilder.new(h_file, c_file, output_prefix)
   end
 
-  def self.get_name
+  # Generate the CS code corresponding to the generated configuration
+  def make_builder_cs(target_dir, output_prefix)
+    cs_file = File.join(target_dir, "#{output_prefix}.cs")
+
+    Cauterize::CSBuilder.new(cs_file, output_prefix)
+  end
+
+  def get_name
     @@description_name
   end
 
-  def self.get_version
+  def get_version
     if defined? @@version
       @@version
     else
@@ -33,11 +41,11 @@ module Cauterize
     end
   end
 
-  def self.set_name(desc_name)
+  def set_name(desc_name)
     @@description_name = desc_name
   end
 
-  def self.set_version(version)
+  def set_version(version)
     @@version = version
   end
 
