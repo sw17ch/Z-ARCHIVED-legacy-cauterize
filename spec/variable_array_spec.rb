@@ -1,4 +1,4 @@
-describe Cauterize do
+module Cauterize
   describe :variable_array  do
     it { creates_a_named_object(:variable_array, VariableArray) }
     it { retrieves_obj_with_identical_name(:variable_array) }
@@ -28,21 +28,21 @@ describe Cauterize do
 
     describe :array_type do
       it "defines the type of the VariableArray" do
-        scalar(:uint32_t)
+        Cauterize.scalar(:uint32_t)
         @a.array_type :uint32_t
         @a.instance_variable_get(:@array_type).name.should == :uint32_t
       end
 
       it "raises an error if type doesn't exist" do
         lambda {
-          fixed_array(:fa) do |f|
+          Cauterize.fixed_array(:fa) do |f|
             f.array_type :lol
           end
         }.should raise_error /lol does not correspond/
       end
 
       it "is the defined type if no argument is passed" do
-        s = scalar(:uint32_t)
+        s = Cauterize.scalar(:uint32_t)
         @a.array_type :uint32_t
         @a.array_type.should be s
       end
@@ -62,7 +62,7 @@ describe Cauterize do
 
     describe :size_type do
       it "defines the type to use to encode the array size" do
-        scalar(:uint16_t)
+        Cauterize.scalar(:uint16_t)
         @a.size_type :uint16_t
         @a.instance_variable_get(:@size_type).name.should == :uint16_t
       end
@@ -72,13 +72,13 @@ describe Cauterize do
       end
 
       it "raises an error if the type isn't an scalar" do
-        scalar(:uint32_t)
-        enumeration(:lol)
+        Cauterize.scalar(:uint32_t)
+        Cauterize.enumeration(:lol)
         lambda { @a.size_type :lol }.should raise_error /is not an scalar/
       end
 
       it "is the defined type if no argument is passed" do
-        s = scalar(:uint32_t)
+        s = Cauterize.scalar(:uint32_t)
         @a.size_type :uint32_t
         @a.size_type.should be s
       end

@@ -4,23 +4,21 @@ lib_path = File.dirname(__FILE__) + "/.."
 require_all Dir[lib_path + "/**/*.rb"]
 
 module Cauterize
-  # Genearte the C code corresponding to the generated configuration
-  def self.generate_c(target_dir, desc_file)
-    Object.new.extend(Cauterize).instance_exec do
-      # this magic allows us to emit useful exception messages when evaling the
-      # file. if your description file has errors, you'll be able to find them
-      # because of this magic.
-      p = Proc.new {}
-      eval(File.read(desc_file), p.binding, desc_file)
-    end
-    output_prefix = get_name || "generated_interface"
 
+  def self.generate(language, target_dir, desc_file)
+    parse_dsl(desc_file)
     FileUtils.mkdir_p(target_dir)
+    output_prefix = get_name || "generated_interface"
+    builder = send "make_builder_#{language}".to_sym, target_dir, output_prefix
+    builder.build
+  end
+
+  # Genearte the C code corresponding to the generated configuration
+  def self.make_builder_c(target_dir, output_prefix)
     h_file = File.join(target_dir, "#{output_prefix}.h")
     c_file = File.join(target_dir, "#{output_prefix}.c")
 
-    builder = Cauterize::CBuilder.new(h_file, c_file, output_prefix)
-    builder.build
+    Cauterize::CBuilder.new(h_file, c_file, output_prefix)
   end
 
   def self.get_name
@@ -35,11 +33,24 @@ module Cauterize
     end
   end
 
-  def set_name(desc_name)
+  def self.set_name(desc_name)
     @@description_name = desc_name
   end
 
-  def set_version(version)
+  def self.set_version(version)
     @@version = version
   end
+
+  private 
+  def self.parse_dsl(desc_file)
+    Object.new.extend(Cauterize).instance_exec do
+      # this magic allows us to emit useful exception messages when evaling the
+      # file. if your description file has errors, you'll be able to find them
+      # because of this magic.
+      p = Proc.new {}
+      eval(File.read(desc_file), p.binding, desc_file)
+    end
+
+  end
+
 end

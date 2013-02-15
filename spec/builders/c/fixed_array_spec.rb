@@ -1,8 +1,8 @@
 describe Cauterize::Builders::C::FixedArray do
   let(:type_constructor) do
-    scalar(:uint32_t)
+    Cauterize.scalar(:uint32_t)
     lambda do |name|
-      fixed_array(name) do |a|
+      Cauterize.fixed_array(name) do |a|
         a.array_type :uint32_t
         a.array_size 16
       end

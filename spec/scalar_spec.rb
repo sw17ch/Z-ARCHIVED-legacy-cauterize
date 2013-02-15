@@ -1,8 +1,8 @@
-describe Cauterize do
+module Cauterize
   describe Scalar do
     describe :initialize do
       it "creates an scalar" do
-        scalar(:foo).name.should == :foo
+        Cauterize.scalar(:foo).name.should == :foo
       end
     end
 

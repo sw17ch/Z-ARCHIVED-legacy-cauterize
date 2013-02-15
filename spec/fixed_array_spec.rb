@@ -1,4 +1,4 @@
-describe Cauterize do
+module Cauterize
   describe :fixed_array  do
     it { creates_a_named_object(:fixed_array, FixedArray) }
     it { retrieves_obj_with_identical_name(:fixed_array) }
@@ -14,7 +14,7 @@ describe Cauterize do
   end
 
   describe FixedArray do
-    before { @a = fixed_array(:foo) }
+    before { @a = Cauterize.fixed_array(:foo) }
 
     describe :initialize do
       it "Creates a fixed array." do
@@ -25,21 +25,21 @@ describe Cauterize do
 
     describe :array_type do
       it "Defines the type of the FixedArray." do
-        scalar(:uint32_t)
+        Cauterize.scalar(:uint32_t)
         @a.array_type :uint32_t
         @a.instance_variable_get(:@array_type).name.should == :uint32_t
       end
 
       it "raises an error if type doesn't exist" do
         lambda {
-          fixed_array(:fa) do |f|
+          Cauterize.fixed_array(:fa) do |f|
             f.array_type :lol
           end
         }.should raise_error /lol does not correspond/
       end
 
       it "is the defined type if no argument is passed" do
-        s = scalar(:uint32_t)
+        s = Cauterize.scalar(:uint32_t)
         @a.array_type :uint32_t
         @a.array_type.should be s
       end

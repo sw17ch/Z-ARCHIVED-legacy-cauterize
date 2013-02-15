@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
 LIB_PATH = File.dirname(__FILE__) + "/../lib"
-C_PATH = File.dirname(__FILE__) + "/../c/src"
-CS_PATH = File.dirname(__FILE__) + "/../cs/src"
 
 $LOAD_PATH.unshift LIB_PATH
 
@@ -31,21 +29,17 @@ class CauterizeCmdline < Thor
       raise CmdLineException.new("The description file #{desc_file} does not exist.")
     end
 
-    case language.to_sym
-    when :c
-      # Generate the C files.
-      Cauterize.generate_c(target_dir, desc_file)
-      path = C_PATH
-    when :cs
-      raise CmdLineException.new("Unimplemented")
-      path = CS_PATH
+    language = language.downcase
+    if %w(c).include? language
+      Cauterize.generate language, target_dir, desc_file
     else
       raise CmdLineException.new("Language '#{language}' is not supported.")
     end
 
     # Copy the cauterize support files.
     unless options[:omit_support]
-      Dir[path + "/*"].each do |path|
+      support_path = File.join(File.dirname(__FILE__),"../#{language}/src")
+      Dir["#{support_path}/*"].each do |path|
         FileUtils.cp(path, target_dir)
       end
     end

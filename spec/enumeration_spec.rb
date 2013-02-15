@@ -1,4 +1,4 @@
-describe Cauterize do
+module Cauterize
   describe Cauterize::EnumerationValue do
     describe :initialize do
       it "creates an EnumerationValue" do
@@ -18,7 +18,7 @@ describe Cauterize do
 
     describe :value do
       it "adds a new value to the enumeration" do
-        enum = enumeration(:foo) do |e|
+        enum = Cauterize.enumeration(:foo) do |e|
           e.value :a
           e.value :b
           e.value :c
@@ -32,7 +32,7 @@ describe Cauterize do
       end
 
       it "accepts a fixed value" do
-        enum = enumeration(:foo) do |e|
+        enum = Cauterize.enumeration(:foo) do |e|
           e.value :a, 10
           e.value :b, 20
           e.value :c
@@ -45,7 +45,7 @@ describe Cauterize do
 
       it "allows out-of-order values" do
         lambda {
-          enumeration(:foo) do |e|
+          Cauterize.enumeration(:foo) do |e|
             e.value :a, 10
             e.value :b, 9
           end
@@ -54,7 +54,7 @@ describe Cauterize do
 
       it "doesn't allow duplicate ids" do
         lambda {
-          enumeration(:foo) do |e|
+          Cauterize.enumeration(:foo) do |e|
             e.value :a, 1
             e.value :b, 1
           end
@@ -62,7 +62,7 @@ describe Cauterize do
       end
 
       it "doesn't allow accidentally identical ids" do
-        en = enumeration(:foo) do |e|
+        en = Cauterize.enumeration(:foo) do |e|
           e.value :a, 10
           e.value :b, 9
           e.value :c
@@ -73,7 +73,7 @@ describe Cauterize do
 
       it "errors on duplicate names" do
         lambda {
-          enumeration(:foo) do |e|
+          Cauterize.enumeration(:foo) do |e|
             e.value :a
             e.value :a
           end
