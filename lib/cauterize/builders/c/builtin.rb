@@ -10,15 +10,11 @@ module Cauterize
         }
 
         def render
-          @blueprint.name.to_s
+          render_ctype
         end
 
         def declare(formatter, sym)
           formatter << "#{render} #{sym};"
-        end
-
-        def typedef_decl(formatter)
-          formatter << "typedef #{render_ctype} #{@blueprint.name};"
         end
 
         # These need to be tweaked since we need to replace the names with the

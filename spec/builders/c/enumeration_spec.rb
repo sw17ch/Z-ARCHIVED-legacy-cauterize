@@ -51,7 +51,7 @@ module Cauterize
       end
 
       it "references a packer for the representation" do
-        en.should match /Pack_uint32_t/
+        en.should match /Pack_uint32/
       end
     end
 
@@ -73,7 +73,7 @@ module Cauterize
       end
 
       it "references a unpacker for the representation" do
-        en.should match /Unpack_uint32_t/
+        en.should match /Unpack_uint32/
       end
     end
   end

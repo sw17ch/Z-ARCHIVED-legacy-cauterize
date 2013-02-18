@@ -1,8 +1,8 @@
 set_name("example_project")
 set_version("1.2.3")
 
-scalar(:int32_t)  { |t| t.type_name(:int32) }
-scalar(:uint8_t) { |t| t.type_name(:uint8) }
+scalar(:bigint)  { |t| t.type_name(:int32) }
+scalar(:usmallint) { |t| t.type_name(:uint8) }
 
 enumeration(:color) do |e|
   e.value :red
@@ -21,8 +21,8 @@ fixed_array(:color_list_list) do |a|
 end
 
 variable_array(:numbers) do |a|
-  a.size_type  :uint8_t
-  a.array_type :int32_t
+  a.size_type  :usmallint
+  a.array_type :bigint
   a.array_size 128
 end
 

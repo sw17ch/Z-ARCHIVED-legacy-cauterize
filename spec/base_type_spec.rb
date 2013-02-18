@@ -1,11 +1,6 @@
 module Cauterize
 
   describe Cauterize do
-    before {
-      BaseType.class_variable_set(:@@next_id, {})
-      BaseType.class_variable_set(:@@instances, {})
-    }
-
     describe BaseType do
       describe :id do
         it { has_a_unique_id_for_each_instance(BaseType) }
@@ -69,6 +64,8 @@ module Cauterize
 
       describe :register_instance do
         it "adds an instance to the instance list" do
+          orig_len = BaseType.all_instances.length
+
           class X < BaseType
             def initialize(name); end
           end
@@ -78,8 +75,8 @@ module Cauterize
             register_instance(x)
           end
 
-          BaseType.all_instances[0].should be x
-          BaseType.all_instances.length.should == 1
+          BaseType.all_instances.last.should be x
+          BaseType.all_instances.length.should == orig_len + 1
         end
       end
 
@@ -88,8 +85,9 @@ module Cauterize
         # 1. That instances works.
         # 2. That super() is called in each .new
         it "is every instance of a BaseType-derived class" do
-          BaseType.all_instances.should == []
+          BaseType.class_variable_set(:@@instances, {})
 
+          b = BuiltIn.new(:uint32)
           s = Scalar.new(:eek)
           e = Enumeration.new(:emoo)
           c = Composite.new(:cooo)
@@ -97,7 +95,7 @@ module Cauterize
           v = VariableArray.new(:quack)
           g = Group.new(:goo)
 
-          lst = [s, e, c, f, v, g]
+          lst = [b, s, e, c, f, v, g]
 
           instances = BaseType.all_instances
 

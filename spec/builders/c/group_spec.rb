@@ -107,8 +107,8 @@ module Cauterize
           fs.should match /struct oof/
           fs.should match /enum group_oof_type tag;/
           fs.should match /union/
-          fs.should match /int32 aaa;/
-          fs.should match /int32 bbb;/
+          fs.should match /int32_t aaa;/ # built-in types are represented as their C type
+          fs.should match /int32_t bbb;/ # built-in types are represented as their C type
           fs.should match /No data associated with 'empty'./
           fs.should match /} data;/
           fs.should match /};/

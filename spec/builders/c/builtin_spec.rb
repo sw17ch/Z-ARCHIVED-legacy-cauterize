@@ -11,20 +11,11 @@ module Cauterize
       Builders.get(:c, bi)
     end
 
-    describe ".typedef_decl" do
-      it "declares the type synonym" do
-        f = default_formatter
-        bi_bldr.typedef_decl(f)
-
-        f.to_s.should == "typedef uint32_t foo;"
-      end
-    end
-
     describe ".declare" do
       it "declares a variable with the BuiltIn's type" do
         f = default_formatter
         bi_bldr.declare(f, :meep)
-        f.to_s.should == "foo meep;"
+        f.to_s.should == "uint32_t meep;"
       end
     end
   end

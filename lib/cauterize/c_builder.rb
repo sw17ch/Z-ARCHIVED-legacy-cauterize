@@ -34,6 +34,7 @@ module Cauterize
       instances = BaseType.all_instances
       builders = instances.map {|i| Builders.get(:c, i)}
 
+      builders.each { |b| b.typedef_decl(f) }
       builders.each { |b| b.enum_defn(f) }
       builders.each { |b| b.struct_proto(f) }
       builders.each { |b| b.struct_defn(f) }

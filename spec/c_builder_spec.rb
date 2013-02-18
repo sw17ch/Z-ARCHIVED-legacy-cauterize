@@ -23,24 +23,22 @@ module Cauterize
       before do
         Cauterize.set_version("1.2.3")
 
-        Cauterize.scalar(:uint8_t)
-        Cauterize.scalar(:uint16_t)
-        Cauterize.scalar(:uint32_t)
+        Cauterize.scalar(:small_uint) {|t| t.type_name(:uint8)}
 
         Cauterize.fixed_array(:mac_address) do |fa|
-          fa.array_type :uint8_t
+          fa.array_type :small_uint
           fa.array_size 6
         end
 
         Cauterize.variable_array(:mac_table) do |t|
           t.array_type :mac_address
           t.array_size 64
-          t.size_type :uint8_t
+          t.size_type :small_uint
         end
 
         Cauterize.variable_array(:name) do |va|
-          va.array_type :uint8_t
-          va.size_type :uint8_t
+          va.array_type :small_uint
+          va.size_type :small_uint
           va.array_size 32
         end
 
@@ -51,7 +49,7 @@ module Cauterize
 
         Cauterize.composite(:place) do |c|
           c.field :name, :name
-          c.field :elevation, :uint32_t
+          c.field :elevation, :uint32
         end
 
         Cauterize.composite(:person) do |c|
@@ -63,7 +61,7 @@ module Cauterize
         Cauterize.composite(:dog) do |c|
           c.field :name, :name
           c.field :gender, :gender
-          c.field :leg_count, :uint8_t
+          c.field :leg_count, :small_uint
         end
 
         Cauterize.group(:creature) do |g|

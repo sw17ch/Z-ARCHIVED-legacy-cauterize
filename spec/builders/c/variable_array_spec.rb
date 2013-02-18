@@ -2,11 +2,10 @@ module Cauterize
   describe Cauterize::Builders::C::VariableArray do
     let(:type_constructor) do
       lambda do |name|
-        Cauterize.scalar(:uint8_t) {|t| t.type_name(:uint8)}
         Cauterize.variable_array(name) do |a|
-          a.array_type(:uint8_t)
+          a.array_type(:uint8)
           a.array_size(8)
-          a.size_type(:uint8_t)
+          a.size_type(:uint8)
         end
       end
     end
@@ -41,8 +40,8 @@ module Cauterize
           fs = f.to_s
 
           fs.should match /struct va/
-          fs.should match /int32 length;/
-          fs.should match /int32 data\[8\];/
+          fs.should match /int32_t length;/
+          fs.should match /int32_t data\[8\];/
           fs.should match /};/
         end
       end

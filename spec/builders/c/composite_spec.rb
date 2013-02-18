@@ -1,10 +1,14 @@
 module Cauterize
   describe Cauterize::Builders::C::Composite do
+    before do
+      Cauterize.scalar(:my_int) {|t| t.type_name(:int32)}
+    end
+
     let(:type_constructor) do
       lambda do |name|
         Cauterize.composite(name) do |c|
-          c.field :an_int, :int32
-          c.field :another_int, :int32
+          c.field :an_int, :my_int
+          c.field :another_int, :my_int
         end
       end
     end
@@ -16,7 +20,7 @@ module Cauterize
     context "structure definition" do
       let(:comp) do
         _c = Cauterize.composite(:foo) do |c|
-          c.field(:an_int, :int32)
+          c.field(:an_int, :my_int)
         end
 
         Builders.get(:c, _c)
@@ -37,7 +41,7 @@ module Cauterize
           fs = f.to_s
 
           fs.should match /struct foo/
-          fs.should match /int32 an_int;/
+          fs.should match /my_int an_int;/
           fs.should match /};/
         end
       end

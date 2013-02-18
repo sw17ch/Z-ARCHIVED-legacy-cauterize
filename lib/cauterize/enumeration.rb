@@ -38,13 +38,10 @@ module Cauterize
 
     def initialize(name)
       super
-      # Ensure that the representation type is defined
-      Cauterize.scalar(:uint32_t)
-
       @values = {}
       @value_id = 0
       @used_ids = Set.new
-      @representation = BaseType.find_type!(:uint32_t)
+      @representation = BaseType.find_type!(:uint32)
     end
 
     def value(name, id=nil)

@@ -6,6 +6,11 @@ module Cauterize
           @blueprint.name.to_s
         end
 
+        def typedef_decl(formatter)
+          tn_bldr = Builders.get(:c, @blueprint.type_name)
+          formatter << "typedef #{tn_bldr.render} #{render};"
+        end
+
         def declare(formatter, sym)
           formatter << "#{render} #{sym};"
         end
