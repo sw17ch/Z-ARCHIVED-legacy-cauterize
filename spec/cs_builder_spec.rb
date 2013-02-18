@@ -17,9 +17,9 @@ module Cauterize
       before do
         Cauterize.set_version("1.2.3")
 
-        Cauterize.scalar(:uint8_t)
-        Cauterize.scalar(:uint16_t)
-        Cauterize.scalar(:uint32_t)
+        Cauterize.scalar(:uint8_t) { |t| t.type_name(:uint8) }
+        Cauterize.scalar(:uint16_t) { |t| t.type_name(:uint16) }
+        Cauterize.scalar(:uint32_t) { |t| t.type_name(:uint32) }
 
         Cauterize.fixed_array(:mac_address) do |fa|
           fa.array_type :uint8_t

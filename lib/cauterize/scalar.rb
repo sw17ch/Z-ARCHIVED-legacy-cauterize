@@ -30,5 +30,18 @@ module Cauterize
     def initialize(name)
       super
     end
+
+    def type_name(type_name = nil)
+      if type_name
+        t = BaseType.find_type!(type_name)
+        if t.class != BuiltIn
+          raise Exception.new("Must specify a BuiltIn type for scalars.")
+        end
+
+        @type_name = t
+      else
+        @type_name
+      end
+    end
   end
 end

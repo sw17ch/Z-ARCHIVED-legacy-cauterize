@@ -50,6 +50,7 @@ module Cauterize
         end
 
         # These are only different in a few type varieties.
+        def typedef_decl(formatter); nil end
         def struct_proto(formatter); nil end
         def struct_defn(formatter); nil end
         def enum_defn(formatter); nil end

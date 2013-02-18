@@ -166,6 +166,11 @@ module Cauterize
         it "supports group" do
           Cauterize.group(:foo).is_group?.should be_true
         end
+
+        it "supports builtin" do
+          # This one is special because of how buitins are declared
+          Cauterize.builtins[:int32].is_built_in?.should be_true
+        end
       end
     end
   end

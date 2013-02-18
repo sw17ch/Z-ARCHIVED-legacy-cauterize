@@ -2,7 +2,7 @@ module Cauterize
   describe Cauterize::Builders::CS::Composite do
     context "class definition" do
       let(:comp) do
-        Cauterize.scalar(:int32_t)
+        Cauterize.scalar(:int32_t) {|t| t.type_name(:int32) }
         _c = Cauterize.composite(:foo) do |c|
           c.field(:an_int, :int32_t)
         end

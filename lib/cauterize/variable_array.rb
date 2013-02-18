@@ -43,10 +43,10 @@ module Cauterize
     def size_type(t = nil)
       if t
         _t = BaseType.find_type!(t)
-        if _t.is_scalar?
+        if _t.is_built_in? or _t.is_scalar?
           @size_type = _t
         else
-          raise Exception.new("The type #{t} is not an scalar")
+          raise Exception.new("The type #{t} is not a built-in or scalar type")
         end
       else
         @size_type

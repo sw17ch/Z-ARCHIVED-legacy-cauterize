@@ -2,7 +2,6 @@ module Cauterize
   describe Cauterize::Builders::C::Composite do
     let(:type_constructor) do
       lambda do |name|
-        Cauterize.scalar(:int32)
         Cauterize.composite(name) do |c|
           c.field :an_int, :int32
           c.field :another_int, :int32
@@ -16,7 +15,6 @@ module Cauterize
 
     context "structure definition" do
       let(:comp) do
-        Cauterize.scalar(:int32)
         _c = Cauterize.composite(:foo) do |c|
           c.field(:an_int, :int32)
         end

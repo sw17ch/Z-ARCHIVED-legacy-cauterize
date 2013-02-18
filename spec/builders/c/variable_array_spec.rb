@@ -17,7 +17,6 @@ module Cauterize
 
     context "structure definition" do
       let(:vara) do
-        Cauterize.scalar(:int32)
         _a = Cauterize.variable_array(:va) do |a|
           a.array_size(8)
           a.array_type(:int32)

@@ -72,9 +72,9 @@ module Cauterize
       end
 
       it "raises an error if the type isn't an scalar" do
-        Cauterize.scalar(:uint32_t)
+        Cauterize.scalar(:uint32_t) { |t| t.type_name(:uint32) }
         Cauterize.enumeration(:lol)
-        lambda { @a.size_type :lol }.should raise_error /is not an scalar/
+        lambda { @a.size_type :lol }.should raise_error /is not a built-in or scalar/
       end
 
       it "is the defined type if no argument is passed" do

@@ -23,6 +23,7 @@ module Cauterize
       BaseType.class_variable_set(:@@instances, {})
 
       Cauterize.module_exec do
+        @builtins = {}
         @scalars = {}
         @composites = {}
         @enumerations = {}
@@ -31,6 +32,7 @@ module Cauterize
         @groups = {}
       end
 
+      Cauterize.create_builtins
     end
 
     def is_tagged_as(cls, tag)

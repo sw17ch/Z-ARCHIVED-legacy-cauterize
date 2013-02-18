@@ -81,7 +81,6 @@ module Cauterize
 
     context "structure definition" do
       let(:grp) do
-        Cauterize.scalar(:int32)
         _g = Cauterize.group(:oof) do |g|
           g.field(:aaa, :int32)
           g.field(:bbb, :int32)
