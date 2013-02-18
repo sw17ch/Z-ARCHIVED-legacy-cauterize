@@ -2,7 +2,7 @@ describe Cauterize::Builders::CS::FixedArray do
 
   context "array class definition" do
     let(:fixed_arr) do
-      Cauterize.scalar(:uint32_t)
+      Cauterize.scalar(:uint32_t) {|t| t.type_name(:uint32)}
       _fa = Cauterize.fixed_array(:myriad_data) do |a|
         a.array_type :uint32_t
         a.array_size 16

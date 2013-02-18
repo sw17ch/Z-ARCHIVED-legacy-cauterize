@@ -14,7 +14,9 @@ module Cauterize
     end
 
     it "errors on duplicate type names" do
-      BaseType.class_variable_set(:@@instances, {:a_common_name => nil})
+      instances = BaseType.class_variable_get(:@@instances)
+      instances[:a_common_name] = nil
+      BaseType.class_variable_set(:@@instances, instances)
       lambda {
         type_constructor.call(:a_common_name)
       }.should raise_error /already exists/

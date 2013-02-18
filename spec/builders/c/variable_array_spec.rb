@@ -2,7 +2,7 @@ module Cauterize
   describe Cauterize::Builders::C::VariableArray do
     let(:type_constructor) do
       lambda do |name|
-        Cauterize.scalar(:uint8_t)
+        Cauterize.scalar(:uint8_t) {|t| t.type_name(:uint8)}
         Cauterize.variable_array(name) do |a|
           a.array_type(:uint8_t)
           a.array_size(8)

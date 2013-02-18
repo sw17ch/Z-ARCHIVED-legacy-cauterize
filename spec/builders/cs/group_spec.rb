@@ -2,7 +2,7 @@ module Cauterize
   describe Cauterize::Builders::CS::Group do
     context "enumeration for type tag" do
       before do
-        Cauterize.scalar(:uint8_t)
+        Cauterize.scalar(:uint8_t) {|t| t.type_name(:uint8)}
         @g = Cauterize.group!(:some_name) do |_g|
           _g.field(:a, :uint8_t)
           _g.field(:b, :uint8_t)
