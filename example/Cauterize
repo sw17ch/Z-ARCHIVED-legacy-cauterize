@@ -1,14 +1,8 @@
 set_name("example_project")
 set_version("1.2.3")
 
-scalar(:int8_t)
-scalar(:int16_t)
-scalar(:int32_t)
-scalar(:int64_t)
-scalar(:uint8_t)
-scalar(:uint16_t)
-scalar(:uint32_t)
-scalar(:uint64_t)
+scalar(:int32_t)  { |t| t.type_name(:int32) }
+scalar(:uint8_t) { |t| t.type_name(:uint8) }
 
 enumeration(:color) do |e|
   e.value :red

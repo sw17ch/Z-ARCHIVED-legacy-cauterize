@@ -1,17 +1,17 @@
 #!/bin/sh
 
-rm -rf cauterize_output
-../bin/cauterize generate c cauterize_output
+rm -rf c_cauterize_output
+../bin/cauterize generate c c_cauterize_output
 
 CFLAGS="-Wall -Werror -Wextra"
-INCLUDES="-Icauterize_output"
+INCLUDES="-Ic_cauterize_output"
 
 
-gcc $CFLAGS $INCLUDES cauterize_output/cauterize.c -c -o cauterize_output/cauterize.o
-gcc $CFLAGS $INCLUDES cauterize_output/example_project.c -c -o cauterize_output/example_project.o
+gcc $CFLAGS $INCLUDES c_cauterize_output/cauterize.c -c -o c_cauterize_output/cauterize.o
+gcc $CFLAGS $INCLUDES c_cauterize_output/example_project.c -c -o c_cauterize_output/example_project.o
 
-rm -rf cauterize_output
-../bin/cauterize generate cs cauterize_output
+rm -rf cs_cauterize_output
+../bin/cauterize generate cs cs_cauterize_output
 
-dmcs cauterize_output/Cauterize.cs cauterize_output/example_project.cs -target:library -out:cauterize_output/example_project.dll
+dmcs cs_cauterize_output/Cauterize.cs cs_cauterize_output/example_project.cs -target:library -out:cs_cauterize_output/example_project.dll
 
