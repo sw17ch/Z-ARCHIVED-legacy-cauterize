@@ -13,8 +13,8 @@ task :greatest do
     test_suite_path = File.join(d, "test_suite.c")
     mk_test_suite_file(test_suite_path)
 
-    args = "-Wall -Wextra -Werror -Ic/test -Ic/src -I#{d}"
-    srcs = "c/src/cauterize.c c/test/test.c"
+    args = "-Wall -Wextra -Werror -Isupport/c/test -Isupport/c/src -I#{d}"
+    srcs = "support/c/src/cauterize.c support/c/test/test.c"
     bin = File.join(d, "test.bin")
     sh "gcc #{args} #{srcs} -o #{bin}"
     sh bin
@@ -26,7 +26,7 @@ end
 SUITE_ENTRY_TEMPLATE = "  RUN_TEST(%s);"
 
 def mk_test_suite_file(path)
-  test_files = Dir["c/test/*.c"]
+  test_files = Dir["support/c/test/*.c"]
   suite_text = test_files.map do |test_file|
     File.read(test_file).lines.map do |l|
       m = l.match(/^TEST (?<sym>[^\(]+)\(\)/)
