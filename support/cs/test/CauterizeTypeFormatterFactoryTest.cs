@@ -20,7 +20,7 @@ namespace Cauterize.Test
     }
     class MyGroup : CauterizeGroup
     {
-        public GroupType Type;
+        public GroupType Type { get; set; }
 
         public Int32 NormalInt { get; set; }
         public Int16 SmallInt { get; set; }

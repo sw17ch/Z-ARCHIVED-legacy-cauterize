@@ -21,6 +21,20 @@ task :greatest do
   end
 end
 
+desc "Run C# tests"
+task :nunit do
+  cd "support/cs" do
+    sh "dmcs -target:library -out:lib/Cauterize.dll src/*.cs"
+    references = "-r:lib/nunit.framework.dll -r:lib/Moq.dll -r:lib/Cauterize.dll"
+    sh "dmcs -target:library #{references} -out:lib/Cauterize.Test.dll test/*.cs"
+    sh "#{nunit} lib/*.dll"
+  end
+end
+
+def nunit
+  "nunit-console4"
+end
+
 # Support Methods
 
 SUITE_ENTRY_TEMPLATE = "  RUN_TEST(%s);"
