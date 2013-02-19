@@ -11,6 +11,12 @@ module Cauterize::Builders::CS
         formatter << "_data = new #{ty_bldr.render}[size];"
       end
     end
+
+    protected
+    def extra_array_declarations(formatter)
+      size_type = Cauterize::Builders.get(:cs, @blueprint.size_type).render
+      formatter << "public static Type SizeType = typeof(#{size_type});"
+    end
   end
 end
 

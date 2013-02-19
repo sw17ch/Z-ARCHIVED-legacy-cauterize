@@ -3,6 +3,7 @@ module Cauterize::Builders::CS
     def class_defn(formatter)
       formatter << "public class #{render} : #{render_parent}"
       formatter.braces do
+        extra_array_declarations(formatter)
         formatter << "private #{ty_bldr.render}[] _data;"
         formatter.blank_line
         constructor_defn(formatter)
@@ -17,6 +18,9 @@ module Cauterize::Builders::CS
     end
 
     protected
+
+    def extra_array_declarations(formatter)
+    end
 
     def ty_bldr
       @ty_bldr ||= Cauterize::Builders.get(:cs, @blueprint.array_type)

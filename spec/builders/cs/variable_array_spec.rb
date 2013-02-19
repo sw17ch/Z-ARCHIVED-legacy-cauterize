@@ -3,7 +3,7 @@ describe Cauterize::Builders::CS::VariableArray do
   context "array class definition" do
     let(:var_arr) do
       Cauterize.scalar(:uint32_t) {|t| t.type_name(:uint32)}
-      Cauterize.scalar(:uint8_t)
+      Cauterize.scalar(:uint8_t) {|t| t.type_name(:uint8)}
       _va = Cauterize.variable_array(:myriad_data) do |a|
         a.size_type :uint8_t
         a.array_type :uint32_t
@@ -21,6 +21,10 @@ describe Cauterize::Builders::CS::VariableArray do
       end
       it "defines a class for the array" do
         text.should match /public class MyriadData : CauterizeVariableArray/
+      end
+
+      it "defines the size type" do
+        text.should match /public static Type SizeType = typeof\(Byte\);/
       end
 
       it "defines an array of the correct type" do
