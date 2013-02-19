@@ -19,6 +19,15 @@ namespace Cauterize
             return t.GetProperties().OrderBy(p => ((OrderAttribute)p.GetCustomAttributes(typeof(OrderAttribute), false)[0]).Order);
         }
 
+        public static PropertyInfo GetPropertyByOrder(Type t, int order)
+        {
+            return t.GetProperties().Where(p =>
+                {
+                    var orderAttr = ((OrderAttribute) p.GetCustomAttributes(typeof (OrderAttribute), false)[0]);
+                    return orderAttr.Order == order;
+                }).FirstOrDefault();
+        }
+
     }
 }
 

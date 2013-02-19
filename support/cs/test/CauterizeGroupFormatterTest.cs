@@ -12,7 +12,8 @@ namespace Cauterize.Test
     enum TestGroupType
     {
         TestGroupTypeFoo = 0,
-        TestGroupTypeBar
+        TestGroupTypeBar,
+        TestGroupTypeBaz
     }
     class TestGroup : CauterizeGroup
     {
@@ -21,8 +22,9 @@ namespace Cauterize.Test
 
         [Order(1)]
         public int Foo { get; set; }
-        [Order(2)]
-        public byte Bar { get; set; }
+        /* unused for 2/Bar */
+        [Order(3)]
+        public byte Baz { get; set; }
     }
 
     [TestFixture]
@@ -65,8 +67,8 @@ namespace Cauterize.Test
         {
             var stream = new MemoryStream();
             var group = new TestGroup();
-            group.Type = TestGroupType.TestGroupTypeBar;
-            group.Bar = 4;
+            group.Type = TestGroupType.TestGroupTypeBaz;
+            group.Baz = 4;
             var enumFormatter = new Mock<ICauterizeTypeFormatter>();
             var byteFormatter = new Mock<ICauterizeTypeFormatter>();
             var factory = new Mock<CauterizeTypeFormatterFactory>();
@@ -85,12 +87,61 @@ namespace Cauterize.Test
                         return null;
                     }
                 });
-            enumFormatter.Setup(f => f.Serialize(stream, TestGroupType.TestGroupTypeBar));
+            enumFormatter.Setup(f => f.Serialize(stream, TestGroupType.TestGroupTypeBaz));
             byteFormatter.Setup(f => f.Serialize(stream, (Byte)4));
             var formatter = new CauterizeGroupFormatter(factory.Object);
             formatter.Serialize(stream, group);
             enumFormatter.VerifyAll();
             byteFormatter.VerifyAll();
+        }
+
+        [Test]
+        public void TestDeserialized_UnusedGroupData()
+        {
+            var stream = new MemoryStream();
+            var factory = new Mock<CauterizeTypeFormatterFactory>();
+            var enumFormatter = new Mock<ICauterizeTypeFormatter>();
+            factory.Setup(f => f.GetFormatter(It.IsAny<Type>())).Returns((Type t) =>
+                {
+                    if (t == typeof (TestGroupType))
+                    {
+                        return enumFormatter.Object;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                });
+            enumFormatter.Setup(f => f.Deserialize(stream, typeof (TestGroupType)))
+                         .Returns(TestGroupType.TestGroupTypeBar);
+            var formatter = new CauterizeGroupFormatter(factory.Object);
+            var result = (TestGroup) formatter.Deserialize(stream, typeof (TestGroup));
+            Assert.AreEqual(TestGroupType.TestGroupTypeBar, result.Type);
+        }
+
+        [Test]
+        public void TestSerialized_UnusedGroupData()
+        {
+            var stream = new MemoryStream();
+            var group = new TestGroup();
+            group.Type = TestGroupType.TestGroupTypeBar;
+            var enumFormatter = new Mock<ICauterizeTypeFormatter>();
+            var factory = new Mock<CauterizeTypeFormatterFactory>();
+            factory.Setup(f => f.GetFormatter(It.IsAny<Type>())).Returns((Type t) =>
+                {
+                    if (t == typeof (TestGroupType))
+                    {
+                        return enumFormatter.Object;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                });
+            enumFormatter.Setup(f => f.Serialize(stream, TestGroupType.TestGroupTypeBar));
+            var formatter = new CauterizeGroupFormatter(factory.Object);
+            formatter.Serialize(stream, group);
+            enumFormatter.VerifyAll();
         }
     }
 }

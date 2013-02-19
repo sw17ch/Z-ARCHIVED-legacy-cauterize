@@ -51,6 +51,7 @@ namespace Cauterize.Test
     public enum TestSubGroupType
     {
         TestSubGroupTypeVariable,
+        TestSUbGroupTypeNothing,
         TestSubGroupTypeShort
     }
 
@@ -62,7 +63,8 @@ namespace Cauterize.Test
         [Order(1)]
         public TestSubVariable SubVar { get; set; }
 
-        [Order(2)]
+        /* no data for nothing */
+        [Order(3)]
         public Int16 SubShort { get; set; }
     }
 
