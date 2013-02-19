@@ -38,7 +38,7 @@ class CauterizeCmdline < Thor
 
     # Copy the cauterize support files.
     unless options[:omit_support]
-      support_path = File.join(File.dirname(__FILE__),"../#{language}/src")
+      support_path = File.join(File.dirname(__FILE__),"../support/#{language}/src")
       Dir["#{support_path}/*"].each do |path|
         FileUtils.cp(path, target_dir)
       end

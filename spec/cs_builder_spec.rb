@@ -70,6 +70,11 @@ module Cauterize
         @cs_lines = @cs_text.lines.to_a
       end
 
+      it "includes namespaces" do
+        @cs_lines.should include("using System;\n")
+        @cs_lines.should include("using Cauterize;\n")
+      end
+
       it "creates a cauterize info class with version and date" do
         @cs_lines.should include("        Name = \"Testing\";\n")
         @cs_lines.should include("        GeneratedVersion = \"1.2.3\";\n")

@@ -19,16 +19,17 @@ module Cauterize
       f = four_space_formatter
 
       f << "using System;"
+      f << "using Cauterize;"
       f.blank_line
       f << "public class #{@name}CauterizeInfo : CauterizeInfo"
-      f << "{"
-      f << "    static #{@name}CauterizeInfo()"
-      f << "    {"
-      f << "        Name = \"#{@name}\";"
-      f << "        GeneratedVersion = \"#{Cauterize.get_version}\";"
-      f << "        GeneratedDate = \"#{Cauterize.get_version}\";"
-      f << "    }"
-      f << "}"
+      f.braces do
+        f << "static #{@name}CauterizeInfo()"
+        f.braces do
+          f << "Name = \"#{@name}\";"
+          f << "GeneratedVersion = \"#{Cauterize.get_version}\";"
+          f << "GeneratedDate = \"#{Cauterize.get_version}\";"
+        end
+      end
       f.blank_line
 
       instances = BaseType.all_instances

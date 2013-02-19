@@ -1,6 +1,10 @@
 module Cauterize::Builders::CS
   class FixedArray < CSArray
 
+    def render_parent
+      "CauterizeFixedArray"
+    end
+
     def constructor_defn(formatter)
       formatter << "public #{render}()"
       formatter.braces do

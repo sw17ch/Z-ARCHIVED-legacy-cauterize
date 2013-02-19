@@ -1,7 +1,7 @@
 module Cauterize::Builders::CS
   class CSArray < Buildable
     def class_defn(formatter)
-      formatter << "public class #{render}"
+      formatter << "public class #{render} : #{render_parent}"
       formatter.braces do
         formatter << "private #{ty_bldr.render}[] _data;"
         formatter.blank_line

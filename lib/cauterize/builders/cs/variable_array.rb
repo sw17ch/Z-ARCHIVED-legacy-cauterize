@@ -1,6 +1,10 @@
 module Cauterize::Builders::CS
   class VariableArray < CSArray
 
+    def render_parent
+      "CauterizeVariableArray"
+    end
+
     def constructor_defn(formatter)
       formatter << "public #{render}(int size)"
       formatter.braces do

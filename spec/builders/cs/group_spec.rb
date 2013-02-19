@@ -33,11 +33,14 @@ module Cauterize
           fs = f.to_s
 
           fs.should == <<EOS
-public class SomeName
+public class SomeName : CauterizeGroup
 {
+    [Order(0)]
     public GroupSomeNameType Type { get; set; }
 
+    [Order(1)]
     public Byte A { get; set; }
+    [Order(2)]
     public Byte B { get; set; }
     /* No data associated with 'c'. */
 }

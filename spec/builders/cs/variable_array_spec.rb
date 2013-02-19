@@ -20,7 +20,7 @@ describe Cauterize::Builders::CS::VariableArray do
         text = f.to_s
       end
       it "defines a class for the array" do
-        text.should match /public class MyriadData/
+        text.should match /public class MyriadData : CauterizeVariableArray/
       end
 
       it "defines an array of the correct type" do
