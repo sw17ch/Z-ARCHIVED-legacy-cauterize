@@ -28,13 +28,13 @@ namespace Cauterize
             _formatterFactory = factory;
         }
 
-        public object Deserialize(Stream serializationStream)
+        public virtual object Deserialize(Stream serializationStream)
         {
             var formatter = _formatterFactory.GetFormatter(_deserializeType);
             return formatter.Deserialize(serializationStream, _deserializeType);
         }
 
-        public void Serialize(Stream serializationStream, object obj)
+        public virtual void Serialize(Stream serializationStream, object obj)
         {
             var formatter = _formatterFactory.GetFormatter(obj.GetType());
             formatter.Serialize(serializationStream, obj);

@@ -72,13 +72,18 @@ module Cauterize
 
       it "includes namespaces" do
         @cs_lines.should include("using System;\n")
+        @cs_lines.should include("using System.Linq;\n")
         @cs_lines.should include("using Cauterize;\n")
       end
 
+      it "uses a namespace" do
+        @cs_lines.should include("namespace Testing\n")
+      end
+
       it "creates a cauterize info class with version and date" do
-        @cs_lines.should include("        Name = \"Testing\";\n")
-        @cs_lines.should include("        GeneratedVersion = \"1.2.3\";\n")
-        @cs_lines.any?{|l| l.match /GeneratedDate = / }.should be_true
+        @cs_text.should match /Name = \"Testing\";/
+        @cs_text.should match /GeneratedVersion = \"1.2.3\";/
+        @cs_text.should match /GeneratedDate = /
       end
 
       it "includes enumeration definitions" do

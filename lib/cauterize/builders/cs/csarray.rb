@@ -13,6 +13,12 @@ module Cauterize::Builders::CS
           formatter << "get { return _data[i]; }"
           formatter << "set { _data[i] = value; }"
         end
+        formatter.blank_line
+        formatter << "public #{ty_bldr.render}[] this[Tuple<int, int> range]"
+        formatter.braces do
+          formatter << "get { return _data.Skip(range.Item1).Take(range.Item2-range.Item1).ToArray(); }"
+          formatter << "set { Array.ConstrainedCopy(value, 0, _data, range.Item1, range.Item2 - range.Item1); }"
+        end
       end
       formatter.blank_line
     end

@@ -37,6 +37,12 @@ describe Cauterize::Builders::CS::VariableArray do
         text.should match /set { _data\[i\] = value; }/
       end
 
+      it "defines slicing into the array" do
+        text.should match /public UInt32\[\] this\[Tuple<int, int> range\]/
+        text.should match /get { return _data.Skip\(range.Item1\).Take\(range.Item2-range.Item1\).ToArray\(\); }/
+        text.should match /set { Array.ConstrainedCopy\(value, 0, _data, range.Item1, range.Item2 - range.Item1\); }/
+      end
+
       it "sets the size of the array from configuration" do
         text.should match /public MyriadData\(int size\)/ # no args
         text.should match /_data = new UInt32\[size\];/
