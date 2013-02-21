@@ -8,6 +8,10 @@ module Cauterize::Builders::CS
         formatter.blank_line
         constructor_defn(formatter)
         formatter.blank_line
+        formatter << "public int Length"
+        formatter.braces do
+          formatter << "get { return _data.Length; }"
+        end
         formatter << "public #{ty_bldr.render} this[int i]"
         formatter.braces do
           formatter << "get { return _data[i]; }"

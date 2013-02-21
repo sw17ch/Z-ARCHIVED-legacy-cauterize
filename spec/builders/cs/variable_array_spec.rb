@@ -47,6 +47,12 @@ describe Cauterize::Builders::CS::VariableArray do
         text.should match /public MyriadData\(int size\)/ # no args
         text.should match /_data = new UInt32\[size\];/
       end
+
+      it "allows defaulting an array" do
+        text.should match /public MyriadData\(UInt32\[\] data\)/
+        text.should match /_data = new UInt32\[data\.Length\];/
+        text.should match /Array\.Copy\(data,_data,data\.Length\);/
+      end
     end
   end
 end

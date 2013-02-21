@@ -35,6 +35,16 @@ describe Cauterize::Builders::CS::FixedArray do
         text.should match /public MyriadData\(\)/ # no args
         text.should match /_data = new UInt32\[16\];/
       end
+
+      it "allows defaulting an array" do
+        text.should match /public MyriadData\(UInt32\[\] data\)/
+        text.should match /Array\.Copy\(data,_data,16\);/
+      end
+
+      it "defines a length" do
+        text.should match /public int Length/
+        text.should match /get { return _data\.Length; }/
+      end
     end
   end
 end
