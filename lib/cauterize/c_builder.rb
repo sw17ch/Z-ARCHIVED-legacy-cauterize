@@ -25,8 +25,6 @@ module Cauterize
       f << "#define #{excluder}"
       f.blank_line
       f << %Q{#include <cauterize.h>}
-      f << %Q{#include <cauterize_util.h>}
-      f << %Q{#include <stdint.h>}
       f.blank_line
       f << "#define GEN_VERSION (\"#{Cauterize.get_version}\")"
       f << "#define GEN_DATE (\"#{DateTime.now.to_s}\")"
