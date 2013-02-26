@@ -6,16 +6,16 @@
 
 #include "cauterize_util.h"
 
-typedef enum cauterize_status {
-  CA_OK                    = 0,
-  CA_ERR_ASSERT            = 1,
-  CA_ERR_NOT_ENOUGH_SPACE  = 2,
-  CA_ERR_NOT_ENOUGH_DATA   = 3,
-  CA_ERR_INVALID_LENGTH    = 4,
-  CA_ERR_INVALUD_TYPE_TAG  = 5,
-  CA_ERR_INVALID_ENUM_VAL  = 6,
-  CA_ERR_GENERAL           = UINT32_MAX,
-} CAUTERIZE_STATUS_T;
+typedef uint32_t CAUTERIZE_STATUS_T;
+
+#define CA_OK                    (0)
+#define CA_ERR_ASSERT            (1)
+#define CA_ERR_NOT_ENOUGH_SPACE  (2)
+#define CA_ERR_NOT_ENOUGH_DATA   (3)
+#define CA_ERR_INVALID_LENGTH    (4)
+#define CA_ERR_INVALUD_TYPE_TAG  (5)
+#define CA_ERR_INVALID_ENUM_VAL  (6)
+#define CA_ERR_GENERAL           (UINT32_MAX)
 
 struct Cauterize {
   size_t size; // Size of the buffer in bytes
