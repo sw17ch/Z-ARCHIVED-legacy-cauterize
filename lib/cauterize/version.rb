@@ -1,3 +1,3 @@
 module Cauterize
-  VERSION = "0.0.1.pre3.1"
+  VERSION = "0.0.1.pre4"
 end
