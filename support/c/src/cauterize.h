@@ -56,6 +56,4 @@ CALLCONV CAUTERIZE_STATUS_T DLLDECL CauterizeRead(
 }
 #endif
 
-#define CA_MAX(a,b) ((a) > (b) ? (a) : (b))
-
 #endif /* CAUTERIZE_H */

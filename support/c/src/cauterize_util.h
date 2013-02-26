@@ -2,7 +2,8 @@
 #define CAUTERIZE_UTIL_H
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define CA_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define CA_MAX(a,b) ((a) > (b) ? (a) : (b))
 
 /* Buidling Cauterize files as a DLL. */
 
