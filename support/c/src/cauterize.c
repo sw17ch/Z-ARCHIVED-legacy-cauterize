@@ -1,12 +1,14 @@
 #define CAUTERIZE_C
 
 #include "cauterize.h"
+#include "cauterize_util.h"
 #include "cauterize_debug.h"
 
 #include <string.h>
 
 #define S CAUTERIZE_STATUS_T
 #define T struct Cauterize
+
 
 S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, size_t length)
 {
