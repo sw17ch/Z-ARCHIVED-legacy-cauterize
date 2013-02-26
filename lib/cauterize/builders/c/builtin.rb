@@ -17,16 +17,6 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
-        # These need to be tweaked since we need to replace the names with the
-        # C type capable of representing it.
-        def packer_sig
-          "CAUTERIZE_STATUS_T #{packer_sym}(struct Cauterize * dst, #{render_ctype} * src)"
-        end
-
-        def unpacker_sig
-          "CAUTERIZE_STATUS_T #{unpacker_sym}(struct Cauterize * src, #{render_ctype} * dst)"
-        end
-
         # These are identical to the Scalar definitions. For now.
         def packer_defn(formatter)
           formatter << packer_sig
