@@ -1,8 +1,12 @@
 #ifndef CAUTERIZE_H
 #define CAUTERIZE_H
 
-#include <stdint.h>
-#include <stddef.h>
+#ifndef CUSTOM_TYPES
+  #include <stdint.h>
+  #include <stddef.h>
+#else
+  #include "cauterize_custom_types.h"
+#endif
 
 #include "cauterize_util.h"
 
