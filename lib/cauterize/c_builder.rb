@@ -25,6 +25,7 @@ module Cauterize
       f << "#define #{excluder}"
       f.blank_line
       f << %Q{#include <cauterize.h>}
+      f << %Q{#include <cauterize_util.h>}
       f << %Q{#include <stdint.h>}
       f.blank_line
       f << "#define GEN_VERSION (\"#{Cauterize.get_version}\")"
@@ -38,8 +39,17 @@ module Cauterize
       builders.each { |b| b.enum_defn(f) }
       builders.each { |b| b.struct_proto(f) }
       builders.each { |b| b.struct_defn(f) }
+
+      f << "#ifdef __cplusplus"
+      f << "extern \"C\" {"
+      f << "#endif"
+
       builders.each { |b| b.packer_proto(f) }
       builders.each { |b| b.unpacker_proto(f) }
+
+      f << "#ifdef __cplusplus"
+      f << "}"
+      f << "#endif"
 
       f.blank_line
       f << "#endif /* #{excluder} */"
