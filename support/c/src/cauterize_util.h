@@ -15,8 +15,7 @@
 #endif
 
 #if defined(_WIN32)
-#warn "building on win32"
-#define CALLCONV __stdcal
+#define CALLCONV __stdcall
 #else
 #define CALLCONV
 #endif
