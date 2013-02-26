@@ -112,7 +112,7 @@ module Cauterize
 
       describe "compilation" do
         it "can be built" do
-          caut_dir = "#{File.dirname(__FILE__)}/../c/src"
+          caut_dir = "#{File.dirname(__FILE__)}/../support/c/src"
 
           res = Dir.chdir @tempdir do
             File.open("test_main.c", "wb") do |fh|

@@ -5,14 +5,20 @@ module Cauterize::Builders::CS
       @tag_enum = blueprint.tag_enum
     end
 
+    def render_parent
+      "CauterizeGroup"
+    end
+
     def class_defn(formatter)
-      formatter << "public class #{render}"
+      formatter << "public class #{render} : #{render_parent}"
       formatter.braces do
+        formatter << "[Order(0)]"
         Cauterize::Builders.get(:cs, @tag_enum).declare(formatter, "Type")
         formatter.blank_line
-        @blueprint.fields.values.each do |field|
+        @blueprint.fields.values.each_with_index do |field, i|
           b = Cauterize::Builders.get(:cs, field.type)
           if b
+            formatter << "[Order(#{i+1})]"
             b.declare(formatter, field.name)
           else
             formatter << "/* No data associated with '#{field.name}'. */"

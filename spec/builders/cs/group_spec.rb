@@ -7,6 +7,7 @@ module Cauterize
           _g.field(:a, :uint8_t)
           _g.field(:b, :uint8_t)
           _g.field(:c)
+          _g.field(:d, :uint8_t)
         end
         @b = Cauterize::Builders::CS::Group.new(@g)
       end
@@ -22,7 +23,8 @@ module Cauterize
           e = @b.instance_variable_get(:@tag_enum)
           e.values.keys.should =~ [ :GROUP_SOME_NAME_TYPE_A,
                                     :GROUP_SOME_NAME_TYPE_B,
-                                    :GROUP_SOME_NAME_TYPE_C ]
+                                    :GROUP_SOME_NAME_TYPE_C,
+                                    :GROUP_SOME_NAME_TYPE_D ]
         end
       end
 
@@ -33,13 +35,18 @@ module Cauterize
           fs = f.to_s
 
           fs.should == <<EOS
-public class SomeName
+public class SomeName : CauterizeGroup
 {
+    [Order(0)]
     public GroupSomeNameType Type { get; set; }
 
+    [Order(1)]
     public Byte A { get; set; }
+    [Order(2)]
     public Byte B { get; set; }
     /* No data associated with 'c'. */
+    [Order(4)]
+    public Byte D { get; set; }
 }
 EOS
         end
