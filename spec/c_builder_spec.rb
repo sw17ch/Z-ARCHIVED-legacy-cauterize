@@ -128,7 +128,7 @@ module Cauterize
             end
 
             cmd = %W{
-              clang -Wall -Wextra -Werror
+              gcc -Wall -Wextra -Werror
               -I#{caut_dir}
               #{@cb.c}
               #{caut_dir}/cauterize.c
