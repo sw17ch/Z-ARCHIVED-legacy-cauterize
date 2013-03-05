@@ -10,13 +10,23 @@ namespace Cauterize
     {
         public object Deserialize(Stream serializationStream, Type t)
         {
-            var bytes = new byte[4];
-            serializationStream.Read(bytes, 0, 4);
+            var numBytes = GetNumBytesForEnum(t);
+            var bytes = new byte[numBytes];
+            serializationStream.Read(bytes, 0, numBytes);
             if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(bytes);
             }
-            var intValue = BitConverter.ToInt32(bytes, 0);
+            UInt32 intValue = 0;
+            switch (numBytes)
+            {
+                case 4: intValue = BitConverter.ToUInt32(bytes, 0);
+                        break;
+                case 2: intValue = BitConverter.ToUInt16(bytes, 0);
+                        break;
+                case 1: intValue = (UInt32)bytes[0];
+                        break;
+            }
             return Enum.ToObject(t, intValue);
         }
 
@@ -28,7 +38,22 @@ namespace Cauterize
             {
                 Array.Reverse(bytes);
             }
-            serializationStream.Write(bytes, 0, 4);
+            serializationStream.Write(bytes, 0, GetNumBytesForEnum(obj.GetType()));
+        }
+
+        private int GetNumBytesForEnum(Type t)
+        {
+            var numBytes = 4;
+            var max = Enum.GetValues(t).Cast<int>().Max();
+            if (max < Byte.MaxValue)
+            {
+                numBytes = 1;
+            }
+            else if (max < UInt16.MaxValue)
+            {
+                numBytes = 2;
+            }
+            return numBytes;
         }
     }
 }
