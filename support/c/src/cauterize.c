@@ -9,8 +9,7 @@
 #define S CALLCONV CAUTERIZE_STATUS_T DLLDECL
 #define T struct Cauterize
 
-
-S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, uint32_t length)
+S CauterizeInitAppend(T * m, uint8_t * buffer, uint32_t length)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != buffer);
@@ -23,7 +22,7 @@ S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, uint32_t length)
   return CA_OK;
 }
 
-S CauterizeInitRead( struct Cauterize * m, uint8_t * buffer, uint32_t used)
+S CauterizeInitRead(T * m, uint8_t * buffer, uint32_t used)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != buffer);
