@@ -44,6 +44,12 @@ class CauterizeCmdline < Thor
       end
     end
   end
+
+  desc "version",
+       "Prints the cauterize version to the screen."
+  def version
+    puts "cauterize-" + Cauterize::VERSION
+  end
 end
 
 begin
