@@ -9,19 +9,23 @@ using Cauterize;
 
 namespace Cauterize.Test
 {
-    class TestVariableArray : CauterizeVariableArray
+    class TestVariableArray : CauterizeVariableArrayTyped<int>
     {
         public static Type SizeType = typeof (Byte);
-        private int[] _data;
 
         public TestVariableArray(int size)
         {
-            _data = new int[size];
+            Allocate(size);
         }
-        public int this[int i]
+
+        public TestVariableArray(int[] data)
         {
-            get { return _data[i]; }
-            set { _data[i] = value; }
+            Allocate(data);
+        }
+
+        protected override int MaxSize
+        {
+            get { return Byte.MaxValue; }
         }
     }
 

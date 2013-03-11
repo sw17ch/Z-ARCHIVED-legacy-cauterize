@@ -17,14 +17,16 @@ namespace Cauterize
             {
                 Array.Reverse(bytes);
             }
-            UInt32 intValue = 0;
+            Int64 intValue = 0;
             switch (numBytes)
             {
-                case 4: intValue = BitConverter.ToUInt32(bytes, 0);
+                case 8: intValue = BitConverter.ToInt64(bytes, 0);
                         break;
-                case 2: intValue = BitConverter.ToUInt16(bytes, 0);
+                case 4: intValue = BitConverter.ToInt32(bytes, 0);
                         break;
-                case 1: intValue = (UInt32)bytes[0];
+                case 2: intValue = BitConverter.ToInt16(bytes, 0);
+                        break;
+                case 1: intValue = (Int32)bytes[0];
                         break;
             }
             return Enum.ToObject(t, intValue);
@@ -32,8 +34,8 @@ namespace Cauterize
 
         public void Serialize(Stream serializationStream, object obj)
         {
-            var intValue = (int) obj;
-            var bytes = BitConverter.GetBytes(intValue);
+            var longValue = Convert.ToInt64(obj);
+            var bytes = BitConverter.GetBytes(longValue);
             if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(bytes);
@@ -43,17 +45,24 @@ namespace Cauterize
 
         private int GetNumBytesForEnum(Type t)
         {
-            var numBytes = 4;
-            var max = Enum.GetValues(t).Cast<int>().Max();
-            if (max < Byte.MaxValue)
+            var type = SerializedRepresentationAttribute.GetRepresentation(t);
+            if (type == typeof(SByte) || type == typeof(Byte))
             {
-                numBytes = 1;
+                return 1;
             }
-            else if (max < UInt16.MaxValue)
+            else if (type == typeof(Int16) || type == typeof(UInt16))
             {
-                numBytes = 2;
+                return 2;
             }
-            return numBytes;
+            else if (type == typeof(Int32) || type == typeof(UInt32))
+            {
+                return 4;
+            }
+            else if (type == typeof(Int64) || type == typeof(UInt64))
+            {
+                return 8;
+            }
+            return 0;
         }
     }
 }

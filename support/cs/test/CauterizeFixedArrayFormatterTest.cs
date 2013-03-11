@@ -9,19 +9,21 @@ using Cauterize;
 
 namespace Cauterize.Test
 {
-    class TestFixedArray : CauterizeFixedArray
+    class TestFixedArray : CauterizeFixedArrayTyped<long>
     {
-        public static Type SizeType = typeof (Int16);
         private long[] _data;
 
         public TestFixedArray()
         {
-            _data = new long[3];
+            Allocate(3);
         }
-        public long this[int i]
+        public TestFixedArray(long[] data)
         {
-            get { return _data[i]; }
-            set { _data[i] = value; }
+            Allocate(data);
+        }
+        protected override int Size
+        {
+            get { return 3; }
         }
     }
     [TestFixture]

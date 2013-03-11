@@ -32,22 +32,25 @@ namespace Cauterize.Test
         public Byte Byte2 { get; set; }
     }
 
-    class TestSubFixed : CauterizeFixedArray
+    class TestSubFixed : CauterizeFixedArrayTyped<Int64>
     {
-        private Int64[] _data;
-
         public TestSubFixed()
         {
-            _data = new Int64[4];
+            Allocate(4);
         }
 
-        public Int64 this[int i]
+        public TestSubFixed(Int64[] data)
         {
-            get { return _data[i]; }
-            set { _data[i] = value;  }
+            Allocate(data);
+        }
+
+        protected override int Size
+        {
+            get { return 4; }
         }
     }
     
+    [SerializedRepresentation(typeof(Byte))]
     public enum TestSubGroupType
     {
         TestSubGroupTypeVariable,
@@ -68,21 +71,25 @@ namespace Cauterize.Test
         public Int16 SubShort { get; set; }
     }
 
-    class TestSubVariable : CauterizeVariableArray
+    class TestSubVariable : CauterizeVariableArrayTyped<Byte>
     {
         public static Type SizeType = typeof (Byte);
-        private Byte[] _data;
 
         public TestSubVariable(int size)
         {
-            _data = new Byte[size];
+            Allocate(size);
         }
 
-        public Byte this[int i]
+        public TestSubVariable(Byte[] data)
         {
-            get { return _data[i]; }
-            set { _data[i] = value;  }
+            Allocate(data);
         }
+
+        protected override int MaxSize
+        {
+            get { return Byte.MaxValue; }
+        }
+
     }
 
     [TestFixture]

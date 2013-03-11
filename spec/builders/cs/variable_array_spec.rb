@@ -20,38 +20,26 @@ describe Cauterize::Builders::CS::VariableArray do
         text = f.to_s
       end
       it "defines a class for the array" do
-        text.should match /public class MyriadData : CauterizeVariableArray/
+        text.should match /public class MyriadData : CauterizeVariableArrayTyped<UInt32>/
       end
 
       it "defines the size type" do
         text.should match /public static Type SizeType = typeof\(Byte\);/
       end
 
-      it "defines an array of the correct type" do
-        text.should match /private UInt32\[\] _data;/
-      end
-
-      it "defines indexing into the array" do
-        text.should match /public UInt32 this\[int i\]/
-        text.should match /get { return _data\[i\]; }/
-        text.should match /set { _data\[i\] = value; }/
-      end
-
-      it "defines slicing into the array" do
-        text.should match /public UInt32\[\] this\[Tuple<int, int> range\]/
-        text.should match /get { return _data.Skip\(range.Item1\).Take\(range.Item2-range.Item1\).ToArray\(\); }/
-        text.should match /set { Array.ConstrainedCopy\(value, 0, _data, range.Item1, range.Item2 - range.Item1\); }/
-      end
-
       it "sets the size of the array from configuration" do
         text.should match /public MyriadData\(int size\)/ # no args
-        text.should match /_data = new UInt32\[size\];/
+        text.should match /Allocate\(size\);/
       end
 
       it "allows defaulting an array" do
         text.should match /public MyriadData\(UInt32\[\] data\)/
-        text.should match /_data = new UInt32\[data\.Length\];/
-        text.should match /Array\.Copy\(data,_data,data\.Length\);/
+        text.should match /Allocate\(data\);/
+      end
+
+      it "defines a max size" do
+        text.should match /protected override int MaxSize/
+        text.should match /get { return Byte\.MaxValue; }/
       end
     end
   end

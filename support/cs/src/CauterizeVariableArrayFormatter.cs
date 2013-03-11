@@ -21,7 +21,7 @@ namespace Cauterize
             var rawSize = sizeFormatter.Deserialize(serializationStream, sizeType);
             var arraySize = PrimitiveSupport.TypeToInt(rawSize);
             var ret = t.GetConstructor(new Type[] {typeof (int)}).Invoke(new object[] {arraySize});
-            var arrayField = t.GetField("_data", BindingFlags.NonPublic | BindingFlags.Instance);
+            var arrayField = t.BaseType.GetField("_data", BindingFlags.NonPublic | BindingFlags.Instance);
             var array = (Array)arrayField.GetValue(ret);
             var arrayType = arrayField.FieldType.GetElementType();
             var subFormatter = _typeFormatterFactory.GetFormatter(arrayType);
@@ -35,7 +35,7 @@ namespace Cauterize
         public override void Serialize(Stream serializationStream, object obj)
         {
             var t = obj.GetType();
-            var arrayField = t.GetField("_data", BindingFlags.NonPublic | BindingFlags.Instance);
+            var arrayField = t.BaseType.GetField("_data", BindingFlags.NonPublic | BindingFlags.Instance);
             var array = (Array)arrayField.GetValue(obj);
             var sizeType = (Type) t.GetField("SizeType").GetValue(null);
             var sizeFormatter = _typeFormatterFactory.GetFormatter(sizeType);

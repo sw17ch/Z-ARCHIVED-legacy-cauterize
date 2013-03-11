@@ -7,18 +7,21 @@ using NUnit.Framework;
 
 namespace Cauterize.Test
 {
+    [SerializedRepresentation(typeof(SByte))]
     public enum CauterizeEnumTestSmall
     {
         Cets01 = 0,
         Cets02 = 2
     }
 
+    [SerializedRepresentation(typeof(Int16))]
     public enum CauterizeEnumTestMedium
     {
         Cetm01 = 0,
         Cetm02 = 512
     }
 
+    [SerializedRepresentation(typeof(Int64))]
     public enum CauterizeEnumTestLarge
     {
         Cetl01 = 0,
@@ -52,11 +55,15 @@ namespace Cauterize.Test
         [Test]
         public void TestDeserialize_Large()
         {
-            var bytes = new byte[4];
+            var bytes = new byte[8];
             bytes[0] = 0;
             bytes[1] = 0;
             bytes[2] = 2;
             bytes[3] = 0;
+            bytes[4] = 0;
+            bytes[5] = 0;
+            bytes[6] = 0;
+            bytes[7] = 0;
             var stream = new MemoryStream(bytes);
             var formatter = new CauterizeEnumFormatter();
             Assert.AreEqual(CauterizeEnumTestLarge.Cetl02, formatter.Deserialize(stream, typeof (CauterizeEnumTestLarge)));
@@ -86,7 +93,7 @@ namespace Cauterize.Test
         [Test]
         public void TestSerialize_Large()
         {
-            var bytes = new byte[4];
+            var bytes = new byte[8];
             var stream = new MemoryStream(bytes);
             var formatter = new CauterizeEnumFormatter();
             formatter.Serialize(stream, CauterizeEnumTestLarge.Cetl02);
@@ -94,6 +101,10 @@ namespace Cauterize.Test
             Assert.AreEqual(0, bytes[1]);
             Assert.AreEqual(2, bytes[2]);
             Assert.AreEqual(0, bytes[3]);
+            Assert.AreEqual(0, bytes[4]);
+            Assert.AreEqual(0, bytes[5]);
+            Assert.AreEqual(0, bytes[6]);
+            Assert.AreEqual(0, bytes[7]);
         }
     }
 }
