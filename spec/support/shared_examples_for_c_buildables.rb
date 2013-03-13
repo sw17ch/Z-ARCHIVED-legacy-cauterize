@@ -30,7 +30,7 @@ module Cauterize
 
     describe :packer_sig do
       it "looks like this" do
-        r = /CAUTERIZE_STATUS_T (?<sym>[^\(]+)\(struct Cauterize \* dst, (?<rend>(?:(?:struct|enum) )?[^ ]+) \* src\)/
+        r = /CALLCONV CAUTERIZE_STATUS_T DLLDECL (?<sym>[^\(]+)\(struct Cauterize \* dst, (?<rend>(?:(?:struct|enum) )?[^ ]+) \* src\)/
         subject.packer_sig.should match r
         m = subject.packer_sig.match(r)
         m[:sym].should == subject.packer_sym
@@ -65,7 +65,7 @@ module Cauterize
 
     describe :unpacker_sig do
       it "looks like this" do
-        r = /CAUTERIZE_STATUS_T (?<sym>[^\(]+)\(struct Cauterize \* src, (?<rend>(?:(?:struct|enum) )?[^ ]+) \* dst\)/
+        r = /CALLCONV CAUTERIZE_STATUS_T DLLDECL (?<sym>[^\(]+)\(struct Cauterize \* src, (?<rend>(?:(?:struct|enum) )?[^ ]+) \* dst\)/
         subject.unpacker_sig.should match r
         m = subject.unpacker_sig.match(r)
         m[:sym].should == subject.unpacker_sym

@@ -38,13 +38,13 @@ module Cauterize
 
         # Methods that are pretty much the same for everyone.
         def packer_sym; "Pack_#{@blueprint.name}" end
-        def packer_sig; "CAUTERIZE_STATUS_T #{packer_sym}(struct Cauterize * dst, #{render} * src)" end
+        def packer_sig; "CALLCONV CAUTERIZE_STATUS_T DLLDECL #{packer_sym}(struct Cauterize * dst, #{render} * src)" end
         def packer_proto(formatter)
           formatter << packer_sig + ";"
         end
 
         def unpacker_sym; "Unpack_#{@blueprint.name}" end
-        def unpacker_sig; "CAUTERIZE_STATUS_T #{unpacker_sym}(struct Cauterize * src, #{render} * dst)" end
+        def unpacker_sig; "CALLCONV CAUTERIZE_STATUS_T DLLDECL #{unpacker_sym}(struct Cauterize * src, #{render} * dst)" end
         def unpacker_proto(formatter)
           formatter << unpacker_sig + ";"
         end

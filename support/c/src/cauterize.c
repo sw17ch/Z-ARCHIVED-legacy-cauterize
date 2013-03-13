@@ -6,11 +6,10 @@
 
 #include <string.h>
 
-#define S CAUTERIZE_STATUS_T
+#define S CALLCONV CAUTERIZE_STATUS_T DLLDECL
 #define T struct Cauterize
 
-
-S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, size_t length)
+S CauterizeInitAppend(T * m, uint8_t * buffer, uint32_t length)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != buffer);
@@ -23,7 +22,7 @@ S CauterizeInitAppend( struct Cauterize * m, uint8_t * buffer, size_t length)
   return CA_OK;
 }
 
-S CauterizeInitRead( struct Cauterize * m, uint8_t * buffer, size_t used)
+S CauterizeInitRead(T * m, uint8_t * buffer, uint32_t used)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != buffer);
@@ -36,12 +35,12 @@ S CauterizeInitRead( struct Cauterize * m, uint8_t * buffer, size_t used)
   return CA_OK;
 }
 
-S CauterizeAppend(T * m, uint8_t * src, size_t length)
+S CauterizeAppend(T * m, uint8_t * src, uint32_t length)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != src);
 
-  size_t needed = m->used + length;
+  uint32_t needed = m->used + length;
 
   if (needed > m->size)
     return CA_ERR_NOT_ENOUGH_SPACE;
@@ -53,13 +52,13 @@ S CauterizeAppend(T * m, uint8_t * src, size_t length)
   return CA_OK;
 }
 
-S CauterizeRead(T * m, uint8_t * dst, size_t length)
+S CauterizeRead(T * m, uint8_t * dst, uint32_t length)
 {
   CA_ASSERT(NULL != m);
   CA_ASSERT(NULL != dst);
   CA_ASSERT(m->used >= m->pos);
 
-  size_t available = m->used - m->pos;
+  uint32_t available = m->used - m->pos;
 
   if (length > available)
     return CA_ERR_NOT_ENOUGH_DATA;

@@ -77,6 +77,10 @@ module Cauterize
       end
 
       describe "header generation" do
+        it "externs 'c'" do
+          @h_lines.should include("extern \"C\" {\n")
+        end
+
         it "creates a VERSION define" do
           @h_lines.should include("#define GEN_VERSION (\"1.2.3\")\n")
         end
@@ -124,7 +128,7 @@ module Cauterize
             end
 
             cmd = %W{
-              clang -Wall -Wextra -Werror
+              gcc -Wall -Wextra -Werror
               -I#{caut_dir}
               #{@cb.c}
               #{caut_dir}/cauterize.c
