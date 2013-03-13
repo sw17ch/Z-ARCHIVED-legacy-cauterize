@@ -11,8 +11,6 @@ namespace Cauterize.Test
 {
     class TestFixedArray : CauterizeFixedArrayTyped<long>
     {
-        private long[] _data;
-
         public TestFixedArray()
         {
             Allocate(3);
