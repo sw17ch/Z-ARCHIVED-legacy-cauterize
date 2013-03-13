@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "cauterize_util.h"
+
 typedef uint32_t CAUTERIZE_STATUS_T;
 
 #define CA_OK                    (0)
@@ -22,25 +24,33 @@ struct Cauterize {
   uint8_t * buffer; // Buffer to hold data
 };
 
-CAUTERIZE_STATUS_T CauterizeInitAppend(
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+CAUTERIZE_STATUS_T DLLDECL CauterizeInitAppend(
     struct Cauterize * m,
     uint8_t * buffer,
     size_t length);
 
-CAUTERIZE_STATUS_T CauterizeInitRead(
+CAUTERIZE_STATUS_T DLLDECL CauterizeInitRead(
     struct Cauterize * m,
     uint8_t * buffer,
     size_t used);
 
-CAUTERIZE_STATUS_T CauterizeAppend(
+CAUTERIZE_STATUS_T DLLDECL CauterizeAppend(
     struct Cauterize * m,
     uint8_t * src,
     size_t length);
 
-CAUTERIZE_STATUS_T CauterizeRead(
+CAUTERIZE_STATUS_T DLLDECL CauterizeRead(
     struct Cauterize * m,
     uint8_t * dst,
     size_t length);
+
+#ifdef __cplusplus
+}
+#endif
 
 #define CA_MAX(a,b) ((a) > (b) ? (a) : (b))
 
