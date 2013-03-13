@@ -72,7 +72,6 @@ module Cauterize
 
       it "includes namespaces" do
         @cs_lines.should include("using System;\n")
-        @cs_lines.should include("using System.Linq;\n")
         @cs_lines.should include("using Cauterize;\n")
       end
 

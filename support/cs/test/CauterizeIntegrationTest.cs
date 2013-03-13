@@ -110,12 +110,12 @@ namespace Cauterize.Test
             inputTopLevel.SubGroup.SubVar[1] = 55;
             inputTopLevel.SubInt = 1000000;
 
-            var formatter = new CauterizeFormatter(typeof (TestTopLevel));
+            var formatter = new CauterizeFormatter();
             var stream = new MemoryStream(2048);
             formatter.Serialize(stream, inputTopLevel);
 
             stream.Position = 0;
-            var outputTopLevel = (TestTopLevel) formatter.Deserialize(stream);
+            var outputTopLevel = formatter.Deserialize<TestTopLevel>(stream);
             Assert.AreEqual(inputTopLevel.SubComp.Byte1, outputTopLevel.SubComp.Byte1);
             Assert.AreEqual(inputTopLevel.SubComp.Byte2, outputTopLevel.SubComp.Byte2);
             Assert.AreEqual(inputTopLevel.SubFixed[0], outputTopLevel.SubFixed[0]);
