@@ -19,7 +19,6 @@ module Cauterize
       f = four_space_formatter
 
       f << "using System;"
-      f << "using System.Linq;"
       f << "using Cauterize;"
       f.blank_line
       f << "namespace #{@name}"

@@ -80,6 +80,47 @@ module Cauterize
         }.should raise_error /duplicate name/
       end
     end
+
+    describe :representation do
+      it "chooses int8 when appropriate" do
+        Cauterize.enumeration(:a) do |t|
+          t.value :a, -128
+        end.representation.name.should == :int8
+        Cauterize.enumeration(:b) do |t|
+          t.value :a, 127
+        end.representation.name.should == :int8
+      end
+
+      it "chooses int16 when appropriate" do
+        Cauterize.enumeration(:a) do |t|
+          t.value :a, -32768
+        end.representation.name.should == :int16
+        Cauterize.enumeration(:b) do |t|
+          t.value :a, 32767
+        end.representation.name.should == :int16
+        Cauterize.enumeration(:c) do |t|
+          t.value :a, 300
+        end.representation.name.should == :int16
+      end
+
+      it "chooses int32 when appropriate" do
+        Cauterize.enumeration(:a) do |t|
+          t.value :a, -2147483648
+        end.representation.name.should == :int32
+        Cauterize.enumeration(:b) do |t|
+          t.value :a, 2147483647
+        end.representation.name.should == :int32
+      end
+
+      it "chooses int64 when appropriate" do
+        Cauterize.enumeration(:a) do |t|
+          t.value :a, -9223372036854775808
+        end.representation.name.should == :int64
+        Cauterize.enumeration(:b) do |t|
+          t.value :a, 9223372036854775807
+        end.representation.name.should == :int64
+      end
+    end
   end
 
   describe :enumeration do

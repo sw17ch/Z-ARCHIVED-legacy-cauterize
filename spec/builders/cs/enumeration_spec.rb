@@ -13,6 +13,10 @@ module Cauterize
         f.to_s
       end
 
+      it "contains the serialized representation annotation" do
+        en.should match /\[SerializedRepresentation\(typeof\(SByte\)\)\]/
+      end
+
       it "contains the enum name" do
         en.should match /public enum Foo/
       end

@@ -10,6 +10,16 @@ enumeration(:color) do |e|
   e.value :green
 end
 
+enumeration(:large_value) do |e|
+  e.value :negative, -500
+  e.value :positive, 500
+end
+
+composite(:weirdness) do |c|
+  c.field :val, :large_value
+  c.field :num, :int8
+end
+
 fixed_array(:color_list) do |a|
   a.array_type :color
   a.array_size 4

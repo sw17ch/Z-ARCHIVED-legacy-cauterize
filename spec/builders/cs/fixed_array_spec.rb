@@ -18,32 +18,22 @@ describe Cauterize::Builders::CS::FixedArray do
         text = f.to_s
       end
       it "defines a class for the array" do
-        text.should match /public class MyriadData : CauterizeFixedArray/
-      end
-
-      it "defines an array of the correct type" do
-        text.should match /private UInt32\[\] _data;/
-      end
-
-      it "defines indexing into the array" do
-        text.should match /public UInt32 this\[int i\]/
-        text.should match /get { return _data\[i\]; }/
-        text.should match /set { _data\[i\] = value; }/
+        text.should match /public class MyriadData : CauterizeFixedArrayTyped<UInt32>/
       end
 
       it "sets the size of the array from configuration" do
         text.should match /public MyriadData\(\)/ # no args
-        text.should match /_data = new UInt32\[16\];/
+        text.should match /Allocate\(16\);/
       end
 
       it "allows defaulting an array" do
         text.should match /public MyriadData\(UInt32\[\] data\)/
-        text.should match /Array\.Copy\(data,_data,16\);/
+        text.should match /Allocate\(data\);/
       end
 
-      it "defines a length" do
-        text.should match /public int Length/
-        text.should match /get { return _data\.Length; }/
+      it "defines a size" do
+        text.should match /protected override int Size/
+        text.should match /get { return 16; }/
       end
     end
   end

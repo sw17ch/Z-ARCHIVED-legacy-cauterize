@@ -1,37 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace Cauterize
 {
-    public class CauterizeFormatter : IFormatter
+    public class CauterizeFormatter
     {
         public SerializationBinder Binder { get; set; }
         public StreamingContext Context { get; set; }
         public ISurrogateSelector SurrogateSelector { get; set; }
 
-        private readonly Type _deserializeType;
         private readonly CauterizeTypeFormatterFactory _formatterFactory;
-        public CauterizeFormatter(Type deserializeType) // only needed for deserialization
+        public CauterizeFormatter() // only needed for deserialization
         {
-            _deserializeType = deserializeType;
             _formatterFactory = new CauterizeTypeFormatterFactory();
         }
 
-        public CauterizeFormatter(Type deserializeType, CauterizeTypeFormatterFactory factory)
+        public CauterizeFormatter(CauterizeTypeFormatterFactory factory)
         {
-            _deserializeType = deserializeType;
             _formatterFactory = factory;
         }
 
-        public virtual object Deserialize(Stream serializationStream)
+        public virtual T Deserialize<T>(Stream serializationStream)
         {
-            var formatter = _formatterFactory.GetFormatter(_deserializeType);
-            return formatter.Deserialize(serializationStream, _deserializeType);
+            var formatter = _formatterFactory.GetFormatter(typeof(T));
+            return (T)formatter.Deserialize(serializationStream, typeof(T));
         }
 
         public virtual void Serialize(Stream serializationStream, object obj)

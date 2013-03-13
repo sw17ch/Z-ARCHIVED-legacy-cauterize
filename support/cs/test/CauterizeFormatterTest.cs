@@ -20,8 +20,8 @@ namespace Cauterize.Test
             subFormatter.Setup(sf => sf.Deserialize(serializationStream, typeof (string))).Returns("hello world");
             var factory = new Mock<CauterizeTypeFormatterFactory>();
             factory.Setup(f => f.GetFormatter(typeof (string))).Returns(subFormatter.Object);
-            var formatter = new CauterizeFormatter(typeof (string), factory.Object);
-            Assert.AreEqual("hello world", formatter.Deserialize(serializationStream));
+            var formatter = new CauterizeFormatter(factory.Object);
+            Assert.AreEqual("hello world", formatter.Deserialize<string>(serializationStream));
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace Cauterize.Test
             subFormatter.Setup(sf => sf.Serialize(serializationStream, "hello world"));
             var factory = new Mock<CauterizeTypeFormatterFactory>();
             factory.Setup(f => f.GetFormatter(typeof (string))).Returns(subFormatter.Object);
-            var formatter = new CauterizeFormatter(typeof (string), factory.Object);
+            var formatter = new CauterizeFormatter(factory.Object);
             formatter.Serialize(serializationStream, "hello world");
             subFormatter.VerifyAll();
         }

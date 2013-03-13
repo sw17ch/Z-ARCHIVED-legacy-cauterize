@@ -2,30 +2,22 @@ module Cauterize::Builders::CS
   class VariableArray < CSArray
 
     def render_parent
-      "CauterizeVariableArray"
+      "CauterizeVariableArrayTyped<#{ty_bldr.render}>"
     end
 
-    def constructor_defn(formatter)
-      formatter << "public #{render}(int size)"
-      formatter.braces do
-        size_guard(formatter,"size")
-        formatter << "_data = new #{ty_bldr.render}[size];"
-      end
+    def simple_constructor_line
+      "public #{render}(int size)"
+    end
 
-      formatter.blank_line
-      formatter << "public #{render}(#{ty_bldr.render}[] data)"
+    def size_defn(formatter)
+      formatter << "protected override int MaxSize"
       formatter.braces do
-        size_guard(formatter, "data.Length")
-        formatter << "_data = new #{ty_bldr.render}[data.Length];"
-        formatter << "Array.Copy(data,_data,data.Length);"
+        formatter << "get { return #{size_type}.MaxValue; }"
       end
     end
 
-    def size_guard(formatter, size_exp)
-      formatter << "if (#{size_exp} >= #{size_type}.MaxValue)"
-      formatter.braces do
-        formatter << "throw new CauterizeException(\"arrays for #{render} must be smaller than\" + #{size_type}.MaxValue);"
-      end
+    def size
+      return "size"
     end
 
     protected
