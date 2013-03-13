@@ -1,4 +1,5 @@
 require 'tmpdir'
+require 'fileutils'
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
@@ -24,6 +25,7 @@ end
 desc "Run C# tests"
 task :nunit do
   cd "support/cs" do
+    FileUtils.mkdir_p "lib"
     sh "dmcs -target:library -out:lib/Cauterize.dll src/*.cs"
     references = "-r:lib/nunit.framework.dll -r:lib/Moq.dll -r:lib/Cauterize.dll"
     sh "dmcs -target:library #{references} -out:lib/Cauterize.Test.dll test/*.cs"
