@@ -54,6 +54,11 @@ namespace Cauterize
             get { return _data[i]; }
             set { _data[i] = value; }
         }
+
+        public T[] GetArray()
+        {
+          return _data;
+        }
     }
 
     public abstract class CauterizeVariableArray
@@ -91,6 +96,11 @@ namespace Cauterize
         {
             get { return _data[i]; }
             set { _data[i] = value; }
+        }
+
+        public T[] GetArray()
+        {
+          return _data;
         }
     }
 }
