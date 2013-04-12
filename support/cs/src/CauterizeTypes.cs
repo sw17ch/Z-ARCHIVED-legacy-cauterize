@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cauterize
 {
@@ -12,10 +10,35 @@ namespace Cauterize
 
     public class CauterizeComposite
     {
+        public override string ToString()
+        {
+            var result = "{";
+            foreach (var prop in OrderAttribute.GetSortedProperties(GetType()))
+            {
+                result += String.Format("{0}: {1}, ", prop.Name, prop.GetValue(this, null));
+            }
+            result += "}";
+            return result;
+        }
     }
 
     public class CauterizeGroup
     {
+        public override string ToString()
+        {
+            var enumProp = OrderAttribute.GetPropertyByOrder(GetType(), 0);
+            var value = enumProp.GetValue(this, null);
+            var index = (int) value + 1;
+            var prop = OrderAttribute.GetPropertyByOrder(GetType(), index);
+            if (prop != null)
+            {
+                return String.Format("({0}: {1})", prop.Name, prop.GetValue(this, null));
+            }
+            else
+            {
+                return String.Format("({0})", value);
+            }
+        }
     }
 
     public abstract class CauterizeFixedArray
@@ -46,6 +69,14 @@ namespace Cauterize
         public static implicit operator T[](CauterizeFixedArrayTyped<T> array)
         {
             return array._data;
+        }
+
+        public override string ToString()
+        {
+            var result = "[";
+            result += String.Join(", ", _data);
+            result += "]";
+            return result;
         }
 
         // implicit conversion won't cover slicing
@@ -84,6 +115,17 @@ namespace Cauterize
         public static implicit operator T[](CauterizeVariableArrayTyped<T> array)
         {
             return array._data;
+        }
+
+        public override string ToString()
+        {
+            var result = "[";
+            for (var i = 0; i < _data.Length; i++)
+            {
+                result += String.Format("{0},", _data[i]);
+            }
+            result += "]";
+            return result;
         }
 
         // implicit conversion won't cover slicing
