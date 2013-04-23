@@ -23,14 +23,15 @@ module Cauterize
       f.blank_line
       f << "namespace #{@name}"
       f.braces do
-        f << "public class #{@name}CauterizeInfo : CauterizeInfo"
+        f << "public static class #{@name}Cauterize"
         f.braces do
-          f << "static #{@name}CauterizeInfo()"
+          f << "public static CauterizeInfo Info = new CauterizeInfo"
           f.braces do
-            f << "Name = \"#{@name}\";"
-            f << "GeneratedVersion = \"#{Cauterize.get_version}\";"
-            f << "GeneratedDate = \"#{Cauterize.get_version}\";"
+            f << "Name = \"#{@name}\","
+            f << "GeneratedVersion = \"#{Cauterize.get_version}\","
+            f << "GeneratedDate = \"#{DateTime.now.to_s}\""
           end
+          f << ";"
         end
         f.blank_line
 

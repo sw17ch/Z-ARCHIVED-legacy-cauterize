@@ -80,8 +80,8 @@ module Cauterize
       end
 
       it "creates a cauterize info class with version and date" do
-        @cs_text.should match /Name = \"Testing\";/
-        @cs_text.should match /GeneratedVersion = \"1.2.3\";/
+        @cs_text.should match /Name = \"Testing\",/
+        @cs_text.should match /GeneratedVersion = \"1.2.3\",/
         @cs_text.should match /GeneratedDate = /
       end
 
