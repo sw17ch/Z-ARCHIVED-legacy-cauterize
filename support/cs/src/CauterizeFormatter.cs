@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Cauterize
 {
@@ -26,8 +23,13 @@ namespace Cauterize
 
         public virtual T Deserialize<T>(Stream serializationStream)
         {
-            var formatter = _formatterFactory.GetFormatter(typeof(T));
-            return (T)formatter.Deserialize(serializationStream, typeof(T));
+            return (T)Deserialize(serializationStream, typeof (T));
+        }
+
+        public virtual object Deserialize(Stream serializationStream, Type t)
+        {
+            var formatter = _formatterFactory.GetFormatter(t);
+            return formatter.Deserialize(serializationStream, t);
         }
 
         public virtual void Serialize(Stream serializationStream, object obj)
