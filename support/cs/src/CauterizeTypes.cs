@@ -17,6 +17,7 @@ namespace Cauterize
             {
                 result += String.Format("{0}: {1}, ", prop.Name, prop.GetValue(this, null));
             }
+            result = result.TrimEnd(',', ' ');
             result += "}";
             return result;
         }
@@ -125,10 +126,7 @@ namespace Cauterize
         public override string ToString()
         {
             var result = "[";
-            for (var i = 0; i < _data.Length; i++)
-            {
-                result += String.Format("{0},", _data[i]);
-            }
+            result += String.Join(", ", _data);
             result += "]";
             return result;
         }
