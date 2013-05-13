@@ -18,7 +18,7 @@ typedef enum cauterize_status {
   CA_ERR_INVALID_LENGTH = 4,
   CA_ERR_INVALUD_TYPE_TAG = 5,
   CA_ERR_INVALID_ENUM_VAL = 6,
-  CA_ERR_GENERAL = UINT32_MAX,
+  CA_ERR_GENERAL = INT32_MAX,
 } CAUTERIZE_STATUS_T;
 
 struct Cauterize {

@@ -14,7 +14,7 @@ task :greatest do
     test_suite_path = File.join(d, "test_suite.c")
     mk_test_suite_file(test_suite_path)
 
-    args = "-Wall -Wextra -Werror -Isupport/c/test -Isupport/c/src -I#{d}"
+    args = "-pedantic -Wall -Wextra -Werror -std=c99 -Isupport/c/test -Isupport/c/src -I#{d}"
     srcs = "support/c/src/cauterize.c support/c/test/test.c"
     bin = File.join(d, "test.bin")
     sh "gcc #{args} #{srcs} -o #{bin}"
