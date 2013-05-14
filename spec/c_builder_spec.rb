@@ -92,7 +92,8 @@ module Cauterize
         it "prevents multiple inclusion in headers" do
           @h_lines[0].should match /#ifndef TESTING_H_\d+/
           @h_lines[1].should match /#define TESTING_H_\d+/
-          @h_lines.last.should match /#endif \/\* TESTING_H_\d+ \*\//
+          @h_lines[-2].should match /#endif \/\* TESTING_H_\d+ \*\//
+          @h_lines.last.should == "\n"
         end
 
         it "includes prototype information for all defined types" do

@@ -51,6 +51,7 @@ module Cauterize
 
       f.blank_line
       f << "#endif /* #{excluder} */"
+      f << "\n"
 
       File.open(@h, "wb") do |fh|
         fh.write(f.to_s)
