@@ -6,7 +6,7 @@ module Cauterize
         @g = Cauterize.group!(:some_name) do |_g|
           _g.field(:a, :uint8_t)
           _g.field(:b, :uint8_t)
-          _g.field(:c)
+          _g.dataless(:c)
           _g.field(:d, :uint8_t)
         end
         @b = Cauterize::Builders::CS::Group.new(@g)

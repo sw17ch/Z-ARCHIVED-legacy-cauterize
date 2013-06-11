@@ -1,8 +1,8 @@
 module Cauterize
   module_function
 
-  def fixed_array(name)
-    a = Cauterize.fixed_arrays[name] || Cauterize.fixed_arrays[name] = FixedArray.new(name)
+  def fixed_array(name, desc=nil)
+    a = Cauterize.fixed_arrays[name] || Cauterize.fixed_arrays[name] = FixedArray.new(name, desc)
     yield a if block_given?
     return a
   end
@@ -20,7 +20,7 @@ module Cauterize
   end
 
   class FixedArray < BaseType
-    def initialize(name)
+    def initialize(name, desc=nil)
       super
     end
 

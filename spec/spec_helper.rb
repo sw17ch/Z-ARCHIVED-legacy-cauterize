@@ -35,6 +35,10 @@ module Cauterize
       Cauterize.create_builtins
     end
 
+    def can_be_documented(klass)
+      klass.new(:dokumented_klass, "precious documentation").description.should == "precious documentation"
+    end
+
     def is_tagged_as(cls, tag)
       cls.new(:foo).tag.should == tag
     end

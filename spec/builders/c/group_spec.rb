@@ -12,7 +12,7 @@ module Cauterize
         @g = Cauterize.group!(:some_name) do |_g|
           _g.field(:a, :uint8_t)
           _g.field(:b, :uint8_t)
-          _g.field(:c)
+          _g.dataless(:c)
         end
         @b = Cauterize::Builders::C::Group.new(@g)
       end
@@ -84,7 +84,7 @@ module Cauterize
         _g = Cauterize.group(:oof) do |g|
           g.field(:aaa, :int32)
           g.field(:bbb, :int32)
-          g.field(:empty)
+          g.dataless(:empty)
         end
 
         Builders.get(:c, _g)

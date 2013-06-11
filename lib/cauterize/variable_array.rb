@@ -1,8 +1,8 @@
 module Cauterize
   module_function
 
-  def variable_array(name)
-    a = Cauterize.variable_arrays[name] || Cauterize.variable_arrays[name] = VariableArray.new(name)
+  def variable_array(name, desc=nil)
+    a = Cauterize.variable_arrays[name] || Cauterize.variable_arrays[name] = VariableArray.new(name, desc)
     yield a if block_given?
     return a
   end
@@ -20,7 +20,7 @@ module Cauterize
   end
 
   class VariableArray < BaseType
-    def intialize(name)
+    def intialize(name, desc=nil)
       super
     end
 

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+rm -rf doc_cauterize_output
+../bin/cauterize generate doc doc_cauterize_output
+
 rm -rf c_cauterize_output
 ../bin/cauterize generate c c_cauterize_output
 

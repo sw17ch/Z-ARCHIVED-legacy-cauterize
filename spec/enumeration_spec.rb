@@ -16,6 +16,8 @@ module Cauterize
       end
     end
 
+    it { can_be_documented(Cauterize::Enumeration) }
+
     describe :value do
       it "adds a new value to the enumeration" do
         enum = Cauterize.enumeration(:foo) do |e|

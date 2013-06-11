@@ -2,16 +2,17 @@ require 'set'
 
 module Cauterize
   class BaseType
-    attr_reader :name, :id
+    attr_reader :name, :id, :description
     @@next_id = {}
     @@instances = {}
 
-    def initialize(name)
+    def initialize(name, description=nil)
       if @@instances.keys.include?(name)
         raise Exception.new("A type with the name #{name} already exists. [#{@@instances[name].inspect}]")
       end
 
       @name = name
+      @description = description
       @id = next_id
       register_instance(self)
     end

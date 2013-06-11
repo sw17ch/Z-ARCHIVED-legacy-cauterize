@@ -18,7 +18,7 @@ module Cauterize
 
   def create_builtins
     BUILT_IN_TYPES.each do |b|
-      _b = BuiltIn.new(b[:name])
+      _b = BuiltIn.new(b[:name], nil)
       _b.byte_length(b[:size])
       _b.is_signed(b[:signed])
       builtins[b[:name]] = _b
@@ -26,7 +26,7 @@ module Cauterize
   end
 
   class BuiltIn < BaseType
-    def initialize(name)
+    def initialize(name, desc=nil)
       super
     end
 

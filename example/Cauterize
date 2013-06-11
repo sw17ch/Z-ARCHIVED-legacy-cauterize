@@ -51,6 +51,6 @@ end
 group(:insanity) do |g|
   g.field :nonsensical, :nonsensical
   g.field :crazy, :crazy
-  g.field :any_empty_entry
-  g.field :another_empty
+  g.dataless :any_empty_entry
+  g.dataless :another_empty
 end

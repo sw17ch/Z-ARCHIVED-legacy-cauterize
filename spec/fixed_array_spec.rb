@@ -23,6 +23,8 @@ module Cauterize
       end
     end
 
+    it { can_be_documented(Cauterize::FixedArray) }
+
     describe :array_type do
       it "Defines the type of the FixedArray." do
         Cauterize.scalar(:uint32_t)

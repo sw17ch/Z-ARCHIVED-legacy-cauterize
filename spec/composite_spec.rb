@@ -20,6 +20,8 @@ module Cauterize
         end
       end
 
+      it { can_be_documented(Composite) }
+
       describe :fields do
         it "defines a new field in the composite" do
           a = Cauterize.scalar(:foo)
@@ -30,6 +32,15 @@ module Cauterize
           comp.fields.keys[0].should == :a_foo
           comp.fields.values[0].name.should == :a_foo
           comp.fields.values[0].type.should be a
+        end
+
+        it "supports a doc string" do
+          a = Cauterize.scalar(:foo)
+          comp = Cauterize.composite(:comp) do |c|
+            c.field :a_foo, :foo, "some foo"
+          end
+
+          comp.fields.values[0].description.should == "some foo"
         end
 
         it "errors on duplicate field names" do

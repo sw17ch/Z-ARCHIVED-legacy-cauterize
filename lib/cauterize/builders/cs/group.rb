@@ -16,10 +16,9 @@ module Cauterize::Builders::CS
         Cauterize::Builders.get(:cs, @tag_enum).declare(formatter, "Type")
         formatter.blank_line
         @blueprint.fields.values.each_with_index do |field, i|
-          b = Cauterize::Builders.get(:cs, field.type)
-          if b
+          if field.type
             formatter << "[Order(#{i+1})]"
-            b.declare(formatter, field.name)
+            Cauterize::Builders.get(:cs, field.type).declare(formatter, field.name)
           else
             formatter << "/* No data associated with '#{field.name}'. */"
           end

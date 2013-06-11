@@ -6,6 +6,8 @@ module Cauterize
       end
     end
 
+    it { can_be_documented(Cauterize::Scalar) }
+
     describe :id do
       it { has_a_unique_id_for_each_instance(Scalar) }
     end

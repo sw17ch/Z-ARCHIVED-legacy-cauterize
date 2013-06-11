@@ -1,0 +1,53 @@
+builtin int8
+builtin int16
+builtin int32
+builtin int64
+builtin uint8
+builtin uint16
+builtin uint32
+builtin uint64
+scalar bigint - int32
+scalar usmallint - uint8
+enumeration color
+  encoded as type int8
+  values:
+    red = 0
+    blue = 1
+    green = 2
+enumeration large_value
+  encoded as type int16
+  values:
+    negative = -500
+    positive = 500
+composite weirdness
+  val - large_value
+  num - int8
+fixed_array color_list
+  data: 4 values of type color
+fixed_array color_list_list
+  data: 4 values of type color_list
+variable_array numbers
+  length: length of data is encoded as type usmallint
+  data: up to 128 values of type bigint
+composite nonsensical
+  color - color
+  color_list - color_list
+  numbers - numbers
+composite crazy
+  first_numbers - numbers
+  second_numbers - numbers
+  third_numbers - numbers
+group insanity
+  representation encoded as enumeration group_insanity_type
+  representations:
+    nonsensical - nonsensical
+    crazy - crazy
+    any_empty_entry - <none>
+    another_empty - <none>
+enumeration group_insanity_type
+  encoded as type int8
+  values:
+    GROUP_INSANITY_TYPE_NONSENSICAL = 0
+    GROUP_INSANITY_TYPE_CRAZY = 1
+    GROUP_INSANITY_TYPE_ANY_EMPTY_ENTRY = 2
+    GROUP_INSANITY_TYPE_ANOTHER_EMPTY = 3

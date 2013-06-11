@@ -6,17 +6,17 @@ require 'set'
 
 module Cauterize
   module_function
-  def enumeration(name)
-    e = Cauterize.enumerations[name] || Cauterize.enumerations[name] = Enumeration.new(name)
+  def enumeration(name, desc=nil)
+    e = Cauterize.enumerations[name] || Cauterize.enumerations[name] = Enumeration.new(name, desc)
     yield e if block_given?
     return e
   end
 
-  def enumeration!(name, &blk)
+  def enumeration!(name, desc=nil, &blk)
     if Cauterize.enumerations[name]
       raise Exception.new("Enumeration with name #{name} already exists.")
     else
-      Cauterize.enumeration(name, &blk)
+      Cauterize.enumeration(name, desc, &blk)
     end
   end
 
@@ -36,7 +36,7 @@ module Cauterize
   class Enumeration < BaseType
     attr_reader :values
 
-    def initialize(name)
+    def initialize(name, desc=nil)
       super
       @values = {}
       @value_id = 0

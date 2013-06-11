@@ -42,6 +42,8 @@ module Cauterize
         end
       end
 
+      it { can_be_documented(Cauterize::Group) }
+
       describe :field do
         it "adds a field to the Group" do
           a = Cauterize.scalar(:aaa)
@@ -85,8 +87,8 @@ module Cauterize
 
         it "allows nil types" do
           grp = Cauterize.group(:empty) do |g|
-            g.field(:a)
-            g.field(:b)
+            g.dataless(:a)
+            g.dataless(:b)
           end
 
           grp.tag_enum.values.keys.should =~ [:GROUP_EMPTY_TYPE_A, :GROUP_EMPTY_TYPE_B]

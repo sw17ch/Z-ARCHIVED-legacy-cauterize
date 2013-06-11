@@ -8,8 +8,8 @@
 module Cauterize
   module_function
 
-  def scalar(name)
-    a = Cauterize.scalars[name] || Cauterize.scalars[name] = Scalar.new(name)
+  def scalar(name, desc=nil)
+    a = Cauterize.scalars[name] || Cauterize.scalars[name] = Scalar.new(name, desc)
     yield a if block_given?
     return a
   end
@@ -27,7 +27,7 @@ module Cauterize
   end
 
   class Scalar < BaseType
-    def initialize(name)
+    def initialize(name, desc=nil)
       super
     end
 

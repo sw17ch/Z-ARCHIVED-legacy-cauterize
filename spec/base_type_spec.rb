@@ -6,6 +6,16 @@ module Cauterize
         it { has_a_unique_id_for_each_instance(BaseType) }
       end
 
+      describe :description do
+        it "handles nil description" do
+          BaseType.new(:foo, nil).description.should be_nil
+        end
+
+        it "sets the description" do
+          BaseType.new(:foo, "a desc").description.should == "a desc"
+        end
+      end
+
       describe :type_str do
         it "is the hexadecimal representation of type" do
           f = Cauterize.enumeration(:foo) do |e|

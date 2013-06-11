@@ -29,6 +29,12 @@ module Cauterize
     Cauterize::CSBuilder.new(cs_file, output_prefix)
   end
 
+  def make_builder_doc(target_dir, output_prefix)
+    doc_file = File.join(target_dir, "#{output_prefix}.txt")
+
+    Cauterize::DocBuilder.new(doc_file, output_prefix)
+  end
+
   def get_name
     @@description_name
   end

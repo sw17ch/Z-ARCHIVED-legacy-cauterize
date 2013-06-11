@@ -5,8 +5,8 @@
 module Cauterize
   module_function
 
-  def composite(name)
-    c = Cauterize.composites[name] || Cauterize.composites[name] = Composite.new(name)
+  def composite(name, desc=nil)
+    c = Cauterize.composites[name] || Cauterize.composites[name] = Composite.new(name, desc)
     yield c if block_given?
     return c
   end
@@ -24,26 +24,27 @@ module Cauterize
   end
 
   class CompositeField
-    attr_reader :name, :type
-    def initialize(field_name, type_name)
+    attr_reader :name, :type, :description
+    def initialize(field_name, type_name, desc=nil)
       @name = field_name
       @type = BaseType.find_type!(type_name)
+      @description = desc
     end
   end
 
   class Composite < BaseType
     attr_reader :fields
 
-    def initialize(name)
+    def initialize(name, desc=nil)
       super
       @fields = {}
     end
 
-    def field(name, type)
+    def field(name, type, desc=nil)
       if @fields[name]
         raise Exception.new("Field name #{name} already used.")
       else
-        @fields[name] = CompositeField.new(name, type)
+        @fields[name] = CompositeField.new(name, type, desc)
       end
     end
   end

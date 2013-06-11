@@ -84,9 +84,8 @@ module Cauterize
             formatter << "union"
             formatter.braces do
               @blueprint.fields.values.each do |field|
-                b = Builders.get(:c, field.type)
-                if b
-                  b.declare(formatter, field.name)
+                if field.type
+                  Builders.get(:c, field.type).declare(formatter, field.name)
                 else
                   formatter << "/* No data associated with '#{field.name}'. */"
                 end

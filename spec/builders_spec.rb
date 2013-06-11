@@ -43,8 +43,10 @@ module Cauterize
         }.should raise_error /already registered/
       end
 
-      it "is nil if no builder is registered" do
-        Cauterize::Builders.get(:c, s).should be_nil
+      it "raises exception no builder is registered" do
+        lambda {
+          Cauterize::Builders.get(:c, s)
+        }.should raise_error Cauterize::Builders::UnregisteredException
       end
     end
   end
