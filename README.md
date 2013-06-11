@@ -148,3 +148,12 @@ group(:responses) do |g|
   c.field :delete_user, :delete_user_response
 end
 ```
+
+Groups don't have to specify a data type in all of their fields.
+
+```ruby
+group(:complex) do |g|
+  g.field :a_number, :int32
+  g.dataless :a_state # no associated data with this alternative
+end
+```
