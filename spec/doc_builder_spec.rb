@@ -94,74 +94,151 @@ module Cauterize
       describe "doc generation" do
         it "contains type details" do
           t = <<EOF
-builtin int8
-builtin int16
-builtin int32
-builtin int64
-builtin uint8
-builtin uint16
-builtin uint32
-builtin uint64
-scalar an_int - int32 - a useful int
-scalar another_int - int32
-composite a_composite - some useful fields
-  an_int - int32 - a pretty integer
-  another_int - int32 - another pretty integer
-  undescribed - int32
-composite mystery
-  undescribed - int32
-fixed_array a_fixed_array - a few things
-  data: 5 values of type an_int
-fixed_array a_mystery_array
-  data: 1 values of type uint8
-variable_array a_var_array - maybe some things
-  length: length of data is encoded as type uint8
-  data: up to 5 values of type an_int
-variable_array a_var_mystery
-  length: length of data is encoded as type uint8
-  data: up to 1 values of type uint8
-enumeration some_colors - several colors to choose from
-  encoded as type int8
-  values:
+Type Name: int8
+Cauterize Class: built-in
+Description: <none>
+  data - size: 1 bytes
+
+Type Name: int16
+Cauterize Class: built-in
+Description: <none>
+  data - size: 2 bytes
+
+Type Name: int32
+Cauterize Class: built-in
+Description: <none>
+  data - size: 4 bytes
+
+Type Name: int64
+Cauterize Class: built-in
+Description: <none>
+  data - size: 8 bytes
+
+Type Name: uint8
+Cauterize Class: built-in
+Description: <none>
+  data - size: 1 bytes
+
+Type Name: uint16
+Cauterize Class: built-in
+Description: <none>
+  data - size: 2 bytes
+
+Type Name: uint32
+Cauterize Class: built-in
+Description: <none>
+  data - size: 4 bytes
+
+Type Name: uint64
+Cauterize Class: built-in
+Description: <none>
+  data - size: 8 bytes
+
+Type Name: an_int
+Cauterize Class: scalar
+Description:  - a useful int
+  data - type: int32
+
+Type Name: another_int
+Cauterize Class: scalar
+Description: <none>
+  data - type: int32
+
+Type Name: a_composite
+Cauterize Class: composite
+Description:  - some useful fields
+  an_int - type: int32 - description: a pretty integer
+  another_int - type: int32 - description: another pretty integer
+  undescribed - type: int32
+
+Type Name: mystery
+Cauterize Class: composite
+Description: <none>
+  undescribed - type: int32
+
+Type Name: a_fixed_array
+Cauterize Class: fixed-array
+Description:  - a few things
+Stored Type: an_int
+Value Count: 5
+  data - 5 values of type an_int
+
+Type Name: a_mystery_array
+Cauterize Class: fixed-array
+Description: <none>
+Stored Type: uint8
+Value Count: 1
+  data - 1 values of type uint8
+
+Type Name: a_var_array
+Cauterize Class: variable-array
+Description:  - maybe some things
+Maximum Value Count: 5
+  length - type uint8
+  data - 0 to 5 values of type an_int
+
+Type Name: a_var_mystery
+Cauterize Class: variable-array
+Description: <none>
+Maximum Value Count: 1
+  length - type uint8
+  data - 0 to 1 values of type uint8
+
+Type Name: some_colors
+Cauterize Class: enumeration
+Description:  - several colors to choose from
+Encoding: int8
     red = 0
     blue = 1
     green = 2
-enumeration mystery_things
-  encoded as type int8
-  values:
+
+Type Name: mystery_things
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int8
     thing1 = 0
     thing2 = 1
     thing3 = 2
-group oddness - a mix of weird things
-  representation encoded as enumeration group_oddness_type
-  representations:
-    a_color - some_colors - a color
-    a_cool_int - int16 - only cool ints fit here
-    a_thing - <none> - only a thing
-    undescribed - <none>
-enumeration group_oddness_type
-  encoded as type int8
-  values:
+
+Type Name: oddness
+Cauterize Class: group
+Description:  - a mix of weird things
+  kind tag: group_oddness_type
+  kinds:
+    a_color - payload: some_colors - description: a color
+    a_cool_int - payload: int16 - description: only cool ints fit here
+    a_thing - payload: <no payload> - description: only a thing
+    undescribed - payload: <no payload>
+
+Type Name: group_oddness_type
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int8
     GROUP_ODDNESS_TYPE_A_COLOR = 0
     GROUP_ODDNESS_TYPE_A_COOL_INT = 1
     GROUP_ODDNESS_TYPE_A_THING = 2
     GROUP_ODDNESS_TYPE_UNDESCRIBED = 3
-group mystery_oddness
-  representation encoded as enumeration group_mystery_oddness_type
-  representations:
-    a_color - some_colors
-    a_cool_int - int16
-    a_thing - <none> - only a thing
-    undescribed - <none>
-enumeration group_mystery_oddness_type
-  encoded as type int8
-  values:
+
+Type Name: mystery_oddness
+Cauterize Class: group
+Description: <none>
+  kind tag: group_mystery_oddness_type
+  kinds:
+    a_color - payload: some_colors
+    a_cool_int - payload: int16
+    a_thing - payload: <no payload> - description: only a thing
+    undescribed - payload: <no payload>
+
+Type Name: group_mystery_oddness_type
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int8
     GROUP_MYSTERY_ODDNESS_TYPE_A_COLOR = 0
     GROUP_MYSTERY_ODDNESS_TYPE_A_COOL_INT = 1
     GROUP_MYSTERY_ODDNESS_TYPE_A_THING = 2
     GROUP_MYSTERY_ODDNESS_TYPE_UNDESCRIBED = 3
 EOF
-          @doc_text.should == t.chomp
+          @doc_text.should == t
         end
       end
     end

@@ -3,14 +3,16 @@ module Cauterize
     module Doc
       class Enumeration < Buildable
         def heading
-          "enumeration #{@blueprint.name}" + (@blueprint.description ? " - #{@blueprint.description}" : "")
+          [
+            "Type Name: #{@blueprint.name}",
+            "Cauterize Class: enumeration",
+            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Encoding: #{@blueprint.representation.name}",
+          ].join("\n")
         end
 
         def body
-          [
-            "encoded as type #{@blueprint.representation.name}",
-            "values:",
-          ] + @blueprint.values.values.map {|v| "  #{v.name} = #{v.value}"}
+          @blueprint.values.values.map {|v| "  #{v.name} = #{v.value}"}
         end
       end
     end

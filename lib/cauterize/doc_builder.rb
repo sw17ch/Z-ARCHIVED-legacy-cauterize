@@ -23,7 +23,7 @@ module Cauterize
           body_lines = (b.body || []).map {|l| "  " + l}
           lines = ([b.heading] + body_lines)
 
-          doc_sections << lines.join("\n")
+          doc_sections << lines.join("\n") + "\n"
         end
 
         fh.write(doc_sections.join("\n"))

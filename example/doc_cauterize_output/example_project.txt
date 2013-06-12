@@ -1,52 +1,123 @@
-builtin int8
-builtin int16
-builtin int32
-builtin int64
-builtin uint8
-builtin uint16
-builtin uint32
-builtin uint64
-scalar bigint - int32
-scalar usmallint - uint8
-enumeration color
-  encoded as type int8
-  values:
+Type Name: int8
+Cauterize Class: built-in
+Description: <none>
+  data - size: 1 bytes
+
+Type Name: int16
+Cauterize Class: built-in
+Description: <none>
+  data - size: 2 bytes
+
+Type Name: int32
+Cauterize Class: built-in
+Description: <none>
+  data - size: 4 bytes
+
+Type Name: int64
+Cauterize Class: built-in
+Description: <none>
+  data - size: 8 bytes
+
+Type Name: uint8
+Cauterize Class: built-in
+Description: <none>
+  data - size: 1 bytes
+
+Type Name: uint16
+Cauterize Class: built-in
+Description: <none>
+  data - size: 2 bytes
+
+Type Name: uint32
+Cauterize Class: built-in
+Description: <none>
+  data - size: 4 bytes
+
+Type Name: uint64
+Cauterize Class: built-in
+Description: <none>
+  data - size: 8 bytes
+
+Type Name: bigint
+Cauterize Class: scalar
+Description: <none>
+  data - type: int32
+
+Type Name: usmallint
+Cauterize Class: scalar
+Description: <none>
+  data - type: uint8
+
+Type Name: color
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int8
     red = 0
     blue = 1
     green = 2
-enumeration large_value
-  encoded as type int16
-  values:
+
+Type Name: large_value
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int16
     negative = -500
     positive = 500
-composite weirdness
-  val - large_value
-  num - int8
-fixed_array color_list
-  data: 4 values of type color
-fixed_array color_list_list
-  data: 4 values of type color_list
-variable_array numbers
-  length: length of data is encoded as type usmallint
-  data: up to 128 values of type bigint
-composite nonsensical
-  color - color
-  color_list - color_list
-  numbers - numbers
-composite crazy
-  first_numbers - numbers
-  second_numbers - numbers
-  third_numbers - numbers
-group insanity
-  representation encoded as enumeration group_insanity_type
-  representations:
-    nonsensical - nonsensical
-    crazy - crazy
-    any_empty_entry - <none>
-    another_empty - <none>
-enumeration group_insanity_type
-  encoded as type int8
-  values:
+
+Type Name: weirdness
+Cauterize Class: composite
+Description: <none>
+  val - type: large_value
+  num - type: int8
+
+Type Name: color_list
+Cauterize Class: fixed-array
+Description: <none>
+Stored Type: color
+Value Count: 4
+  data - 4 values of type color
+
+Type Name: color_list_list
+Cauterize Class: fixed-array
+Description: <none>
+Stored Type: color_list
+Value Count: 4
+  data - 4 values of type color_list
+
+Type Name: numbers
+Cauterize Class: variable-array
+Description: <none>
+Maximum Value Count: 128
+  length - type usmallint
+  data - 0 to 128 values of type bigint
+
+Type Name: nonsensical
+Cauterize Class: composite
+Description: <none>
+  color - type: color
+  color_list - type: color_list
+  numbers - type: numbers
+
+Type Name: crazy
+Cauterize Class: composite
+Description: <none>
+  first_numbers - type: numbers
+  second_numbers - type: numbers
+  third_numbers - type: numbers
+
+Type Name: insanity
+Cauterize Class: group
+Description: <none>
+  kind tag: group_insanity_type
+  kinds:
+    nonsensical - payload: nonsensical
+    crazy - payload: crazy
+    any_empty_entry - payload: <no payload>
+    another_empty - payload: <no payload>
+
+Type Name: group_insanity_type
+Cauterize Class: enumeration
+Description: <none>
+Encoding: int8
     GROUP_INSANITY_TYPE_NONSENSICAL = 0
     GROUP_INSANITY_TYPE_CRAZY = 1
     GROUP_INSANITY_TYPE_ANY_EMPTY_ENTRY = 2

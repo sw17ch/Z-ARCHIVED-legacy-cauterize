@@ -3,11 +3,19 @@ module Cauterize
     module Doc
       class FixedArray < Buildable
         def heading
-          "fixed_array #{@blueprint.name}" + (@blueprint.description ? " - #{@blueprint.description}" : "")
+          [
+            "Type Name: #{@blueprint.name}",
+            "Cauterize Class: fixed-array",
+            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Stored Type: #{@blueprint.array_type.name}",
+            "Value Count: #{@blueprint.array_size}",
+          ].join("\n")
         end
 
         def body
-          ["data: #{@blueprint.array_size} values of type #{@blueprint.array_type.name}"]
+          [
+            "data - #{@blueprint.array_size} values of type #{@blueprint.array_type.name}",
+          ]
         end
       end
     end

@@ -3,10 +3,16 @@ module Cauterize
     module Doc
       class Scalar < Buildable
         def heading
-          "scalar #{@blueprint.name} - #{@blueprint.type_name.name}" + (@blueprint.description ? " - #{@blueprint.description}" : "")
+          [
+            "Type Name: #{@blueprint.name}",
+            "Cauterize Class: scalar",
+            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+          ].join("\n")
         end
 
-        def body; nil end
+        def body
+          ["data - type: #{@blueprint.type_name.name}"]
+        end
       end
     end
   end
