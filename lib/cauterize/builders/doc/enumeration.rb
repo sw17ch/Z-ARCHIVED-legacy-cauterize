@@ -6,7 +6,7 @@ module Cauterize
           [
             "Type Name: #{@blueprint.name}",
             "Cauterize Class: enumeration",
-            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Description: #{@blueprint.description ? @blueprint.description : "<none>"}",
             "Encoding: #{@blueprint.representation.name}",
           ].join("\n")
         end

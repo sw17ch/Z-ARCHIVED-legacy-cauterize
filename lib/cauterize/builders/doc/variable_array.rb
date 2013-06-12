@@ -6,7 +6,7 @@ module Cauterize
           [
             "Type Name: #{@blueprint.name}",
             "Cauterize Class: variable-array",
-            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Description: #{@blueprint.description ? @blueprint.description : "<none>"}",
             "Maximum Value Count: #{@blueprint.array_size}",
           ].join("\n")
         end

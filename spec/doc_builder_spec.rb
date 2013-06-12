@@ -146,7 +146,7 @@ Description: <none>
 
 Type Name: a_composite
 Cauterize Class: composite
-Description:  - some useful fields
+Description: some useful fields
   an_int - type: int32 - description: a pretty integer
   another_int - type: int32 - description: another pretty integer
   undescribed - type: int32
@@ -158,7 +158,7 @@ Description: <none>
 
 Type Name: a_fixed_array
 Cauterize Class: fixed-array
-Description:  - a few things
+Description: a few things
 Stored Type: an_int
 Value Count: 5
   data - 5 values of type an_int
@@ -172,7 +172,7 @@ Value Count: 1
 
 Type Name: a_var_array
 Cauterize Class: variable-array
-Description:  - maybe some things
+Description: maybe some things
 Maximum Value Count: 5
   length - type uint8
   data - 0 to 5 values of type an_int
@@ -186,7 +186,7 @@ Maximum Value Count: 1
 
 Type Name: some_colors
 Cauterize Class: enumeration
-Description:  - several colors to choose from
+Description: several colors to choose from
 Encoding: int8
     red = 0
     blue = 1
@@ -202,7 +202,7 @@ Encoding: int8
 
 Type Name: oddness
 Cauterize Class: group
-Description:  - a mix of weird things
+Description: a mix of weird things
   kind tag: group_oddness_type
   kinds:
     a_color - payload: some_colors - description: a color

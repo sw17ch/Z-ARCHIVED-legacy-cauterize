@@ -6,7 +6,7 @@ module Cauterize
           [
             "Type Name: #{@blueprint.name}",
             "Cauterize Class: fixed-array",
-            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Description: #{@blueprint.description ? @blueprint.description : "<none>"}",
             "Stored Type: #{@blueprint.array_type.name}",
             "Value Count: #{@blueprint.array_size}",
           ].join("\n")

@@ -6,7 +6,7 @@ module Cauterize
           [
             "Type Name: #{@blueprint.name}",
             "Cauterize Class: group",
-            "Description: #{(@blueprint.description ? " - #{@blueprint.description}" : "<none>")}",
+            "Description: #{(@blueprint.description ? @blueprint.description : "<none>")}",
           ].join("\n")
         end
 
