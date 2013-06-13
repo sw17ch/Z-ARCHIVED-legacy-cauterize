@@ -70,6 +70,10 @@ module Cauterize
         @cs_lines = @cs_text.lines.to_a
       end
 
+      it "informs the user the code is generated" do
+        @cs_text.should match /generated code. Do not edit/
+      end
+
       it "includes namespaces" do
         @cs_lines.should include("using System;\n")
         @cs_lines.should include("using Cauterize;\n")

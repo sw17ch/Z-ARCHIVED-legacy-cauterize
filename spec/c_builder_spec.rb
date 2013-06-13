@@ -77,6 +77,10 @@ module Cauterize
       end
 
       describe "header generation" do
+        it "informs the user the code is generated" do
+          @h_text.should include("generated code. Do not edit")
+        end
+
         it "externs 'c'" do
           @h_lines.should include("extern \"C\" {\n")
         end
@@ -90,8 +94,8 @@ module Cauterize
         end
 
         it "prevents multiple inclusion in headers" do
-          @h_lines[0].should match /#ifndef TESTING_H_\d+/
-          @h_lines[1].should match /#define TESTING_H_\d+/
+          @h_lines[2].should match /#ifndef TESTING_H_\d+/
+          @h_lines[3].should match /#define TESTING_H_\d+/
           @h_lines[-2].should match /#endif \/\* TESTING_H_\d+ \*\//
           @h_lines.last.should == "\n"
         end
@@ -110,6 +114,10 @@ module Cauterize
       end
 
       describe "c body generation" do
+        it "informs the user the code is generated" do
+          @c_text.should include("generated code. Do not edit")
+        end
+
         it "includes the generated header file" do
           @c_text.should match /#include "testing.h"/
         end
