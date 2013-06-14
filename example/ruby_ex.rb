@@ -5,6 +5,10 @@ require 'bindata'
 
 Cauterize.populate(ARGV[0])
 
-p BinData::RegisteredClasses
-
-p Cauterize::ExampleProject::Color.new.enum
+i = Cauterize::ExampleProject::Wat.new
+i.tag.representation = 0
+p i.num_bytes
+i.tag.representation = 1
+p i.num_bytes
+i.tag.representation = 2
+p i.num_bytes

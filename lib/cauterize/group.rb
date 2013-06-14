@@ -33,9 +33,14 @@ module Cauterize
     attr_reader :fields, :tag_enum
 
     def initialize(name, desc=nil)
+      # This technically should be defined before the group itself is defined
+      # because the group depends on the enumeration. Technically, this snippet
+      # of code doesn't care, but others may depend on the ordering.
+      @tag_enum = Cauterize.enumeration!("group_#{name}_type".to_sym)
+
+      # Make sure that this is called *AFTER* the enumeration is created.
       super
       @fields = {}
-      @tag_enum = Cauterize.enumeration!("group_#{name}_type".to_sym)
     end
 
     def field(name, type, desc=nil)
