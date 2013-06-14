@@ -1,8 +1,8 @@
 set_name("example_project")
 set_version("1.2.3")
 
-scalar(:bigint)  { |t| t.type_name(:int32) }
-scalar(:usmallint) { |t| t.type_name(:uint8) }
+# scalar(:bigint)  { |t| t.type_name(:int32) }
+# scalar(:usmallint) { |t| t.type_name(:uint8) }
 
 enumeration(:color) do |e|
   e.value :red
@@ -10,47 +10,47 @@ enumeration(:color) do |e|
   e.value :green
 end
 
-enumeration(:large_value) do |e|
-  e.value :negative, -500
-  e.value :positive, 500
-end
-
-composite(:weirdness) do |c|
-  c.field :val, :large_value
-  c.field :num, :int8
-end
+# enumeration(:large_value) do |e|
+#   e.value :negative, -500
+#   e.value :positive, 500
+# end
 
 fixed_array(:color_list) do |a|
   a.array_type :color
   a.array_size 4
 end
 
-fixed_array(:color_list_list) do |a|
-  a.array_type :color_list
-  a.array_size 4
-end
-
-variable_array(:numbers) do |a|
-  a.size_type  :usmallint
-  a.array_type :bigint
-  a.array_size 128
-end
-
-composite(:nonsensical) do |c|
-  c.field :color, :color
-  c.field :color_list, :color_list
-  c.field :numbers, :numbers
-end
-
-composite(:crazy) do |c|
-  c.field :first_numbers, :numbers
-  c.field :second_numbers, :numbers
-  c.field :third_numbers, :numbers
-end
-
-group(:insanity) do |g|
-  g.field :nonsensical, :nonsensical
-  g.field :crazy, :crazy
-  g.dataless :any_empty_entry
-  g.dataless :another_empty
-end
+# composite(:weirdness) do |c|
+#   c.field :val, :large_value
+#   c.field :num, :int8
+# end
+# 
+# fixed_array(:color_list_list) do |a|
+#   a.array_type :color_list
+#   a.array_size 4
+# end
+# 
+# variable_array(:numbers) do |a|
+#   a.size_type  :usmallint
+#   a.array_type :bigint
+#   a.array_size 128
+# end
+# 
+# composite(:nonsensical) do |c|
+#   c.field :color, :color
+#   c.field :color_list, :color_list
+#   c.field :numbers, :numbers
+# end
+# 
+# composite(:crazy) do |c|
+#   c.field :first_numbers, :numbers
+#   c.field :second_numbers, :numbers
+#   c.field :third_numbers, :numbers
+# end
+# 
+# group(:insanity) do |g|
+#   g.field :nonsensical, :nonsensical
+#   g.field :crazy, :crazy
+#   g.dataless :any_empty_entry
+#   g.dataless :another_empty
+# end

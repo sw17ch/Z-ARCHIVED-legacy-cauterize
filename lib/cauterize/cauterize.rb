@@ -55,8 +55,7 @@ module Cauterize
     @@version = version
   end
 
-  private 
-  def self.parse_dsl(desc_file)
+  def parse_dsl(desc_file)
     Object.new.extend(Cauterize).instance_exec do
       # this magic allows us to emit useful exception messages when evaling the
       # file. if your description file has errors, you'll be able to find them
