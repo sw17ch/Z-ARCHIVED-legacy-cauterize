@@ -20,6 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rake',        '>= 0.9.2.0'
   gem.add_dependency 'thor',        '>= 0.16.0'
   gem.add_dependency 'require_all', '>= 1.2.1'
+  gem.add_dependency 'bindata',     '>= 1.5'
 
   gem.add_development_dependency 'rspec', '>= 2.12.0'
   gem.add_development_dependency 'mocha', '>= 0.13.0'
