@@ -2,14 +2,17 @@ module Cauterize
   module_function
 
   BUILT_IN_TYPES = [
-    { :name => :int8,   :size => 1, :signed => true },
-    { :name => :int16,  :size => 2, :signed => true },
-    { :name => :int32,  :size => 4, :signed => true },
-    { :name => :int64,  :size => 8, :signed => true },
-    { :name => :uint8,  :size => 1, :signed => false },
-    { :name => :uint16, :size => 2, :signed => false },
-    { :name => :uint32, :size => 4, :signed => false },
-    { :name => :uint64, :size => 8, :signed => false },
+    { :name => :int8,    :size => 1, :flavor => :signed },
+    { :name => :int16,   :size => 2, :flavor => :signed },
+    { :name => :int32,   :size => 4, :flavor => :signed },
+    { :name => :int64,   :size => 8, :flavor => :signed },
+    { :name => :uint8,   :size => 1, :flavor => :unsigned },
+    { :name => :uint16,  :size => 2, :flavor => :unsigned },
+    { :name => :uint32,  :size => 4, :flavor => :unsigned },
+    { :name => :uint64,  :size => 8, :flavor => :unsigned },
+    { :name => :float32, :size => 4, :flavor => :float },
+    { :name => :float64, :size => 8, :flavor => :float },
+    { :name => :bool,    :size => 1, :flavor => :bool },
   ]
 
   def builtins
@@ -20,7 +23,7 @@ module Cauterize
     BUILT_IN_TYPES.each do |b|
       _b = BuiltIn.new(b[:name], nil)
       _b.byte_length(b[:size])
-      _b.is_signed(b[:signed])
+      _b.flavor(b[:flavor])
       builtins[b[:name]] = _b
     end
   end
@@ -30,11 +33,11 @@ module Cauterize
       super
     end
 
-    def is_signed(signed = nil)
-      unless signed.nil?
-        @is_signed = signed
+    def flavor(f = nil)
+      unless f.nil?
+        @flavor = f
       else
-        @is_signed
+        @flavor
       end
     end
 

@@ -3,10 +3,10 @@ module Cauterize
     module C
       class BuiltIn < Buildable
         @@C_TYPE_MAPPING = {
-          1 => {signed:  :int8_t, unsigned:  :uint8_t},
-          2 => {signed: :int16_t, unsigned: :uint16_t},
-          4 => {signed: :int32_t, unsigned: :uint32_t},
-          8 => {signed: :int64_t, unsigned: :uint64_t},
+          1 => {signed:  :int8_t, unsigned:  :uint8_t, :float => nil,     :bool => :bool},
+          2 => {signed: :int16_t, unsigned: :uint16_t, :float => nil,     :bool =>   nil},
+          4 => {signed: :int32_t, unsigned: :uint32_t, :float => :float,  :bool =>   nil},
+          8 => {signed: :int64_t, unsigned: :uint64_t, :float => :double, :bool =>   nil},
         }
 
         def render
@@ -35,8 +35,7 @@ module Cauterize
         private
 
         def render_ctype
-          s_key = @blueprint.is_signed ? :signed : :unsigned
-          @@C_TYPE_MAPPING[@blueprint.byte_length][s_key]
+          @@C_TYPE_MAPPING[@blueprint.byte_length][@blueprint.flavor]
         end
       end
     end
