@@ -40,6 +40,8 @@ composite(:nonsensical) do |c|
   c.field :color, :color
   c.field :color_list, :color_list
   c.field :numbers, :numbers
+  c.field :a_float, :float64
+  c.field :a_bool, :bool
 end
 
 composite(:crazy) do |c|

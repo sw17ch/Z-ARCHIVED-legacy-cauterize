@@ -134,6 +134,21 @@ Cauterize Class: built-in
 Description: <none>
   data - size: 8 bytes
 
+Type Name: float32
+Cauterize Class: built-in
+Description: <none>
+  data - size: 4 bytes
+
+Type Name: float64
+Cauterize Class: built-in
+Description: <none>
+  data - size: 8 bytes
+
+Type Name: bool
+Cauterize Class: built-in
+Description: <none>
+  data - size: 1 bytes
+
 Type Name: an_int
 Cauterize Class: scalar
 Description:  - a useful int

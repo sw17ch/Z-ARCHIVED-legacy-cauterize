@@ -1,10 +1,10 @@
 module Cauterize::Builders::CS
   class BuiltIn < Buildable
     @@CS_TYPE_MAPPING = {
-      1 => {signed: "SByte", unsigned: "Byte"},
-      2 => {signed: "Int16", unsigned: "UInt16"},
-      4 => {signed: "Int32", unsigned: "UInt32"},
-      8 => {signed: "Int64", unsigned: "UInt64"},
+      1 => {signed: "SByte", unsigned: "Byte",   :float => nil,      :bool => "bool"},
+      2 => {signed: "Int16", unsigned: "UInt16", :float => nil,      :bool => nil},
+      4 => {signed: "Int32", unsigned: "UInt32", :float => "Float",  :bool => nil},
+      8 => {signed: "Int64", unsigned: "UInt64", :float => "Double", :bool => nil},
     }
 
     def render
@@ -14,8 +14,7 @@ module Cauterize::Builders::CS
     private
 
     def render_cstype
-      s_key = @blueprint.is_signed ? :signed : :unsigned
-      @@CS_TYPE_MAPPING[@blueprint.byte_length][s_key]
+      @@CS_TYPE_MAPPING[@blueprint.byte_length][@blueprint.flavor]
     end
   end
 end

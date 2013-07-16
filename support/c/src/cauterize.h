@@ -3,6 +3,7 @@
 
 #ifndef CUSTOM_TYPES
   #include <stdint.h>
+  #include <stdbool.h>
   #include <stddef.h>
 #else
   #include "cauterize_custom_types.h"

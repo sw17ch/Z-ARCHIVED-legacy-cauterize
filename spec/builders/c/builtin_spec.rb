@@ -2,7 +2,7 @@ module Cauterize
   describe Builders::C::BuiltIn do
     let(:bi) do
       b = BuiltIn.new(:foo)
-      b.is_signed(false)
+      b.flavor(:unsigned)
       b.byte_length(4)
       b
     end

@@ -33,12 +33,30 @@ used to abstract the process of packaging and unpackaging different elements.
 
 # Different Types
 
-There are 6 fundamental classes of types in Cauterize. These types have several characteristics:
+There are 7 fundamental classes of types in Cauterize. These types have several characteristics:
 
 * They can be copied with `memcpy`.
 * They do not attempt to cover the concept of indirection or pointers.
 * They are simple.
 * They cannot be defined recursively.
+
+## Primitives
+
+* 1 Byte Primitives
+  * `:bool` - a boolean value
+  * `:int8` - a signed, 8 bit value
+  * `:uint8` - an unsigned, 8 bit value
+* 2 Byte Primitives
+  * `:int16` - a signed, 16 bit value
+  * `:uint16` - an unsigned, 16 bit value
+* 4 Byte Primitives
+  * `:int32` - a signed, 32 bit value
+  * `:uint32` - an unsigned, 32 bit value
+  * `:float32` - a 32 bit floating point value
+* 8 Byte Primitives
+  * `:int64` - a signed, 64 bit value
+  * `:uint64` - an unsigned, 64 bit value
+  * `:float64` - a 64 bit floating point value
 
 ## Scalars
 

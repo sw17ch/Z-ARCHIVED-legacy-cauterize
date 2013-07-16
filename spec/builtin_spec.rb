@@ -4,11 +4,11 @@ module Cauterize
     describe :initialize do
       it "creates a builtin" do
         b = BuiltIn.new(:foo)
-        b.is_signed(false)
+        b.flavor(:unsigned)
         b.byte_length(4)
         
         b.name.should == :foo
-        b.is_signed.should == false
+        b.flavor.should == :unsigned
         b.byte_length.should == 4
       end
     end
@@ -30,6 +30,8 @@ module Cauterize
     Cauterize.builtins.keys.should =~ [
       :int8, :int16, :int32, :int64,
       :uint8, :uint16, :uint32, :uint64,
+      :float32, :float64,
+      :bool,
     ]
   end
 
