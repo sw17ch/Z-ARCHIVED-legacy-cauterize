@@ -37,7 +37,7 @@ module Cauterize
               format_no_data_stubs(formatter)
 
               formatter.backdent "default:"
-              formatter << "return CA_ERR_INVALUD_TYPE_TAG;"
+              formatter << "return CA_ERR_INVALID_TYPE_TAG;"
               formatter << "break;"
             end
             formatter << "return CA_OK;"
@@ -66,7 +66,7 @@ module Cauterize
               format_no_data_stubs(formatter)
 
               formatter.backdent "default:"
-              formatter << "return CA_ERR_INVALUD_TYPE_TAG;"
+              formatter << "return CA_ERR_INVALID_TYPE_TAG;"
               formatter << "break;"
             end
             formatter << "return CA_OK;"
