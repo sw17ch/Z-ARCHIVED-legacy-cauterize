@@ -1,42 +1,42 @@
 require_relative './cauterize_ruby_baseclasses'
 
-class Uint8 < CauterizeBuiltin
+class UInt8 < CauterizeBuiltin
   def in_range(v) v >= 0 && v < 2**8 end
   def pack
     [val.to_i].pack("C")
   end
   def self.unpack!(str)
-    Uint8.new takeByte!(str).unpack("C")[0]
+    UInt8.new takeByte!(str).unpack("C")[0]
   end
 end
 
-class Uint16 < CauterizeBuiltin
+class UInt16 < CauterizeBuiltin
   def in_range(v) v >= 0 && v < 2**16 end
   def pack
     [val.to_i].pack("S")
   end
   def self.unpack!(str)
-    Uint16.new takeByte!(str).unpack("S")[0]
+    UInt16.new takeByte!(str).unpack("S")[0]
   end
 end
 
-class Uint32 < CauterizeBuiltin
+class UInt32 < CauterizeBuiltin
   def in_range(v) v >= 0 && v < 2**32 end
   def pack
     [val.to_i].pack("L")
   end
   def self.unpack!(str)
-    Uint32.new takeByte!(str).unpack("L")[0]
+    UInt32.new takeByte!(str).unpack("L")[0]
   end
 end
 
-class Uint64 < CauterizeBuiltin
+class UInt64 < CauterizeBuiltin
   def in_range(v) v >= 0 && v < 2**64 end
   def pack
     [val.to_i].pack("Q")
   end
   def self.unpack!(str)
-    Uint64.new takeByte!(str).unpack("Q")[0]
+    UInt64.new takeByte!(str).unpack("Q")[0]
   end
 end
 
