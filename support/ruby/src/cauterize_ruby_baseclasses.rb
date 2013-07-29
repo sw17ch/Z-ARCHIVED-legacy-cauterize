@@ -1,3 +1,4 @@
+require 'stringio'
 
 def takeBytes!(num_bytes, str)
   byte = str.slice!(0, num_bytes)
@@ -13,6 +14,10 @@ class CauterizeData
     else
       self.new x
     end
+  end
+
+  def self.unpack(x)
+    self.unpackio(StringIO.new(x))
   end
 end
 
@@ -41,8 +46,8 @@ class CauterizeScalar < CauterizeData
     @val.pack
   end
 
-  def self.unpack!(str)
-    self.new self.builtin.unpack!(str)
+  def self.unpackio(str)
+    self.new self.builtin.unpackio(str)
   end
 end
 
@@ -59,8 +64,8 @@ class CauterizeFixedArray < CauterizeData
     @elems.inject("") { |sum, n| sum + n.pack }
   end
 
-  def self.unpack!(str)
-    self.new (1..self.length).map { self.elem_type.unpack!(str) }
+  def self.unpackio(str)
+    self.new (1..self.length).map { self.elem_type.unpackio(str) }
   end
 end
 
@@ -79,9 +84,9 @@ class CauterizeVariableArray < CauterizeData
     @length.pack + @elems.inject("") { |sum, n| sum + n.pack }
   end
 
-  def self.unpack!(str)
-    length = self.size_type.unpack!(str)
-    self.new (1..length.val).map { self.elem_type.unpack!(str) }
+  def self.unpackio(str)
+    length = self.size_type.unpackio(str)
+    self.new (1..length.val).map { self.elem_type.unpackio(str) }
   end
 end
 
@@ -103,9 +108,9 @@ class CauterizeComposite < CauterizeData
     @fields.values.inject("")  { |sum, v| sum + v.pack }
   end
 
-  def self.unpack!(str)
+  def self.unpackio(str)
     self.new Hash[self.fields.keys.map do |k|
-      [k, self.fields[k].unpack!(str)]
+      [k, self.fields[k].unpackio(str)]
     end]
   end
 
@@ -134,8 +139,8 @@ class CauterizeEnumeration < CauterizeData
     self.new(self.fields.invert[i.to_i])
   end
 
-  def self.unpack!(str)
-    self.from_int(self.repr_type.unpack!(str))
+  def self.unpackio(str)
+    self.from_int(self.repr_type.unpackio(str))
   end
 end
 
@@ -172,14 +177,14 @@ class CauterizeGroup < CauterizeData
     end
   end
 
-  def self.unpack!(str)
-    tag = self.tag_type.unpack!(str)
+  def self.unpackio(str)
+    tag = self.tag_type.unpackio(str)
     field_name = self.from_field_name(tag.field_name)
     data = self.fields[field_name]
     if data.nil?
       self.new(field_name)
     else
-      self.new(field_name, data.unpack!(str))
+      self.new(field_name, data.unpackio(str))
     end
   end
 end
