@@ -108,6 +108,10 @@ class CauterizeComposite < CauterizeData
       [k, self.fields[k].unpack!(str)]
     end]
   end
+
+  def method_missing(m, *args, &block)
+    fields[m]
+  end
 end
 
 
