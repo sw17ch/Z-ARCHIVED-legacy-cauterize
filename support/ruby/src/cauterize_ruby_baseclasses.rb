@@ -9,7 +9,7 @@ end
 class CauterizeData
   def self.construct(x)
     if x.is_a? CauterizeData
-      raise "Invalid Type: was #{x.class}, expected #{c.class}" if not x.is_a? self
+      raise "Invalid Type: was #{x.class}, expected #{self.name}" if not x.is_a?(self)
       x
     else
       self.new x
@@ -114,8 +114,14 @@ class CauterizeComposite < CauterizeData
     end]
   end
 
+  alias orig_method_missing method_missing
+
   def method_missing(m, *args, &block)
-    fields[m]
+    if fields[m]
+      fields[m]
+    else
+      orig_method_missing(m, *args, &block)
+    end
   end
 end
 
