@@ -18,3 +18,5 @@ rm -rf cs_cauterize_output
 
 dmcs cs_cauterize_output/*.cs -target:library -out:cs_cauterize_output/example_project.dll
 
+rm -rf ruby_cauterize_output
+../bin/cauterize generate ruby ruby_cauterize_output

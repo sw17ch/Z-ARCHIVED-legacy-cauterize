@@ -6,6 +6,8 @@ namespace Cauterize
         public string Name;
         public string GeneratedVersion;
         public string GeneratedDate;
+        public int ModelHashLength;
+        public byte[] ModelHash;
     }
 
     public class CauterizeComposite

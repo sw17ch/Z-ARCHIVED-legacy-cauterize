@@ -20,6 +20,14 @@ module Cauterize
       f << "require_relative './cauterize_ruby_builtins'"
       f << ""
 
+      f << "CAUTERIZE_GEN_VERSION = \"#{Cauterize.get_version}\""
+      f << "CAUTERIZE_GEN_DATE = \"#{DateTime.now.to_s}\""
+      f << ""
+
+      f << "CAUTERIZE_MODEL_HASH_LEN = #{BaseType.digest_class.new.length}"
+      f << "CAUTERIZE_MODEL_HASH = [#{BaseType.model_hash.bytes.join(", ")}]"
+      f << ""
+
       instances = BaseType.all_instances
       builders = instances.map {|i| Builders.get(:ruby, i)}
       builders.each { |b| b.class_defn(f) }

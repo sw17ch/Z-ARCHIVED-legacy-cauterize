@@ -1,4 +1,5 @@
 require 'time'
+require 'digest'
 
 module Cauterize
   class CBuilder
@@ -30,6 +31,10 @@ module Cauterize
       f.blank_line
       f << "#define GEN_VERSION (\"#{Cauterize.get_version}\")"
       f << "#define GEN_DATE (\"#{DateTime.now.to_s}\")"
+      f.blank_line
+
+      f << "#define MODEL_HASH_LEN (#{BaseType.digest_class.new.length})"
+      f << "#define MODEL_HASH {#{BaseType.model_hash.bytes.join(", ")}}"
       f.blank_line
 
       instances = BaseType.all_instances

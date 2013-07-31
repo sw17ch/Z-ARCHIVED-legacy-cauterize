@@ -31,7 +31,9 @@ module Cauterize
           f.braces do
             f << "Name = \"#{@name}\","
             f << "GeneratedVersion = \"#{Cauterize.get_version}\","
-            f << "GeneratedDate = \"#{DateTime.now.to_s}\""
+            f << "GeneratedDate = \"#{DateTime.now.to_s}\","
+            f << "ModelHashLength = #{BaseType.digest_class.new.length},"
+            f << "ModelHash = new byte[] {#{BaseType.model_hash.bytes.join(", ")}}"
           end
           f << ";"
         end
