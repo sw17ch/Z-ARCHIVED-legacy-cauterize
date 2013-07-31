@@ -16,29 +16,6 @@ module Cauterize
         end
       end
 
-      describe :type_str do
-        it "is the hexadecimal representation of type" do
-          f = Cauterize.enumeration(:foo) do |e|
-            e.value :a, 1
-          end
-
-          b = Cauterize.enumeration(:bar) do |e|
-            e.value :a, 1
-          end
-
-          b.type_str.should == "0x2001"
-        end
-      end
-
-      describe :tag do
-        it { is_tagged_as(Scalar, 0) }
-        it { is_tagged_as(Enumeration, 1) }
-        it { is_tagged_as(Composite, 2) }
-        it { is_tagged_as(FixedArray, 3) }
-        it { is_tagged_as(VariableArray, 4) }
-        it { is_tagged_as(Group, 5) }
-      end
-
       describe :next_id do
         it "is an incrementing value starting at 0" do
           # the .new consumes the 0.
@@ -60,15 +37,6 @@ module Cauterize
           a2.id.should == 1
           e1.id.should == 0
           e2.id.should == 1
-        end
-      end
-
-      describe "bit stuff" do
-        it "is consistent" do
-          BaseType.class_exec do
-            (tag_bit_width + id_bit_width).should == type_bit_width
-            (tag_bit_mask >> id_bit_width).should == 0x7
-          end
         end
       end
 
