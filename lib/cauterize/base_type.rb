@@ -1,4 +1,5 @@
 require 'set'
+require 'digest'
 
 module Cauterize
   class BaseType
@@ -15,7 +16,21 @@ module Cauterize
       register_instance(self)
     end
 
+    def type_hash(digest = nil)
+      digest ||= BaseType.digest_class.new
+      digest.update(@name.to_s)
+      local_hash(digest)
+    end
+
     def self.all_instances; @@instances.values end
+
+    def self.model_hash
+      @@instances.keys.sort.map do |k|
+        @@instances[k]
+      end.inject(BaseType.digest_class.new) do |d, i|
+        i.type_hash(d)
+      end.digest
+    end
 
     def self.find_type(name)
       @@instances[name]
@@ -27,6 +42,10 @@ module Cauterize
       else
         return t
       end
+    end
+
+    def self.digest_class
+      Digest::SHA1
     end
 
     alias :orig_method_missing :method_missing
@@ -41,6 +60,12 @@ module Cauterize
     end
 
     protected
+
+    # local_hash is responsible for hashing the things in the type that
+    # are not known about in the BaseType parent class.
+    def local_hash(digest)
+      raise Exception.new("All instances of BaseType (including #{self.class}) must implement local_hash.")
+    end
 
     def register_instance(inst)
       if @@instances[inst.name]

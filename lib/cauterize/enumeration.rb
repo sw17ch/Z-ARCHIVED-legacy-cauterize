@@ -31,6 +31,11 @@ module Cauterize
       @name = name
       @value = value
     end
+
+    def value_hash(digest)
+      digest.update(@name.to_s)
+      digest.update(@value.to_s)
+    end
   end
 
   class Enumeration < BaseType
@@ -69,12 +74,21 @@ module Cauterize
         raise Exception.new("Unable to represent enumeration (#{min_val} -> #{max_val})")
       end
     end
+    
+    protected
+
+    def local_hash(digest)
+      representation.type_hash(digest)
+      values.keys.sort.inject(digest) {|d, k|
+        values[k].value_hash(digest)
+      }
+    end
 
     private
 
     def value_id(next_id=nil)
       if next_id
-        @value_id = next_id
+        @value_id = next_id.to_i
       end
 
       v = @value_id

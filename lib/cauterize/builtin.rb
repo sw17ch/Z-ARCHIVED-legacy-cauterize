@@ -48,6 +48,13 @@ module Cauterize
         @byte_length
       end
     end
+
+    protected
+
+    def local_hash(digest)
+      digest.update(@flavor.to_s)
+      digest.update(@byte_length.to_s)
+    end
   end
 
   # Create all the builtin types.

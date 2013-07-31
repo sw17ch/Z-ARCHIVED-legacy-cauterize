@@ -43,5 +43,11 @@ module Cauterize
         @type_name
       end
     end
+
+    protected
+
+    def local_hash(digest)
+      @type_name.type_hash(digest)
+    end
   end
 end

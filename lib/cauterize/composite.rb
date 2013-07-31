@@ -30,6 +30,11 @@ module Cauterize
       @type = BaseType.find_type!(type_name)
       @description = desc
     end
+
+    def field_hash(digest)
+      digest.update(@name.to_s)
+      @type.type_hash(digest)
+    end
   end
 
   class Composite < BaseType
@@ -46,6 +51,14 @@ module Cauterize
       else
         @fields[name] = CompositeField.new(name, type, desc)
       end
+    end
+
+    protected
+
+    def local_hash(digest)
+      @fields.keys.inject(digest) {|d, k|
+        @fields[k].field_hash(digest)
+      }
     end
   end
 end

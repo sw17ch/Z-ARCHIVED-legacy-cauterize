@@ -62,6 +62,120 @@ module Cauterize
         end
       end
 
+      describe :type_hash do
+        it "is different for objects with different names" do
+          f = Cauterize.scalar(:foo) {|t| t.type_name :uint8}.type_hash
+          g = Cauterize.scalar(:bar) {|t| t.type_name :uint8}.type_hash
+
+          f.should_not == g
+        end
+
+        it "is different for objects with different types" do
+          f = Cauterize.scalar(:foo) {|t| t.type_name :uint8}.type_hash
+          reset_for_test
+
+          g = Cauterize.scalar(:foo) {|t| t.type_name :int8}.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differes on enumeration value differences" do
+          f = Cauterize.enumeration(:foo) { |t| t.value :a, 0 }.type_hash
+          reset_for_test
+
+          g = Cauterize.enumeration(:foo) { |t| t.value :a, 1 }.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differs on differing length in fixed arrays" do
+          f = Cauterize.fixed_array(:foo) { |t| t.array_type :int8; t.array_size 1 }.type_hash
+          reset_for_test
+
+          g = Cauterize.fixed_array(:foo) { |t| t.array_type :int8; t.array_size 2 }.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differs on differing size type in variable arrays" do
+          f = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2; t.size_type :uint8 }.type_hash
+          reset_for_test
+
+          g = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2; t.size_type :uint16 }.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differs on group field reordering" do
+          f = Cauterize.group(:foo) do |t|
+            t.field :a, :int8
+            t.field :b, :int8
+          end.type_hash
+          reset_for_test
+
+          g = Cauterize.group(:foo) do |t|
+            t.field :b, :int8
+            t.field :a, :int8
+          end.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differs on composite field reordering" do
+          f = Cauterize.composite(:foo) do |t|
+            t.field :a, :int8
+            t.field :b, :int8
+          end.type_hash
+          reset_for_test
+
+          g = Cauterize.composite(:foo) do |t|
+            t.field :b, :int8
+            t.field :a, :int8
+          end.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+
+        it "differs on changes in indirect fields" do
+          Cauterize.scalar(:a_thing) { |t| t.type_name :int8 }
+          f = Cauterize.composite(:foo) do |t|
+            t.field :a, :a_thing
+          end.type_hash
+          reset_for_test
+
+          Cauterize.scalar(:a_thing) { |t| t.type_name :uint8 }
+          g = Cauterize.composite(:foo) do |t|
+            t.field :a, :a_thing
+          end.type_hash
+          reset_for_test
+
+          f.should_not == g
+        end
+      end
+
+      describe :model_hash do
+        it "returns a SHA1 of the model" do
+          Cauterize.scalar(:foo) {|t| t.type_name :uint8}
+
+          h = BaseType.model_hash
+          h.should_not be_nil
+          h.length.should == 20 # length of sha1
+        end
+
+        it "is supported by all the types" do
+          gen_a_model
+          h = BaseType.model_hash
+          h.should_not be_nil
+          h.length.should == 20 # length of sha1
+        end
+      end
+
       describe :find_type do
         it "returns the instance with the provided name" do
           f = Cauterize.scalar(:foo)

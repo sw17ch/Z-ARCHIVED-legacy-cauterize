@@ -27,6 +27,11 @@ module Cauterize
       @type = BaseType.find_type!(type) if type
       @description = desc
     end
+
+    def field_hash(digest)
+      digest.update(@name.to_s)
+      @type.type_hash(digest) if @type
+    end
   end
 
   class Group < BaseType
@@ -58,6 +63,15 @@ module Cauterize
 
     def enum_sym(fname)
       "group_#{@name}_type_#{fname}".up_snake.to_sym
+    end
+
+    protected
+
+    def local_hash(digest)
+      @tag_enum.type_hash(digest)
+      @fields.keys.inject(digest) {|d, k|
+        @fields[k].field_hash(digest)
+      }
     end
   end
 end

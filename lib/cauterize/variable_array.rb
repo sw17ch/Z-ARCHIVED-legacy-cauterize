@@ -52,5 +52,13 @@ module Cauterize
         @size_type
       end
     end
+
+    protected
+
+    def local_hash(digest)
+      digest.update(@array_size.to_s)
+      @array_type.type_hash(digest)
+      @size_type.type_hash(digest)
+    end
   end
 end
