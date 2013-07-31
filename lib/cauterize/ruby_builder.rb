@@ -25,7 +25,7 @@ module Cauterize
       f << ""
 
       f << "CAUTERIZE_MODEL_HASH_LEN = #{BaseType.digest_class.new.length}"
-      f << "CAUTERIZE_MODEL_HASH = [#{BaseType.model_hash.bytes.join(", ")}]"
+      f << "CAUTERIZE_MODEL_HASH = [#{BaseType.model_hash.bytes.to_a.join(", ")}]"
       f << ""
 
       instances = BaseType.all_instances

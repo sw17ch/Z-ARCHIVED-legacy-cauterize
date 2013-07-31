@@ -34,7 +34,7 @@ module Cauterize
       f.blank_line
 
       f << "#define MODEL_HASH_LEN (#{BaseType.digest_class.new.length})"
-      f << "#define MODEL_HASH {#{BaseType.model_hash.bytes.join(", ")}}"
+      f << "#define MODEL_HASH {#{BaseType.model_hash.bytes.to_a.join(", ")}}"
       f.blank_line
 
       instances = BaseType.all_instances
