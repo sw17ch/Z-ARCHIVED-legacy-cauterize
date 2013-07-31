@@ -2,8 +2,7 @@ require 'set'
 
 module Cauterize
   class BaseType
-    attr_reader :name, :id, :description
-    @@next_id = {}
+    attr_reader :name, :description
     @@instances = {}
 
     def initialize(name, description=nil)
@@ -13,7 +12,6 @@ module Cauterize
 
       @name = name
       @description = description
-      @id = next_id
       register_instance(self)
     end
 
@@ -50,15 +48,6 @@ module Cauterize
       end
 
       @@instances[inst.name] = inst
-    end
-
-    def next_id
-      cname = self.class.name
-      @@next_id[cname] ||= 0
-
-      an_id = @@next_id[cname]
-      @@next_id[cname] += 1
-      return an_id
     end
   end
 end

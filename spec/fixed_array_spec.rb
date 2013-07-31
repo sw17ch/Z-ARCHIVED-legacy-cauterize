@@ -19,7 +19,6 @@ module Cauterize
     describe :initialize do
       it "Creates a fixed array." do
         @a.name.should == :foo
-        @a.id.should_not be_nil
       end
     end
 

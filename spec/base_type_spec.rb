@@ -2,10 +2,6 @@ module Cauterize
 
   describe Cauterize do
     describe BaseType do
-      describe :id do
-        it { has_a_unique_id_for_each_instance(BaseType) }
-      end
-
       describe :description do
         it "handles nil description" do
           BaseType.new(:foo, nil).description.should be_nil
@@ -13,30 +9,6 @@ module Cauterize
 
         it "sets the description" do
           BaseType.new(:foo, "a desc").description.should == "a desc"
-        end
-      end
-
-      describe :next_id do
-        it "is an incrementing value starting at 0" do
-          # the .new consumes the 0.
-          BaseType.new(:foo).instance_exec do
-            next_id.should == 1
-            next_id.should == 2
-            next_id.should == 3
-            next_id.should == 4
-          end
-        end
-
-        it "should not allow derived class ids to interact" do
-          a1 = Scalar.new(:uint8_t)
-          a2 = Scalar.new(:uint64_t)
-          e1 = Enumeration.new(:zoop)
-          e2 = Enumeration.new(:nih)
-
-          a1.id.should == 0
-          a2.id.should == 1
-          e1.id.should == 0
-          e2.id.should == 1
         end
       end
 

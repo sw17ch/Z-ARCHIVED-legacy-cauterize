@@ -14,13 +14,6 @@ module Cauterize
     end
 
     it { can_be_documented(BuiltIn) }
-
-    describe :id do
-     it "has a unique id for each builtin" do
-       ids = Cauterize.builtins.values.map(&:id)
-       ids.uniq.should =~ ids
-     end
-    end
   end
 
 

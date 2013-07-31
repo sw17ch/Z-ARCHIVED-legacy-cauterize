@@ -43,12 +43,6 @@ module Cauterize
       cls.new(:foo).tag.should == tag
     end
 
-    def has_a_unique_id_for_each_instance(cls)
-      cls.new(:foo).id.should == 0
-      cls.new(:bar).id.should == 1
-      cls.new(:baz).id.should == 2
-    end
-
     def creates_a_named_object(fn_sym, obj)
       fn = Cauterize.method(fn_sym)
       a = fn.call(:foo)
