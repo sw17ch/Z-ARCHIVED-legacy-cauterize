@@ -174,6 +174,18 @@ module Cauterize
           h.should_not be_nil
           h.length.should == 20 # length of sha1
         end
+
+        it "differs on different models" do
+          gen_a_model
+          a = BaseType.model_hash
+          reset_for_test
+
+          gen_b_model
+          b = BaseType.model_hash
+          reset_for_test
+
+          a.should_not == b
+        end
       end
 
       describe :find_type do

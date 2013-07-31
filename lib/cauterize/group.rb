@@ -30,7 +30,11 @@ module Cauterize
 
     def field_hash(digest)
       digest.update(@name.to_s)
-      @type.type_hash(digest) if @type
+      if @type
+        @type.type_hash(digest)
+      else 
+        digest
+      end
     end
   end
 
