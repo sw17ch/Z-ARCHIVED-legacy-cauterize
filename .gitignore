@@ -21,9 +21,7 @@ Gemfile.lock
 pkg
 
 # Examples
-example/cauterize_output
-example/c_cauterize_output
-example/cs_cauterize_output
+example/*_cauterize_output
 
 # Nunit test results
 TestResult.xml
