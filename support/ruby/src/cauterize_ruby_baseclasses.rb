@@ -27,11 +27,19 @@ class CauterizeBuiltinInteger < CauterizeBuiltin
   def initialize(val)
     super(val.to_i)
   end
+
+  def to_i
+    val
+  end
 end
 
 class CauterizeBuiltinFloat < CauterizeBuiltin
   def initialize(val)
     super(val.to_f)
+  end
+
+  def to_f
+    val
   end
 end
 
@@ -176,7 +184,7 @@ class CauterizeEnumeration < CauterizeData
   end
 
   def self.unpackio(str)
-    self.from_int(self.repr_type.unpackio(str))
+    self.from_int(self.repr_type.unpackio(str).val)
   end
 end
 
@@ -199,7 +207,7 @@ class CauterizeGroup < CauterizeData
   end
 
   def self.tag_from_field_name(field_name)
-    self.class.tag_type.construct((self.class.tag_prefix + field_name.to_s).to_sym)
+    self.tag_type.construct((self.tag_prefix + field_name.to_s).to_sym)
   end
 
   def self.from_tag_field_name(tag_name)
@@ -209,7 +217,7 @@ class CauterizeGroup < CauterizeData
   end
   
   def initialize(h)
-    @tag = tag_from_field_name(h[:tag])
+    @tag = self.class.tag_from_field_name(h[:tag])
 
     field_class = self.class.fields[tag_field_name]
     if field_class.nil?
