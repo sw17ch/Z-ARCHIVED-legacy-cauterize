@@ -152,7 +152,7 @@ class CauterizeComposite < CauterizeData
 
   def method_missing(m, *args, &block)
     if fields[m]
-      fields[m]
+      fields[m].val
     else
       orig_method_missing(m, *args, &block)
     end
