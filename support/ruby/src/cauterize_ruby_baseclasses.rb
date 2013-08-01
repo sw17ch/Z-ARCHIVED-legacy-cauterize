@@ -74,7 +74,7 @@ class CauterizeArray < CauterizeData
   end
 
   def to_s
-    val.to_a.pack("U*")
+    val.to_a.pack("C*")
   end
 end
 
