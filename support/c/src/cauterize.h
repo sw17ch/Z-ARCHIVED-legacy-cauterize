@@ -33,22 +33,22 @@ struct Cauterize {
 extern "C" {
 #endif
 
-CALLCONV CAUTERIZE_STATUS_T DLLDECL CauterizeInitAppend(
+CAUTERIZE_STATUS_T CauterizeInitAppend(
     struct Cauterize * m,
     uint8_t * buffer,
     uint32_t length);
 
-CALLCONV CAUTERIZE_STATUS_T DLLDECL CauterizeInitRead(
+CAUTERIZE_STATUS_T CauterizeInitRead(
     struct Cauterize * m,
     uint8_t * buffer,
     uint32_t used);
 
-CALLCONV CAUTERIZE_STATUS_T DLLDECL CauterizeAppend(
+CAUTERIZE_STATUS_T CauterizeAppend(
     struct Cauterize * m,
     uint8_t * src,
     uint32_t length);
 
-CALLCONV CAUTERIZE_STATUS_T DLLDECL CauterizeRead(
+CAUTERIZE_STATUS_T CauterizeRead(
     struct Cauterize * m,
     uint8_t * dst,
     uint32_t length);

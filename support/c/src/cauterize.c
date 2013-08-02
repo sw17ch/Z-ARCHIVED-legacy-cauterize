@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-#define S CALLCONV CAUTERIZE_STATUS_T DLLDECL
+#define S CAUTERIZE_STATUS_T
 #define T struct Cauterize
 
 S CauterizeInitAppend(T * m, uint8_t * buffer, uint32_t length)
