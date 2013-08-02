@@ -73,7 +73,7 @@ class CauterizeArray < CauterizeData
     @elems.map{|e| e.val}
   end
 
-  def to_s
+  def to_string
     val.to_a.pack("C*")
   end
 end
