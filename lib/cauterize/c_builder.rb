@@ -72,12 +72,22 @@ module Cauterize
       f << ""
       f << %Q{#include <cauterize_util.h>}
       f << %Q{#include "#{@name}.h"}
+      f.blank_line
+
+      f << %Q{/* Some extra configuration information may be provided. This is}
+      f << %Q{ * a good place for the user to put prototypes or defines used}
+      f << %Q{ * elsewhere. This is a user defined file and should be in the}
+      f << %Q{ * include search path. */}
+      f << %Q{#ifdef USE_CAUTERIZE_CONFIG_HEADER}
+      f << %Q{#include "#{@name}_config.h"}
+      f << %Q{#endif}
+      f.blank_line
 
       instances = BaseType.all_instances
       builders = instances.map {|i| Builders.get(:c, i)}
 
-      builders.each { |b| b.packer_defn(f) }
-      builders.each { |b| b.unpacker_defn(f) }
+      builders.each { |b| b.wrapped_packer_defn(f); f.blank_line }
+      builders.each { |b| b.wrapped_unpacker_defn(f); f.blank_line }
 
       File.open(@c, "wb") do |fh|
         fh.write(f.to_s)

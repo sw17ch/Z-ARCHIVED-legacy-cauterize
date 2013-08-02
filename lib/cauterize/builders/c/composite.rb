@@ -11,27 +11,21 @@ module Cauterize
         end
 
         def packer_defn(formatter)
-          formatter << packer_sig
-          formatter.braces do
-            formatter << "CAUTERIZE_STATUS_T err;"
-            @blueprint.fields.values.each do |field|
-              p_sym = Builders.get(:c, field.type).packer_sym
-              formatter << "if (CA_OK != (err = #{p_sym}(dst, &src->#{field.name}))) { return err; }"
-            end
-            formatter << "return CA_OK;"
+          formatter << "CAUTERIZE_STATUS_T err;"
+          @blueprint.fields.values.each do |field|
+            p_sym = Builders.get(:c, field.type).packer_sym
+            formatter << "if (CA_OK != (err = #{p_sym}(dst, &src->#{field.name}))) { return err; }"
           end
+          formatter << "return CA_OK;"
         end
 
         def unpacker_defn(formatter)
-          formatter << unpacker_sig
-          formatter.braces do
-            formatter << "CAUTERIZE_STATUS_T err;"
-            @blueprint.fields.values.each do |field|
-              u_sym = Builders.get(:c, field.type).unpacker_sym
-              formatter << "if (CA_OK != (err = #{u_sym}(src, &dst->#{field.name}))) { return err; }"
-            end
-            formatter << "return CA_OK;"
+          formatter << "CAUTERIZE_STATUS_T err;"
+          @blueprint.fields.values.each do |field|
+            u_sym = Builders.get(:c, field.type).unpacker_sym
+            formatter << "if (CA_OK != (err = #{u_sym}(src, &dst->#{field.name}))) { return err; }"
           end
+          formatter << "return CA_OK;"
         end
 
         def struct_proto(formatter)

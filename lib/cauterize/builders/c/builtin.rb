@@ -19,17 +19,11 @@ module Cauterize
 
         # These are identical to the Scalar definitions. For now.
         def packer_defn(formatter)
-          formatter << packer_sig
-          formatter.braces do
-            formatter << "return CauterizeAppend(dst, (uint8_t*)src, sizeof(*src));"
-          end
+          formatter << "return CauterizeAppend(dst, (uint8_t*)src, sizeof(*src));"
         end
 
         def unpacker_defn(formatter)
-          formatter << unpacker_sig
-          formatter.braces do
-            formatter << "return CauterizeRead(src, (uint8_t*)dst, sizeof(*dst));"
-          end
+          formatter << "return CauterizeRead(src, (uint8_t*)dst, sizeof(*dst));"
         end
 
         private

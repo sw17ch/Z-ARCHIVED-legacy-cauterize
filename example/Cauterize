@@ -4,6 +4,12 @@ set_version("1.2.3")
 scalar(:bigint)  { |t| t.type_name(:int32) }
 scalar(:usmallint) { |t| t.type_name(:uint8) }
 
+variable_array(:uint8_buffer) do |a|
+  a.size_type  :uint8
+  a.array_type :uint8
+  a.array_size 128
+end
+
 enumeration(:color) do |e|
   e.value :red
   e.value :blue

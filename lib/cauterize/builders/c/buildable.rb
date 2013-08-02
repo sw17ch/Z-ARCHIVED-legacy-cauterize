@@ -33,6 +33,30 @@ module Cauterize
           end
         end
 
+        # wrapped_(un)packer_defn allow us to wrap every definition in some text #
+        ##########################################################################
+        def wrapped_packer_defn(formatter)
+          formatter << packer_sig
+          formatter.braces do
+            formatter.backdent("#ifdef SPECIALIZED_#{packer_sym}")
+            formatter << "return SPECIALIZED_#{packer_sym}(dst, src);"
+            formatter.backdent("#else")
+            packer_defn(formatter)
+            formatter.backdent("#endif")
+          end
+        end
+
+        def wrapped_unpacker_defn(formatter)
+          formatter << unpacker_sig
+          formatter.braces do
+            formatter.backdent("#ifdef SPECIALIZED_#{unpacker_sym}")
+            formatter << "return SPECIALIZED_#{unpacker_sym}(dst, src);"
+            formatter.backdent("#else")
+            unpacker_defn(formatter)
+            formatter.backdent("#endif")
+          end
+        end
+
         # Things below here are tested in shared_examples_for_c_buildables #
         ####################################################################
 

@@ -13,35 +13,29 @@ module Cauterize
         def packer_defn(formatter)
           rep_builder = Builders.get(:c, @blueprint.representation)
 
-          formatter << packer_sig
-          formatter.braces do
-            rep = "enum_representation"
-            rep_builder.declare(formatter, rep)
+          rep = "enum_representation"
+          rep_builder.declare(formatter, rep)
 
-            formatter << "#{rep} = (#{rep_builder.render})(*src);"
-            formatter << "return #{rep_builder.packer_sym}(dst, &#{rep});"
-          end
+          formatter << "#{rep} = (#{rep_builder.render})(*src);"
+          formatter << "return #{rep_builder.packer_sym}(dst, &#{rep});"
         end
 
         def unpacker_defn(formatter)
           rep_builder = Builders.get(:c, @blueprint.representation)
 
-          formatter << unpacker_sig
+          rep = "enum_representation"
+          rep_builder.declare(formatter, rep)
+
+          formatter << "CAUTERIZE_STATUS_T s = #{rep_builder.unpacker_sym}(src, &#{rep});"
+          formatter << "if (CA_OK != s)"
           formatter.braces do
-            rep = "enum_representation"
-            rep_builder.declare(formatter, rep)
+            formatter << "return s;"
+          end
 
-            formatter << "CAUTERIZE_STATUS_T s = #{rep_builder.unpacker_sym}(src, &#{rep});"
-            formatter << "if (CA_OK != s)"
-            formatter.braces do
-              formatter << "return s;"
-            end
-
-            formatter << "else"
-            formatter.braces do
-              formatter << "*dst = (#{render})#{rep};"
-              formatter << "return CA_OK;"
-            end
+          formatter << "else"
+          formatter.braces do
+            formatter << "*dst = (#{render})#{rep};"
+            formatter << "return CA_OK;"
           end
         end
 

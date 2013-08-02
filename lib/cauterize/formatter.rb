@@ -23,9 +23,13 @@ class Formatter
 
   # indent back one level
   def backdent(line)
-    @indent_level -= 1
-    @lines << indent(line)
-    @indent_level += 1
+    if 0 == @indent_level
+      @lines << line
+    else
+      @indent_level -= 1
+      @lines << indent(line)
+      @indent_level += 1
+    end
   end
 
   def append(text)

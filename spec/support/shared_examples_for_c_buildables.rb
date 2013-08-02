@@ -45,12 +45,16 @@ module Cauterize
       end
     end
 
-    describe :packer_defn do
-      before { subject.packer_defn(formatter) }
+    describe :wrapped_packer_defn do
+      before { subject.wrapped_packer_defn(formatter) }
 
       it "contains the signature" do
         formatter.to_s.should match Regexp.escape(subject.packer_sig)
       end
+    end
+
+    describe :packer_defn do
+      before { subject.packer_defn(formatter) }
 
       it "contains a return statement" do
         formatter.to_s.should match /return.*;/
@@ -80,12 +84,16 @@ module Cauterize
       end
     end
 
-    describe :unpacker_defn do
-      before { subject.unpacker_defn(formatter) }
+    describe :wrapped_unpacker_defn do
+      before { subject.wrapped_unpacker_defn(formatter) }
 
       it "contains the signature" do
         formatter.to_s.should match Regexp.escape(subject.unpacker_sig)
       end
+    end
+
+    describe :unpacker_defn do
+      before { subject.unpacker_defn(formatter) }
 
       it "contains a return statement" do
         formatter.to_s.should match /return.*;/

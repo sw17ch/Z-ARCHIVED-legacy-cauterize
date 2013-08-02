@@ -17,60 +17,55 @@ module Cauterize
 
         def packer_defn(formatter)
           enum_builder = Builders.get(:c, @tag_enum)
-          formatter << packer_sig
+          formatter << "CAUTERIZE_STATUS_T err;"
+
+          # pack the tag
+          formatter << "if (CA_OK != (err = #{enum_builder.packer_sym}(dst, &src->tag))) { return err; }"
+
+          # pack the fields
+          formatter << "switch (src->tag)"
           formatter.braces do
-            formatter << "CAUTERIZE_STATUS_T err;"
-
-            # pack the tag
-            formatter << "if (CA_OK != (err = #{enum_builder.packer_sym}(dst, &src->tag))) { return err; }"
-
-            # pack the fields
-            formatter << "switch (src->tag)"
-            formatter.braces do
-              having_data.each do |field|
-                bldr = Builders.get(:c, field.type)
-                formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
-                formatter << "if (CA_OK != (err = #{bldr.packer_sym}(dst, &src->data.#{field.name}))) { return err; }"
-                formatter << "break;"
-              end
-
-              format_no_data_stubs(formatter)
-
-              formatter.backdent "default:"
-              formatter << "return CA_ERR_INVALID_TYPE_TAG;"
+            having_data.each do |field|
+              bldr = Builders.get(:c, field.type)
+              formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
+              formatter << "if (CA_OK != (err = #{bldr.packer_sym}(dst, &src->data.#{field.name}))) { return err; }"
               formatter << "break;"
             end
-            formatter << "return CA_OK;"
+
+            format_no_data_stubs(formatter)
+
+            formatter.backdent "default:"
+            formatter << "return CA_ERR_INVALID_TYPE_TAG;"
+            formatter << "break;"
           end
+          formatter << "return CA_OK;"
         end
 
         def unpacker_defn(formatter)
           enum_builder = Builders.get(:c, @tag_enum)
-          formatter << unpacker_sig
+
+          formatter << "CAUTERIZE_STATUS_T err;"
+
+          # unpack the tag
+          formatter << "if (CA_OK != (err = #{enum_builder.unpacker_sym}(src, &dst->tag))) { return err; }"
+
+          # pack the fields
+          formatter << "switch (dst->tag)"
           formatter.braces do
-            formatter << "CAUTERIZE_STATUS_T err;"
-
-            # unpack the tag
-            formatter << "if (CA_OK != (err = #{enum_builder.unpacker_sym}(src, &dst->tag))) { return err; }"
-
-            # pack the fields
-            formatter << "switch (dst->tag)"
-            formatter.braces do
-              having_data.each do |field|
-                bldr = Builders.get(:c, field.type)
-                formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
-                formatter << "if (CA_OK != (err = #{bldr.unpacker_sym}(src, &dst->data.#{field.name}))) { return err; }"
-                formatter << "break;"
-              end
-
-              format_no_data_stubs(formatter)
-
-              formatter.backdent "default:"
-              formatter << "return CA_ERR_INVALID_TYPE_TAG;"
+            having_data.each do |field|
+              bldr = Builders.get(:c, field.type)
+              formatter.backdent "case #{@blueprint.enum_sym(field.name)}:"
+              formatter << "if (CA_OK != (err = #{bldr.unpacker_sym}(src, &dst->data.#{field.name}))) { return err; }"
               formatter << "break;"
             end
-            formatter << "return CA_OK;"
+
+            format_no_data_stubs(formatter)
+
+            formatter.backdent "default:"
+            formatter << "return CA_ERR_INVALID_TYPE_TAG;"
+            formatter << "break;"
           end
+          formatter << "return CA_OK;"
         end
 
         def struct_proto(formatter)
