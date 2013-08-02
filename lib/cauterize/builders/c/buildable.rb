@@ -50,7 +50,7 @@ module Cauterize
           formatter << unpacker_sig
           formatter.braces do
             formatter.backdent("#ifdef SPECIALIZED_#{unpacker_sym}")
-            formatter << "return SPECIALIZED_#{unpacker_sym}(dst, src);"
+            formatter << "return SPECIALIZED_#{unpacker_sym}(src, dst);"
             formatter.backdent("#else")
             unpacker_defn(formatter)
             formatter.backdent("#endif")
