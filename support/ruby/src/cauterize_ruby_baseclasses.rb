@@ -184,7 +184,7 @@ class CauterizeEnumeration < CauterizeData
   end
 
   def self.unpackio(str)
-    self.from_int(self.repr_type.unpackio(str).val)
+    self.from_int(self.repr_type.unpackio(str).to_i)
   end
 end
 
