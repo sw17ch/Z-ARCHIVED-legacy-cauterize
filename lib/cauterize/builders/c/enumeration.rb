@@ -10,9 +10,11 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
-        def packer_defn(formatter)
-          rep_builder = Builders.get(:c, @blueprint.representation)
+        def preprocessor_defines(formatter)
+          formatter << "#define #{max_enc_len_cpp_sym} (#{rep_builder.max_enc_len_cpp_sym})"
+        end
 
+        def packer_defn(formatter)
           rep = "enum_representation"
           rep_builder.declare(formatter, rep)
 
@@ -21,8 +23,6 @@ module Cauterize
         end
 
         def unpacker_defn(formatter)
-          rep_builder = Builders.get(:c, @blueprint.representation)
-
           rep = "enum_representation"
           rep_builder.declare(formatter, rep)
 
@@ -48,6 +48,10 @@ module Cauterize
           end
           formatter.append(";")
         end
+
+        private
+
+        def rep_builder; Builders.get(:c, @blueprint.representation) end
       end
     end
   end

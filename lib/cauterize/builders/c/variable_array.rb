@@ -10,10 +10,15 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
-        def packer_defn(formatter)
-          size_type_builder = Builders.get(:c, @blueprint.size_type)
-          array_type_builder = Builders.get(:c, @blueprint.array_type)
+        def preprocessor_defines(formatter)
+          formatter << "#define #{length_sym} (#{@blueprint.array_size})"
+          formatter << [
+            "#define #{max_enc_len_cpp_sym} (",
+            "#{size_type_builder.max_enc_len_cpp_sym} + ",
+            "(#{length_sym} * #{array_type_builder.max_enc_len_cpp_sym}))"].join
+        end
 
+        def packer_defn(formatter)
           formatter << "CAUTERIZE_STATUS_T err;"
           formatter << "size_t i;"
           formatter.blank_line
@@ -76,6 +81,15 @@ module Cauterize
           end
           formatter.append(";")
         end
+
+        private
+
+        def length_sym
+          "VARIABLE_ARRAY_MAX_LENGTH_#{@blueprint.name}"
+        end
+
+        def size_type_builder; Builders.get(:c, @blueprint.size_type) end
+        def array_type_builder; Builders.get(:c, @blueprint.array_type) end
       end
     end
   end

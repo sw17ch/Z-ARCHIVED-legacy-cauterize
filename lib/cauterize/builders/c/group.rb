@@ -15,8 +15,17 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
+        def preprocessor_defines(formatter)
+          field_lens = @blueprint.fields.values.map do |field|
+            Builders.get(:c, field.type).max_enc_len_cpp_sym
+          end
+
+          formatter << ["#define #{max_enc_len_cpp_sym} ",
+                        "(#{enum_builder.max_enc_len_cpp_sym} + "
+                        "CA_MAX(" + "#{field_lens.join(",CA_MAX("})"
+        end
+
         def packer_defn(formatter)
-          enum_builder = Builders.get(:c, @tag_enum)
           formatter << "CAUTERIZE_STATUS_T err;"
 
           # pack the tag
@@ -110,6 +119,8 @@ module Cauterize
             formatter << "break;"
           end
         end
+
+        def enum_builder; Builders.get(:c, @tag_enum) end
       end
     end
   end
