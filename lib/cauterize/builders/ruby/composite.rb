@@ -5,16 +5,16 @@ module Cauterize::Builders::Ruby
     end
 
     def class_defn(f)
-      f << "class #{render} < CauterizeComposite"
-      f << "  def self.fields"
-      f << "    {"
+      f << "  class #{render} < CauterizeComposite"
+      f << "    def self.fields"
+      f << "      {"
       @blueprint.fields.values.each_with_index do |field, i|
         t = Cauterize::Builders.get(:ruby, field.type).render
-        f << "      #{field.name}: #{t},"
+        f << "        #{field.name}: #{t},"
       end
-      f << "    }"
+      f << "      }"
+      f << "    end"
       f << "  end"
-      f << "end"
       f << ""
     end
   end

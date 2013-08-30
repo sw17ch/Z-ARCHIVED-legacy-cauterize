@@ -99,7 +99,7 @@ class Bool < CauterizeBuiltinBool
 end
 
 class Float32 < CauterizeBuiltinFloat
-  def in_range(v) v > (-3.402823466e38) && v < (3.402823466e38) end
+  def in_range(v) v >= (-3.402823466e38) && v <= (3.402823466e38) end
   def pack
     [to_f].pack("f")
   end

@@ -17,7 +17,6 @@ end
 
 class CauterizeBuiltin < CauterizeData
   def initialize(val)
-    raise "Out of range value" if not in_range(val)
     @val = val
   end
   def to_ruby
@@ -27,21 +26,31 @@ end
 
 class CauterizeBuiltinInteger < CauterizeBuiltin
   def initialize(val)
+    #this will always set @val to a regular ruby Fixnum
     super(val.to_i)
   end
 
   def to_i
     @val
   end
+
+  def to_f
+    @val.to_f
+  end
 end
 
 class CauterizeBuiltinFloat < CauterizeBuiltin
   def initialize(val)
+    #this will always set @val to a regular ruby float
     super(val.to_f)
   end
 
   def to_f
     @val
+  end
+
+  def to_i
+    @val.to_f
   end
 end
 
@@ -54,11 +63,21 @@ end
 
 class CauterizeScalar < CauterizeData
   def initialize(val)
+    # @val is going to be some form of CauterizeBuiltin
     @val = self.class.builtin.construct val
+    raise "Out of range value: #{val}, for #{self.class}" if not @val.in_range(@val.to_ruby)
   end
 
   def to_ruby
     @val.to_ruby
+  end
+
+  def to_i
+    @val.to_i
+  end
+
+  def to_f
+    @val.to_f
   end
 
   def pack
@@ -71,6 +90,15 @@ class CauterizeScalar < CauterizeData
 end
 
 class CauterizeArray < CauterizeData
+
+  include Enumerable
+
+  def each
+    elems.each do |e|
+      yield e
+    end
+  end
+
   def to_ruby
     @elems.map{|e| e.to_ruby}
   end
@@ -80,12 +108,32 @@ class CauterizeArray < CauterizeData
   end
 end
 
+# pack, unpack, and to_string need to be fast
+# the others can be slow
+# elems be a lazy enumerator
+
+# def enumerate(&f)
+
+# need to know how many bytes to pull from stream
+
+
+# end
+
 class CauterizeFixedArray < CauterizeArray
   attr_reader :elems
 
-  def initialize(elems)
-    @elems = elems.map { |e| self.class.elem_type.construct(e) }
-    raise "Invalid length" if @elems.length != self.class.length
+  def initialize(elems, raw_data = nil)
+    @elems = Enumerator.new do |y|
+      elems.each do |e|
+        y << self.class.elem_type.construct(e)
+      end
+    end
+    @raw_data = raw_data
+    validate
+  end
+
+  def validate
+    raise "Invalid length" if @elems.count != self.class.length
   end
 
   def pack
@@ -93,28 +141,41 @@ class CauterizeFixedArray < CauterizeArray
   end
 
   def self.unpackio(str)
-    self.new (1..self.length).map { self.elem_type.unpackio(str) }
+    self.new ((1..self.length).map { self.elem_type.unpackio(str) })
   end
 end
 
 
 class CauterizeVariableArray < CauterizeArray
-  attr_reader :length
   attr_reader :elems
 
-  def initialize(elems)
-    @elems = elems.map { |e| self.class.elem_type.construct(e) }
-    @length = self.class.size_type.new @elems.length
-    raise "Invalid length" if @elems.length > self.class.max_length
+  def initialize(elems, raw_data = nil)
+    @elems = Enumerator.new do |y|
+      elems.each do |e|
+        y << self.class.elem_type.construct(e)
+      end
+    end
+    
+    @raw_data = raw_data
+    validate
+  end
+
+  def length
+    @length ||= self.class.size_type.new @elems.count
+    @length
+  end
+
+  def validate
+    raise "Invalid length" if @elems.count > self.class.max_length
   end
 
   def pack
-    @length.pack + @elems.inject("") { |sum, n| sum + n.pack }
+    length.pack + @elems.inject("") { |sum, n| sum + n.pack }
   end
-
+ 
   def self.unpackio(str)
-    length = self.size_type.unpackio(str)
-    self.new (1..length.to_i).map { self.elem_type.unpackio(str) }
+    len = self.size_type.unpackio(str)
+    self.new (1..len.to_i).map { self.elem_type.unpackio(str) }
   end
 end
 
