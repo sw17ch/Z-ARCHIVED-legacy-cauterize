@@ -1,17 +1,52 @@
 require 'stringio'
 
 class CauterizeData
-  def self.construct(x)
+  @@specializers = Hash.new { |h, k| k }
+
+  def self.set_specializer(c)
+    @@specializers[self] = c
+  end
+
+  def self.do_construct(x)
     if x.is_a? CauterizeData
-      raise "Invalid Type: was #{x.class}, expected #{self.name}" if not x.is_a?(self)
+      raise "Invalid Type: was #{x.class}, expected #{self}" if not x.is_a?(self)
       x
     else
       self.new x
     end
   end
 
+  def self.construct(x)
+    @@specializers[self].do_construct(x)
+  end
+
+  def self.unpackio(x)
+    @@specializers[self].do_unpackio(x)
+  end
+
+  def pack
+    x = ""
+    packio(x)
+    x
+  end
+
   def self.unpack(x)
     self.unpackio(StringIO.new(x))
+  end
+
+  def ==(other)
+    (self <=> other) == 0
+  end
+
+  #this promotes 'other' to a cauterize type if it's not one already
+  #   this way 'cmp' can always assume 'other' is of the same type
+  def <=>(other)
+    if other.is_a? CauterizeData
+      raise "Invalid Type: was #{other.class}, expected #{self.class}" if not other.is_a?(self.class)
+      cmp(other)
+    else
+      cmp(self.class.construct(other))
+    end
   end
 end
 
@@ -50,42 +85,48 @@ class CauterizeBuiltinFloat < CauterizeBuiltin
   end
 
   def to_i
-    @val.to_f
+    @val.to_i
   end
 end
 
 class CauterizeBuiltinBool < CauterizeBuiltin
   def initialize(val)
+    #this will always set @val to a regular ruby boolean value
     super((val)? true : false)
   end
 end
 
 
 class CauterizeScalar < CauterizeData
+  attr_reader :builtin
   def initialize(val)
-    # @val is going to be some form of CauterizeBuiltin
-    @val = self.class.builtin.construct val
-    raise "Out of range value: #{val}, for #{self.class}" if not @val.in_range(@val.to_ruby)
+    # @builtin is going to be some form of CauterizeBuiltin
+    @builtin = self.class.builtin.construct val
+    raise "Out of range value: #{@builtin.to_ruby}, for #{self.class}" if not @builtin.in_range(@builtin.to_ruby)
   end
 
   def to_ruby
-    @val.to_ruby
+    @builtin.to_ruby
   end
 
   def to_i
-    @val.to_i
+    @builtin.to_i
   end
 
   def to_f
-    @val.to_f
+    @builtin.to_f
   end
 
-  def pack
-    @val.pack
+  def packio(x)
+    @builtin.packio(x)
   end
 
-  def self.unpackio(str)
+  def self.do_unpackio(str)
     self.new self.builtin.unpackio(str)
+  end
+
+  def cmp(other)
+    @builtin <=> other.builtin
   end
 end
 
@@ -108,74 +149,46 @@ class CauterizeArray < CauterizeData
   end
 end
 
-# pack, unpack, and to_string need to be fast
-# the others can be slow
-# elems be a lazy enumerator
-
-# def enumerate(&f)
-
-# need to know how many bytes to pull from stream
-
-
-# end
-
 class CauterizeFixedArray < CauterizeArray
   attr_reader :elems
 
-  def initialize(elems, raw_data = nil)
-    @elems = Enumerator.new do |y|
-      elems.each do |e|
-        y << self.class.elem_type.construct(e)
-      end
+  def initialize(elems)
+    @elems = elems.map { |e| self.class.elem_type.construct(e) }
+    raise "Invalid length #{@elems.length}, expected: #{self.class.length}" if @elems.length != self.class.length
+  end
+
+  def packio(x)
+    elems.each do |e|
+      e.packio(x)
     end
-    @raw_data = raw_data
-    validate
   end
 
-  def validate
-    raise "Invalid length" if @elems.count != self.class.length
-  end
-
-  def pack
-    @elems.inject("") { |sum, n| sum + n.pack }
-  end
-
-  def self.unpackio(str)
-    self.new ((1..self.length).map { self.elem_type.unpackio(str) })
+  def self.do_unpackio(str)
+    self.new (1..self.length).map { self.elem_type.unpackio(str) }
   end
 end
 
 
 class CauterizeVariableArray < CauterizeArray
+  attr_reader :length
   attr_reader :elems
 
-  def initialize(elems, raw_data = nil)
-    @elems = Enumerator.new do |y|
-      elems.each do |e|
-        y << self.class.elem_type.construct(e)
-      end
+  def initialize(elems)
+    @elems = elems.map { |e| self.class.elem_type.construct(e) }
+    @length = self.class.size_type.new @elems.length
+    raise "Invalid length: #{@elems.length}, max length is: #{self.class.max_length}" if @elems.length > self.class.max_length
+  end
+
+  def packio(x)
+    @length.packio(x)
+    @elems.each do |e|
+      e.packio(x)
     end
-    
-    @raw_data = raw_data
-    validate
-  end
-
-  def length
-    @length ||= self.class.size_type.new @elems.count
-    @length
-  end
-
-  def validate
-    raise "Invalid length" if @elems.count > self.class.max_length
-  end
-
-  def pack
-    length.pack + @elems.inject("") { |sum, n| sum + n.pack }
   end
  
-  def self.unpackio(str)
-    len = self.size_type.unpackio(str)
-    self.new (1..len.to_i).map { self.elem_type.unpackio(str) }
+  def self.do_unpackio(str)
+    length = self.size_type.unpackio(str)
+    self.new (1..length.to_i).map { self.elem_type.unpackio(str) }
   end
 end
 
@@ -197,24 +210,16 @@ class CauterizeComposite < CauterizeData
     Hash[@fields.map{|name, value| [name, value.to_ruby]}]
   end
 
-  def pack
-    @fields.values.inject("")  { |sum, v| sum + v.pack }
+  def packio(x)
+    @fields.values.each do |v|
+      v.packio(x)
+    end
   end
 
-  def self.unpackio(str)
+  def self.do_unpackio(str)
     self.new Hash[self.fields.keys.map do |k|
       [k, self.fields[k].unpackio(str)]
     end]
-  end
-
-  alias orig_method_missing method_missing
-
-  def method_missing(m, *args, &block)
-    if fields[m]
-      fields[m]
-    else
-      orig_method_missing(m, *args, &block)
-    end
   end
 end
 
@@ -223,7 +228,7 @@ class CauterizeEnumeration < CauterizeData
   attr_reader :field_name
 
   def initialize(field_name)
-    raise "Invalid field name #{field_name}" if not self.class.fields.keys.include?(field_name)
+    raise "Invalid field name: #{field_name}" if not self.class.fields.keys.include?(field_name)
     @field_name = field_name
   end
 
@@ -233,17 +238,21 @@ class CauterizeEnumeration < CauterizeData
 
   def to_i() self.class.fields[@field_name] end
 
-  def pack
-    self.class.repr_type.construct(self.class.fields[@field_name]).pack
+  def packio(x)
+    self.class.repr_type.construct(self.class.fields[@field_name]).packio(x)
   end
 
   def self.from_int(i)
-    raise "Invalid enumeration value #{i.to_i}" if not self.fields.values.include? i.to_i
+    raise "Invalid enumeration value: #{i.to_i}" if not self.fields.values.include? i.to_i
     self.new(self.fields.invert[i.to_i])
   end
 
-  def self.unpackio(str)
+  def self.do_unpackio(str)
     self.from_int(self.repr_type.unpackio(str).to_i)
+  end
+
+  def cmp(other)
+    to_i <=> other.to_i
   end
 end
 
@@ -277,24 +286,16 @@ class CauterizeGroup < CauterizeData
   
   def initialize(h)
     @tag = self.class.tag_from_field_name(h[:tag])
-
     field_class = self.class.fields[tag_field_name]
-    if field_class.nil?
-      @data = nil
-    else
-      @data = field_class.construct(h[:data])
-    end
+    @data = (field_class.nil?) ? nil : field_class.construct(h[:data])
   end
 
-  def pack
-    if @data.nil?
-      @tag.pack
-    else
-      @tag.pack + @data.pack
-    end
+  def packio(x)
+    @tag.packio(x)
+    @data.packio(x) unless @data.nil?
   end
 
-  def self.unpackio(str)
+  def self.do_unpackio(str)
     tag = self.tag_type.unpackio(str)
     field_name = self.from_tag_field_name(tag.field_name)
     data_type = self.fields[field_name]
