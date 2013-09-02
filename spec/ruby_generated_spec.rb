@@ -406,6 +406,23 @@ module Cauterize
         end
       end 
     end
+    # describe CauterizeFixedArray do
+    #   convert to string
+    #   new to_ruby
+    #   pack unpack
+    #   .each
+    #   enumerable?
+    #   only accepts the specified length
+    #   .to_string
+    #   can nest other types?
+    #     scalar
+    #     enum
+    #     composite
+    #     fixedarray
+    #     vararray
+    #     group
+        
+    # end
 
     describe CauterizeVariableArray do
       it "can be constructed from an existing variable array of same type" do

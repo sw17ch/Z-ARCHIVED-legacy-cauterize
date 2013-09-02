@@ -41,12 +41,12 @@ class CauterizeData
   #this promotes 'other' to a cauterize type if it's not one already
   #   this way 'cmp' can always assume 'other' is of the same type
   def <=>(other)
-    if other.is_a? CauterizeData
-      raise "Invalid Type: was #{other.class}, expected #{self.class}" if not other.is_a?(self.class)
-      cmp(other)
-    else
-      cmp(self.class.construct(other))
-    end
+    # if other.is_a? CauterizeData
+    #   raise "Invalid Type: was #{other.class}, expected #{self.class}" if not other.is_a?(self.class)
+    #   cmp(other)
+    # else
+    cmp(self.class.construct(other))
+    # end
   end
 end
 
