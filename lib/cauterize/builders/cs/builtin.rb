@@ -8,7 +8,7 @@ module Cauterize::Builders::CS
     }
 
     def render
-      render_cstype
+      "CauterizeRuby::#{render_cstype}"
     end
 
     private

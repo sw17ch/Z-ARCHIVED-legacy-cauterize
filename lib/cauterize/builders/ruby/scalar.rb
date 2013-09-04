@@ -7,7 +7,7 @@ module Cauterize::Builders::Ruby
     def class_defn(f)
       tn_bldr = Cauterize::Builders.get(:ruby, @blueprint.type_name)
       x = <<EOF
-  class #{render} < CauterizeScalar
+  class #{render} < CauterizeRuby::Scalar
     def self.builtin() #{tn_bldr.render} end
   end
 EOF

@@ -6,7 +6,7 @@ module Cauterize::Builders::Ruby
 
     def class_defn(f)
       rep_builder = Cauterize::Builders.get(:ruby, @blueprint.representation)
-      f << "  class #{render} < CauterizeEnumeration"
+      f << "  class #{render} < CauterizeRuby::Enumeration"
       f << "    def self.repr_type() #{rep_builder.render} end"
       f << "    def self.fields"
       f << "      {"

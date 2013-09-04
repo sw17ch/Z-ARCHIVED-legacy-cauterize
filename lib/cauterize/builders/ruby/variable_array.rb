@@ -8,7 +8,7 @@ module Cauterize::Builders::Ruby
       array_type_bldr = Cauterize::Builders.get(:ruby, @blueprint.array_type)
       size_type_bldr = Cauterize::Builders.get(:ruby, @blueprint.size_type)
       x = <<EOF
-  class #{render} < CauterizeVariableArray
+  class #{render} < CauterizeRuby::VariableArray
     def self.size_type () #{size_type_bldr.render} end
     def self.max_length () #{@blueprint.array_size} end
     def self.elem_type() #{array_type_bldr.render} end

@@ -11,7 +11,7 @@ module Cauterize::Builders::Ruby
     def class_defn(f)
       tag = Cauterize::Builders.get(:ruby, @tag_enum).render
 
-      f << "  class #{render} < CauterizeGroup"
+      f << "  class #{render} < CauterizeRuby::Group"
       f << "    def self.tag_type() #{tag} end"
       f << "    def self.tag_prefix() '#{@blueprint.tag_enum.name.upcase}_' end"
       f << "    def self.fields"

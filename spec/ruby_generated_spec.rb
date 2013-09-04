@@ -144,7 +144,6 @@ Dir.mktmpdir do |tmpdir|
   require @rb_path
 
   # puts File.read(@rb.rb)
-
 end
 
 # class FastName < CauterizeData
@@ -184,7 +183,7 @@ module Cauterize
     after(:all) do
     end
 
-    describe CauterizeScalar do
+    describe CauterizeRuby::Scalar do
       numeric_builtin_types do |c, min_val, max_val, num_bytes|
         describe c do
           it "should be able to store its minimum value" do
@@ -341,7 +340,7 @@ module Cauterize
       end
     end
 
-    describe CauterizeEnumeration do
+    describe CauterizeRuby::Enumeration do
       describe ExampleProject::Color do
         example_colors = [:RED, :BLUE, :GREEN]
         example_not_colors = [:DIRT, :LASERS, :HUNGRY, 0, 1.0, true]
@@ -444,7 +443,7 @@ module Cauterize
       end
     end
 
-    describe CauterizeVariableArray do
+    describe CauterizeRuby::VariableArray do
       it "can be constructed from an existing variable array of same type" do
         test_string = "this is a test"
         test_array = ExampleProject::Name.new(test_string.bytes) 
@@ -458,7 +457,7 @@ module Cauterize
       end
     end
 
-    describe CauterizeFixedArray do
+    describe CauterizeRuby::FixedArray do
 
       it ".new and .to_ruby are inverses" do
         test_array = [1, 2, 6, 10, 100, 0]
@@ -533,7 +532,7 @@ module Cauterize
       end
     end
 
-    describe CauterizeVariableArray do
+    describe CauterizeRuby::VariableArray do
 
       test_arrays = ["Job Vranish".bytes.to_a,
                      [] ]
@@ -607,7 +606,7 @@ module Cauterize
 
     end
 
-    describe CauterizeComposite do
+    describe CauterizeRuby::Composite do
       sample_persons = [ { first_name: "Jane", last_name: "Smith", gender: :MALE },
                          { first_name: "Jill", last_name: "Smith", gender: :FEMALE},
                          { first_name: "John", last_name: "Smit",  gender: :MALE },
@@ -679,7 +678,7 @@ module Cauterize
       end
     end
 
-    describe CauterizeGroup do
+    describe CauterizeRuby::Group do
       test_groups = [ { tag: :PERSON, data: { first_name: "Jane", last_name: "Smith", gender: :MALE }},
                       { tag: :DOG, data: { name: "Fido", leg_count: 3, gender: :MALE }}]
 

@@ -5,7 +5,7 @@ module Cauterize::Builders::Ruby
     end
 
     def class_defn(f)
-      f << "  class #{render} < CauterizeComposite"
+      f << "  class #{render} < CauterizeRuby::Composite"
       @blueprint.fields.values.each do |field|
         f << "    def #{field.name}() fields[:#{field.name}] end"
       end
