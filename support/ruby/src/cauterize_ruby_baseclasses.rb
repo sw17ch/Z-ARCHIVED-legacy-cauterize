@@ -41,12 +41,7 @@ class CauterizeData
   #this promotes 'other' to a cauterize type if it's not one already
   #   this way 'cmp' can always assume 'other' is of the same type
   def <=>(other)
-    # if other.is_a? CauterizeData
-    #   raise "Invalid Type: was #{other.class}, expected #{self.class}" if not other.is_a?(self.class)
-    #   cmp(other)
-    # else
     cmp(self.class.construct(other))
-    # end
   end
 end
 
@@ -57,6 +52,9 @@ class CauterizeBuiltin < CauterizeData
   def to_ruby
     @val
   end
+  # for builtins max_size == min_size
+  def self.min_size() max_size end
+  def num_bytes() self.class::max_size end
 end
 
 class CauterizeBuiltinInteger < CauterizeBuiltin
@@ -102,7 +100,7 @@ class CauterizeScalar < CauterizeData
   def initialize(val)
     # @builtin is going to be some form of CauterizeBuiltin
     @builtin = self.class.builtin.construct val
-    raise "Out of range value: #{@builtin.to_ruby}, for #{self.class}" if not @builtin.in_range(@builtin.to_ruby)
+    raise "#{self.class}: Out of range value: #{@builtin.to_ruby}, for #{self.class}" if not @builtin.in_range(@builtin.to_ruby)
   end
 
   def to_ruby
@@ -128,11 +126,24 @@ class CauterizeScalar < CauterizeData
   def cmp(other)
     @builtin <=> other.builtin
   end
+
+  def num_bytes() @builtin.num_bytes end
+  def self.max_size() builtin::max_size end
+  def self.min_size() builtin::min_size end
 end
 
 class CauterizeArray < CauterizeData
 
   include Enumerable
+
+  def initialize(elems)
+    if elems.is_a? String
+      # a special case for strings
+      initialize_arr(elems.unpack("C*"))
+    else
+      initialize_arr(elems)
+    end
+  end
 
   def each
     elems.each do |e|
@@ -147,14 +158,18 @@ class CauterizeArray < CauterizeData
   def to_string
     to_ruby.to_a.pack("C*")
   end
+
+  def cmp(other)
+    elems <=> other.elems
+  end
 end
 
 class CauterizeFixedArray < CauterizeArray
   attr_reader :elems
 
-  def initialize(elems)
+  def initialize_arr(elems)
     @elems = elems.map { |e| self.class.elem_type.construct(e) }
-    raise "Invalid length #{@elems.length}, expected: #{self.class.length}" if @elems.length != self.class.length
+    raise "#{self.class}: Invalid length: #{@elems.length}, expected: #{self.class.length}" if @elems.length != self.class.length
   end
 
   def packio(x)
@@ -166,6 +181,10 @@ class CauterizeFixedArray < CauterizeArray
   def self.do_unpackio(str)
     self.new (1..self.length).map { self.elem_type.unpackio(str) }
   end
+
+  def num_bytes() elems.reduce(0) {|sum, e| sum + e.num_bytes} end
+  def self.max_size() length * elem_type::max_size end
+  def self.min_size() length * elem_type::min_size end
 end
 
 
@@ -173,10 +192,10 @@ class CauterizeVariableArray < CauterizeArray
   attr_reader :length
   attr_reader :elems
 
-  def initialize(elems)
+  def initialize_arr(elems)
     @elems = elems.map { |e| self.class.elem_type.construct(e) }
     @length = self.class.size_type.new @elems.length
-    raise "Invalid length: #{@elems.length}, max length is: #{self.class.max_length}" if @elems.length > self.class.max_length
+    raise "#{self.class}: Invalid length: #{@elems.length}, max length is: #{self.class.max_length}" if @elems.length > self.class.max_length
   end
 
   def packio(x)
@@ -190,6 +209,10 @@ class CauterizeVariableArray < CauterizeArray
     length = self.size_type.unpackio(str)
     self.new (1..length.to_i).map { self.elem_type.unpackio(str) }
   end
+
+  def num_bytes() length.num_bytes + elems.reduce(0) {|sum, e| sum + e.num_bytes} end
+  def self.max_size() size_type::max_size + (max_length * elem_type::max_size) end
+  def self.min_size() size_type::min_size end
 end
 
 
@@ -199,10 +222,10 @@ class CauterizeComposite < CauterizeData
   def initialize(field_values)
     missing_keys = self.class.fields.keys - field_values.keys
     extra_keys = field_values.keys - self.class.fields.keys
-    raise "missing fields #{missing_keys}" if not missing_keys.empty?
-    raise "extra fields #{extra_keys}" if not extra_keys.empty?
-    @fields = Hash[field_values.map do |field_name, value|
-      [field_name, self.class.fields[field_name].construct(value)]
+    bad_init = !extra_keys.empty? || !missing_keys.empty?
+    raise "#{self.class}: Invalid initialization params, missing fields: #{missing_keys}, extra fields: #{extra_keys}" if bad_init
+    @fields = Hash[self.class.fields.keys.map do |field_name|
+      [field_name, self.class.fields[field_name].construct(field_values[field_name])]
     end]
   end
 
@@ -221,6 +244,22 @@ class CauterizeComposite < CauterizeData
       [k, self.fields[k].unpackio(str)]
     end]
   end
+
+  def cmp(other)
+    fields.values <=> other.fields.values
+  end
+
+  def num_bytes
+    fields.values.reduce(0) {|sum, v| sum + v.num_bytes}
+  end
+
+  def self.max_size
+    fields.values.reduce(0) {|sum, v| sum + v::max_size}
+  end
+
+  def self.min_size
+    fields.values.reduce(0) {|sum, v| sum + v::min_size}
+  end
 end
 
 
@@ -228,7 +267,7 @@ class CauterizeEnumeration < CauterizeData
   attr_reader :field_name
 
   def initialize(field_name)
-    raise "Invalid field name: #{field_name}" if not self.class.fields.keys.include?(field_name)
+    raise "#{self.class}: Invalid field name: #{field_name}, Valid field names are: #{self.class.fields.keys}" if not self.class.fields.keys.include?(field_name)
     @field_name = field_name
   end
 
@@ -243,7 +282,7 @@ class CauterizeEnumeration < CauterizeData
   end
 
   def self.from_int(i)
-    raise "Invalid enumeration value: #{i.to_i}" if not self.fields.values.include? i.to_i
+    raise "#{self}: Invalid enumeration value: #{i.to_i}" if not self.fields.values.include? i.to_i
     self.new(self.fields.invert[i.to_i])
   end
 
@@ -254,6 +293,10 @@ class CauterizeEnumeration < CauterizeData
   def cmp(other)
     to_i <=> other.to_i
   end
+
+  def num_bytes() self.class.repr_type::max_size end
+  def self.max_size() repr_type::max_size end
+  def self.min_size() repr_type::min_size end
 end
 
 
@@ -305,4 +348,18 @@ class CauterizeGroup < CauterizeData
       self.new({ tag: field_name, data: data_type.unpackio(str) })
     end
   end
+
+  def cmp(other)
+    r = (tag <=> other.tag)
+    if r == 0
+      data <=> other.data
+    else
+      r
+    end
+  end
+
+  def num_bytes() tag.num_bytes + ((data.nil?) ? 0 : data.num_bytes) end
+
+  def self.max_size() tag_type::max_size + fields.values.map{|v| (v.nil?) ? 0 : v::max_size}.max end
+  def self.min_size() tag_type::min_size + fields.values.map{|v| (v.nil?) ? 0 : v::min_size}.min end
 end
