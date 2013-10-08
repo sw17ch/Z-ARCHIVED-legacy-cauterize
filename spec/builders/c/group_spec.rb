@@ -32,6 +32,27 @@ module Cauterize
         end
       end
 
+      describe ".preprocessor_defines" do
+        before do
+          f = default_formatter
+          @b.preprocessor_defines(f)
+          @fs = f.to_s
+        end
+
+        it "contains the maximum encoded length definition" do
+          @fs.should match /MAX_ENCODED_LENGTH_some_name/
+        end
+
+        it "includes the group length in the max encoded length" do
+          @fs.should match /MAX_ENCODED_LENGTH_some_name.+MAX_ENCODED_LENGTH_group_some_name_type/
+        end
+
+        it "includes the length of type synonyms 'a', 'b' in the max encoded length" do
+          @fs.should match /MAX_ENCODED_LENGTH_some_name.+MAX_ENCODED_LENGTH_uint8/
+          @fs.should match /MAX_ENCODED_LENGTH_some_name.+MAX_ENCODED_LENGTH_uint8/
+        end
+      end
+
       describe ".packer_defn" do
         before do
           f = default_formatter
