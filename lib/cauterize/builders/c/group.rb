@@ -36,7 +36,7 @@ module Cauterize
 
           formatter << ["#define #{max_enc_len_cpp_sym}",
                         "(#{enum_builder.max_enc_len_cpp_sym} +",
-                        Maxer.max_str(*field_lens)].join(" ")
+                        Maxer.max_str(*field_lens)].join(" ") + ")"
         end
 
         def packer_defn(formatter)
