@@ -12,6 +12,7 @@ module Cauterize
 
     describe :build do
       before do
+        Cauterize.set_name("example_project")
         Cauterize.set_version("1.2.3")
 
         Cauterize.scalar(:small_uint) {|t| t.type_name(:uint8)}
@@ -72,6 +73,10 @@ module Cauterize
 
         it "requires 'cauterize_ruby_baseclasses'" do
           @ruby_text.should include("require_relative './cauterize_ruby_builtins'")
+        end
+
+        it "The generated code is wrapped in a module" do
+          @ruby_text.should include("module ExampleProject")
         end
 
       end

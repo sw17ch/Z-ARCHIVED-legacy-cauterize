@@ -8,7 +8,7 @@ module Cauterize::Builders::Ruby
     }
 
     def render
-      render_rbtype
+      "CauterizeRuby::#{render_rbtype}"
     end
 
     def class_defn(f)
