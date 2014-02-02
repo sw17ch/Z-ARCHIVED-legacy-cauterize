@@ -40,17 +40,8 @@ module Cauterize
       end
     end
 
-    def size_type(t = nil)
-      if t
-        _t = BaseType.find_type!(t)
-        if _t.is_built_in? or _t.is_scalar?
-          @size_type = _t
-        else
-          raise Exception.new("The type #{t} is not a built-in or scalar type")
-        end
-      else
-        @size_type
-      end
+    def size_type
+      Representation.lengthRepresentation(@array_size)
     end
 
     protected
@@ -58,7 +49,7 @@ module Cauterize
     def local_hash(digest)
       digest.update(@array_size.to_s)
       @array_type.type_hash(digest)
-      @size_type.type_hash(digest)
+      size_type.type_hash(digest)
     end
   end
 end

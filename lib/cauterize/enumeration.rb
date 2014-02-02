@@ -59,20 +59,10 @@ module Cauterize
     end
 
     def representation
-      max_val = @values.values.map(&:value).max
-      min_val = @values.values.map(&:value).min
-      
-      if -128 <= min_val and max_val <= 127
-        BaseType.find_type!(:int8)
-      elsif (-32768 <= min_val and max_val <= 32767)
-        BaseType.find_type!(:int16)
-      elsif (-2147483648 <= min_val and max_val <= 2147483647)
-        BaseType.find_type!(:int32)
-      elsif (-9223372036854775808 <= min_val and max_val <= 9223372036854775807)
-        BaseType.find_type!(:int64)
-      else
-        raise Exception.new("Unable to represent enumeration (#{min_val} -> #{max_val})")
-      end
+      Representation.enumRepresentation(
+        min: @values.values.map(&:value).min,
+        max: @values.values.map(&:value).max
+      )
     end
     
     protected

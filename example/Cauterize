@@ -5,7 +5,6 @@ scalar(:bigint)  { |t| t.type_name(:int32) }
 scalar(:usmallint) { |t| t.type_name(:uint8) }
 
 variable_array(:uint8_buffer) do |a|
-  a.size_type  :uint8
   a.array_type :uint8
   a.array_size 128
 end
@@ -37,7 +36,6 @@ fixed_array(:color_list_list) do |a|
 end
  
 variable_array(:numbers) do |a|
-  a.size_type  :usmallint
   a.array_type :bigint
   a.array_size 128
 end
