@@ -17,7 +17,6 @@ module Cauterize
       end
 
       Cauterize.variable_array(:int8_list) do |a|
-        a.size_type  :uint8
         a.array_type :int8
         a.array_size 200
       end
@@ -53,9 +52,8 @@ module Cauterize
       end
 
       Cauterize.variable_array(:int8_list) do |a|
-        a.size_type  :uint8
         a.array_type :int8
-        a.array_size 200
+        a.array_size 2000
       end
 
       Cauterize.composite(:two_things) do |t|

@@ -5,7 +5,6 @@ module Cauterize
         Cauterize.variable_array(name) do |a|
           a.array_type(:uint8)
           a.array_size(8)
-          a.size_type(:uint8)
         end
       end
     end
@@ -17,9 +16,8 @@ module Cauterize
     context "structure definition" do
       let(:vara) do
         _a = Cauterize.variable_array(:va) do |a|
-          a.array_size(8)
+          a.array_size(700000)
           a.array_type(:int32)
-          a.size_type(:int32)
         end
 
         Builders.get(:c, _a)
@@ -41,7 +39,7 @@ module Cauterize
 
           fs.should match /struct va/
           fs.should match /int32_t length;/
-          fs.should match /int32_t data\[8\];/
+          fs.should match /int32_t data\[700000\];/
           fs.should match /};/
         end
       end
