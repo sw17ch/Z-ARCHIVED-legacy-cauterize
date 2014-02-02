@@ -253,7 +253,7 @@ module Cauterize
           it "to_ruby and to_i and to_f should return the same number" do
             x = c.new(max_val) 
             x.to_i.should == x.to_ruby
-            x.to_f.should == x.to_ruby
+            x.to_f.should be_within(0.0001).of(x.to_ruby)
           end
           it "storing a float should truncate it to an Integer" do
             x = c.new(1.5)
