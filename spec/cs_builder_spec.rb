@@ -29,12 +29,10 @@ module Cauterize
         Cauterize.variable_array(:mac_table) do |t|
           t.array_type :mac_address
           t.array_size 64
-          t.size_type :uint8_t
         end
 
         Cauterize.variable_array(:name) do |va|
           va.array_type :uint8_t
-          va.size_type :uint8_t
           va.array_size 32
         end
 

@@ -5,7 +5,6 @@ describe Cauterize::Builders::CS::VariableArray do
       Cauterize.scalar(:uint32_t) {|t| t.type_name(:uint32)}
       Cauterize.scalar(:uint8_t) {|t| t.type_name(:uint8)}
       _va = Cauterize.variable_array(:myriad_data) do |a|
-        a.size_type :uint8_t
         a.array_type :uint32_t
         a.array_size 16
       end

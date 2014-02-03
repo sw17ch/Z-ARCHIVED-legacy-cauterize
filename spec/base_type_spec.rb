@@ -101,10 +101,10 @@ module Cauterize
         end
 
         it "differs on differing size type in variable arrays" do
-          f = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2; t.size_type :uint8 }.type_hash
+          f = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2 }.type_hash
           reset_for_test
 
-          g = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2; t.size_type :uint16 }.type_hash
+          g = Cauterize.variable_array(:foo) { |t| t.array_type :int8; t.array_size 2000 }.type_hash
           reset_for_test
 
           f.should_not == g

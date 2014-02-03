@@ -51,13 +51,11 @@ module Cauterize
         Cauterize.variable_array(:a_var_array, "maybe some things") do |t|
           t.array_type :an_int
           t.array_size 5
-          t.size_type :uint8
         end
 
         Cauterize.variable_array(:a_var_mystery) do |t|
           t.array_type :uint8
           t.array_size 1
-          t.size_type :uint8
         end
 
         Cauterize.enumeration(:some_colors, "several colors to choose from") do |t|

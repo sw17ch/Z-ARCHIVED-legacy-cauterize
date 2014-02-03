@@ -61,26 +61,12 @@ module Cauterize
     end
 
     describe :size_type do
-      it "defines the type to use to encode the array size" do
-        Cauterize.scalar(:uint16_t)
-        @a.size_type :uint16_t
-        @a.instance_variable_get(:@size_type).name.should == :uint16_t
-      end
+      it "determines the type used to encode the array size" do
+        @a.array_size 30000
+        @a.size_type.name.should == :uint16
 
-      it "raises an error if the type doesn't eixst" do
-        lambda { @a.size_type :uintLOL_t }.should raise_error /does not correspond to a type/
-      end
-
-      it "raises an error if the type isn't an scalar" do
-        Cauterize.scalar(:uint32_t) { |t| t.type_name(:uint32) }
-        Cauterize.enumeration(:lol)
-        lambda { @a.size_type :lol }.should raise_error /is not a built-in or scalar/
-      end
-
-      it "is the defined type if no argument is passed" do
-        s = Cauterize.scalar(:uint32_t)
-        @a.size_type :uint32_t
-        @a.size_type.should be s
+        @a.array_size 10
+        @a.size_type.name.should == :uint8
       end
     end
   end
