@@ -10,13 +10,18 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
+        def preprocessor_defines(formatter)
+          formatter << "#define #{length_sym} (#{@blueprint.array_size})"
+          formatter << "#define #{max_enc_len_cpp_sym} (#{length_sym} * #{ty_bldr.max_enc_len_cpp_sym})"
+        end
+
         def packer_defn(formatter)
           formatter << "CAUTERIZE_STATUS_T err;"
           formatter << "size_t i;"
           formatter.blank_line
 
           # store each used item in the array
-          formatter << "for (i = 0; i < #{@blueprint.array_size}; i++)"
+          formatter << "for (i = 0; i < #{length_sym}; i++)"
           formatter.braces do
             formatter << "if (CA_OK != (err = #{ty_bldr.packer_sym}(dst, &src->data[i]))) { return err; }"
           end
@@ -31,7 +36,7 @@ module Cauterize
           formatter.blank_line
 
           # store each used item in the array
-          formatter << "for (i = 0; i < #{@blueprint.array_size}; i++)"
+          formatter << "for (i = 0; i < #{length_sym}; i++)"
           formatter.braces do
             formatter << "if (CA_OK != (err = #{ty_bldr.unpacker_sym}(src, &dst->data[i]))) { return err; }"
           end
@@ -53,6 +58,10 @@ module Cauterize
         end
 
         private
+
+        def length_sym
+          "FIXED_ARRAY_LENGTH_#{@blueprint.name}"
+        end
 
         def ty_bldr
           @ty_bldr ||= Builders.get(:c, @blueprint.array_type)

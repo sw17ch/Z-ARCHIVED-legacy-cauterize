@@ -10,6 +10,14 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
+        def preprocessor_defines(formatter)
+          field_lens = @blueprint.fields.values.map do |field|
+            Builders.get(:c, field.type).max_enc_len_cpp_sym
+          end
+
+          formatter << "#define #{max_enc_len_cpp_sym} (#{field_lens.join(" + ")})"
+        end
+
         def packer_defn(formatter)
           formatter << "CAUTERIZE_STATUS_T err;"
           @blueprint.fields.values.each do |field|

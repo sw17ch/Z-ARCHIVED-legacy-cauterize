@@ -17,6 +17,10 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
+        def preprocessor_defines(formatter)
+          formatter << "#define #{max_enc_len_cpp_sym} sizeof(#{render_ctype})"
+        end
+
         # These are identical to the Scalar definitions. For now.
         def packer_defn(formatter)
           formatter << "return CauterizeAppend(dst, (uint8_t*)src, sizeof(*src));"

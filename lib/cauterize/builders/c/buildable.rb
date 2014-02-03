@@ -57,6 +57,12 @@ module Cauterize
           end
         end
 
+        # This is the symbol used to define the maximum encoded length of any type
+        ##########################################################################
+        def max_enc_len_cpp_sym
+          "MAX_ENCODED_LENGTH_#{@blueprint.name}"
+        end
+
         # Things below here are tested in shared_examples_for_c_buildables #
         ####################################################################
 
@@ -74,6 +80,7 @@ module Cauterize
         end
 
         # These are only different in a few type varieties.
+        def preprocessor_defines(formatter); nil end
         def typedef_decl(formatter); nil end
         def struct_proto(formatter); nil end
         def struct_defn(formatter); nil end

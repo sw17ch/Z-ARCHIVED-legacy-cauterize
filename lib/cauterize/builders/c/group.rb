@@ -1,6 +1,16 @@
 module Cauterize
   module Builders
     module C
+      class Maxer
+        # Produce a preprocessor string that results in the maximum size of the passed
+        # in symbols. Uses the CA_MAX macro from the Cauterize support C files.
+        def self.max_str(*syms)
+          a = syms.to_a
+          pre = syms.to_a.inject("") {|s, v| s + "CA_MAX(" + v.to_s + ", "}
+          return pre + "0" + (")" * a.length)
+        end
+      end
+
       class Group < Buildable
         def initialize(blueprint)
           super(blueprint)
@@ -15,8 +25,21 @@ module Cauterize
           formatter << "#{render} #{sym};"
         end
 
+        def preprocessor_defines(formatter)
+          field_lens = @blueprint.fields.values.map do |field|
+            if field.type.nil?
+              nil
+            else
+              Builders.get(:c, field.type).max_enc_len_cpp_sym
+            end
+          end.compact
+
+          formatter << ["#define #{max_enc_len_cpp_sym}",
+                        "(#{enum_builder.max_enc_len_cpp_sym} +",
+                        Maxer.max_str(*field_lens)].join(" ") + ")"
+        end
+
         def packer_defn(formatter)
-          enum_builder = Builders.get(:c, @tag_enum)
           formatter << "CAUTERIZE_STATUS_T err;"
 
           # pack the tag
@@ -110,6 +133,8 @@ module Cauterize
             formatter << "break;"
           end
         end
+
+        def enum_builder; Builders.get(:c, @tag_enum) end
       end
     end
   end
