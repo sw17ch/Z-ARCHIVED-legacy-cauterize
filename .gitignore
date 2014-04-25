@@ -25,3 +25,9 @@ example/*_cauterize_output
 
 # Nunit test results
 TestResult.xml
+
+# rbenv
+.ruby-version
+
+# Tags
+tags
