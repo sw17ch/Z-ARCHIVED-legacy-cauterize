@@ -3,7 +3,7 @@ module Cauterize::Builders::CS
     @@CS_TYPE_MAPPING = {
       1 => {signed: "SByte", unsigned: "Byte",   :float => nil,      :bool => "bool"},
       2 => {signed: "Int16", unsigned: "UInt16", :float => nil,      :bool => nil},
-      4 => {signed: "Int32", unsigned: "UInt32", :float => "Float",  :bool => nil},
+      4 => {signed: "Int32", unsigned: "UInt32", :float => "Single",  :bool => nil},
       8 => {signed: "Int64", unsigned: "UInt64", :float => "Double", :bool => nil},
     }
 

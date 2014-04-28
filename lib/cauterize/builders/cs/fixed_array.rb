@@ -10,9 +10,11 @@ module Cauterize::Builders::CS
     end
 
     def size_defn(formatter)
+      formatter << "public static int MySize = #{size};"
+      formatter.blank_line
       formatter << "protected override int Size"
       formatter.braces do
-        formatter << "get { return #{size}; }"
+        formatter << "get { return MySize; }"
       end
     end
 
