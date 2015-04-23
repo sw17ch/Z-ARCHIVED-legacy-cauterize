@@ -15,9 +15,9 @@ namespace Cauterize
             var arrayType = arrayField.FieldType.GetElementType();
             if (arrayType == typeof (Byte))
             {
-                var arraySize = (int) t.GetField("MySize").GetValue(null);
+                var arraySize = (ulong) t.GetField("MySize").GetValue(null);
                 var arrayData = new byte[arraySize];
-                serializationStream.Read(arrayData, 0, arraySize);
+                serializationStream.Read(arrayData, 0, (int)arraySize);
                 var ret = t.GetConstructor(new Type[] {typeof (Byte[])}).Invoke(new object[] {arrayData});
                 return ret;
             }

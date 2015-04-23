@@ -29,7 +29,7 @@ namespace Cauterize
             }
             else
             {
-                var ret = t.GetConstructor(new Type[] {typeof (int)}).Invoke(new object[] {arraySize});
+                var ret = t.GetConstructor(new Type[] {typeof (ulong)}).Invoke(new object[] {(ulong)arraySize});
                 var array = (Array)arrayField.GetValue(ret);
                 var subFormatter = _typeFormatterFactory.GetFormatter(arrayType);
                 for (var i = 0; i < arraySize; i++)
