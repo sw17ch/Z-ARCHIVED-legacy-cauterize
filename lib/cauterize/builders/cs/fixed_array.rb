@@ -10,9 +10,9 @@ module Cauterize::Builders::CS
     end
 
     def size_defn(formatter)
-      formatter << "public static int MySize = #{size};"
+      formatter << "public static ulong MySize = #{size};"
       formatter.blank_line
-      formatter << "protected override int Size"
+      formatter << "protected override ulong Size"
       formatter.braces do
         formatter << "get { return MySize; }"
       end

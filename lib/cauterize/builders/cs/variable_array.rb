@@ -6,14 +6,20 @@ module Cauterize::Builders::CS
     end
 
     def simple_constructor_line
-      "public #{render}(int size)"
+      "public #{render}(ulong size)"
     end
 
     def size_defn(formatter)
-      formatter << "protected override int MaxSize"
+      formatter << "public static ulong MyMaxSize = #{max_size};"
+      formatter.blank_line
+      formatter << "protected override ulong MaxSize"
       formatter.braces do
-        formatter << "get { return #{size_type}.MaxValue; }"
+        formatter << "get { return MyMaxSize; }"
       end
+    end
+
+    def max_size
+      @blueprint.array_size
     end
 
     def size

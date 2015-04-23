@@ -32,8 +32,8 @@ describe Cauterize::Builders::CS::FixedArray do
       end
 
       it "defines a size" do
-        text.should match /public static int MySize = 16;/
-        text.should match /protected override int Size/
+        text.should match /public static ulong MySize = 16;/
+        text.should match /protected override ulong Size/
         text.should match /get { return MySize; }/
       end
     end

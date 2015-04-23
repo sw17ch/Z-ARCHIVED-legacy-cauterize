@@ -26,8 +26,12 @@ describe Cauterize::Builders::CS::VariableArray do
         text.should match /public static Type SizeType = typeof\(Byte\);/
       end
 
+      it "defines the max size" do
+        text.should match /public static ulong MyMaxSize = 16;/
+      end
+
       it "sets the size of the array from configuration" do
-        text.should match /public MyriadData\(int size\)/ # no args
+        text.should match /public MyriadData\(ulong size\)/ # no args
         text.should match /Allocate\(size\);/
       end
 
@@ -37,8 +41,8 @@ describe Cauterize::Builders::CS::VariableArray do
       end
 
       it "defines a max size" do
-        text.should match /protected override int MaxSize/
-        text.should match /get { return Byte\.MaxValue; }/
+        text.should match /protected override ulong MaxSize/
+        text.should match /get { return MyMaxSize; }/
       end
     end
   end

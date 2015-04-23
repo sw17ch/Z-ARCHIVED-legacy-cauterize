@@ -24,6 +24,18 @@ namespace Cauterize
             {
                 return 8;
             }
+            else if (t == typeof (Single))
+            {
+                return 4;
+            }
+            else if (t == typeof (Double))
+            {
+                return 8;
+            }
+            else if (t == typeof (Boolean))
+            {
+                return 1;
+            }
             else
             {
                 throw new Exception("Invalid type to get byte size");

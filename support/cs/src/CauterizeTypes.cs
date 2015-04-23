@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using Cauterize.Common;
 
 namespace Cauterize
 {
-    public class CauterizeInfo {
+    public class CauterizeInfo
+    {
         public string Name;
         public string GeneratedVersion;
         public string GeneratedDate;
+
         public int ModelHashLength;
         public byte[] ModelHash;
     }
@@ -31,7 +36,7 @@ namespace Cauterize
         {
             var enumProp = OrderAttribute.GetPropertyByOrder(GetType(), 0);
             var value = enumProp.GetValue(this, null);
-            var index = (int) value + 1;
+            var index = (int)value + 1;
             var prop = OrderAttribute.GetPropertyByOrder(GetType(), index);
             if (prop != null)
             {
@@ -46,21 +51,22 @@ namespace Cauterize
 
     public abstract class CauterizeFixedArray
     {
+        public abstract object[] ObjectArray();
     }
 
     public abstract class CauterizeFixedArrayTyped<T> : CauterizeFixedArray
     {
         private T[] _data;
 
-        protected abstract int Size { get; }
-        
+        protected abstract ulong Size { get; }
+
         protected void Allocate(T[] data)
         {
-            Allocate(data.Length);
+            Allocate((ulong)data.Length);
             Array.Copy(data, _data, data.Length);
         }
 
-        protected void Allocate(int size)
+        protected void Allocate(ulong size)
         {
             if (size != Size)
             {
@@ -91,27 +97,36 @@ namespace Cauterize
 
         public T[] GetArray()
         {
-          return _data;
+            return _data;
+        }
+
+        public override object[] ObjectArray()
+        {
+            var objArr = new object[_data.Length];
+            Array.Copy(_data, objArr, objArr.Length);
+            return objArr;
         }
     }
 
     public abstract class CauterizeVariableArray
     {
+        public abstract object[] ObjectArray();
     }
 
+    [DebuggerDisplay("{DebuggerDisplay}")]
     public abstract class CauterizeVariableArrayTyped<T> : CauterizeVariableArray
     {
         private T[] _data;
 
-        protected abstract int MaxSize { get; }
-        
+        protected abstract ulong MaxSize { get; }
+
         protected void Allocate(T[] data)
         {
-            Allocate(data.Length);
+            Allocate((ulong)data.Length);
             Array.Copy(data, _data, data.Length);
         }
 
-        protected void Allocate(int size)
+        protected void Allocate(ulong size)
         {
             if (size > MaxSize)
             {
@@ -123,6 +138,18 @@ namespace Cauterize
         public static implicit operator T[](CauterizeVariableArrayTyped<T> array)
         {
             return array._data;
+        }
+
+        public string DebuggerDisplay
+        {
+            get
+            {
+                var result = this.ToString();
+                var bytes = _data as byte[];
+                if (bytes != null)
+                    result = StringExtensions.BytesToString(bytes) + " " + result;
+                return result;
+            }
         }
 
         public override string ToString()
@@ -142,7 +169,14 @@ namespace Cauterize
 
         public T[] GetArray()
         {
-          return _data;
+            return _data;
+        }
+
+        public override object[] ObjectArray()
+        {
+            var objArr = new object[_data.Length];
+            Array.Copy(_data, objArr, objArr.Length);
+            return objArr;
         }
     }
 }
